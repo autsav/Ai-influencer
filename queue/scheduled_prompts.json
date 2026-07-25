@@ -28,5 +28,35 @@
     "updated_at": "2026-07-25T16:45:09.782093+00:00",
     "seed": 42,
     "cost_usd": 0.05
+  },
+  {
+    "id": "post_d0c16049",
+    "prompt": "A candid fashion photograph. aeloria woman, auburn hair in a loose messy bun with flyaway strands framing her face, green eyes, fair skin with freckles across nose and cheeks, visible pores, peach fuzz. walking through Soho London at night, neon signs and rain-slicked streets, vibrant nightlife atmosphere. wearing white cropped tank top with a fitted miniskirt, gold hoop earrings, showing an hourglass figure. Pose: Leaning over a bridge railing, looking down at the water, hair hanging forward, contemplative. Phone-in-frame dual media \u2014 person holding a phone recording video, showing both person and their screen live. Monochromatic deep blacks, high-contrast B&W with red filter simulation, darkened skies, sharpened skin grain. Shot on Kodak Portra 400, natural depth of field, subtle film grain, raw unretouched editorial look.",
+    "scene": "walking through Soho London at night, neon signs and rain-slicked streets, vibrant nightlife atmosphere",
+    "wardrobe": "white cropped tank top with a fitted miniskirt, gold hoop earrings, showing an hourglass figure",
+    "pose": "Leaning over a bridge railing, looking down at the water, hair hanging forward, contemplative",
+    "camera_angle": "Phone-in-frame dual media \u2014 person holding a phone recording video, showing both person and their screen live",
+    "status": "qc_passed",
+    "image_path": "output/pipeline/post_d0c16049.png",
+    "qc_result": {},
+    "created_at": "2026-07-25T18:33:30.823122+00:00",
+    "updated_at": "2026-07-25T18:33:30.823122+00:00",
+    "seed": 777,
+    "cost_usd": 0.05
+  },
+  {
+    "id": "post_bda446a6",
+    "prompt": "A candid fashion photograph. aeloria woman, auburn hair in a loose messy bun with flyaway strands framing her face, green eyes, fair skin with freckles across nose and cheeks, visible pores, peach fuzz. walking through Soho London at night, neon signs and rain-slicked streets, vibrant nightlife atmosphere. wearing white cropped tank top with a fitted miniskirt, gold hoop earrings, showing an hourglass figure. Pose: standing confidently with both hands naturally at her sides, one hand resting on her hip, looking at the camera. eye-level 50mm portrait, shallow depth of field, neon bokeh background. Ultra-wide lens distortion correction off, raw spherical edge bending preserved. Shot on Kodak Portra 400, natural depth of field, subtle film grain, raw unretouched editorial look.",
+    "scene": "walking through Soho London at night, neon signs and rain-slicked streets, vibrant nightlife atmosphere",
+    "wardrobe": "white cropped tank top with a fitted miniskirt, gold hoop earrings, showing an hourglass figure",
+    "pose": "standing confidently with both hands naturally at her sides, one hand resting on her hip, looking at the camera",
+    "camera_angle": "eye-level 50mm portrait, shallow depth of field, neon bokeh background",
+    "status": "qc_passed",
+    "image_path": "output/pipeline/post_bda446a6.png",
+    "qc_result": {},
+    "created_at": "2026-07-25T18:37:59.432938+00:00",
+    "updated_at": "2026-07-25T18:37:59.432938+00:00",
+    "seed": 999,
+    "cost_usd": 0.05
   }
 ]

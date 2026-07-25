@@ -42,32 +42,85 @@ class ImageResult:
 def _build_prompt(char: CharacterConfig, scene: str, wardrobe: str = "",
                   pose: str = "", camera_angle: str = "",
                   tech_profile: str = "") -> str:
-    """Build a Flux-ready prompt from character config + scene parameters."""
+    """Build a Flux-optimized prompt using natural-language description.
+
+    Research-backed structure (Flux prompt engineering best practices 2025):
+    1. Opening shot type + aesthetic (natural language, not tags)
+    2. Subject identity with physical details (LoRA trigger + visual DNA)
+    3. Wardrobe with fabric, fit, neckline, texture, how it catches light
+    4. Pose with explicit hand positioning (prevent extra hands)
+    5. Environment with atmosphere, time, weather, mood
+    6. Camera gear (lens, aperture, body, film stock)
+    7. Skin realism (pores, freckles, peach fuzz, oil — anti-plastic)
+    8. Identity lock (preserve LoRA face)
+
+    NOTE: Flux has no native negative prompt. Do NOT put "Avoid: ..." in the
+    positive prompt — it pollutes generation. Use positive-only framing.
+    """
     v = char.visual_dna
-    parts = [
-        f"A candid fashion photograph",
-        f"aeloria woman, {v.get('hair', 'auburn hair')}, {v.get('eyes', 'green eyes')}, "
-        f"{v.get('skin', 'fair skin with freckles')}",
-        scene,
-    ]
+
+    # ── 1. Opening: shot type + aesthetic ──
+    parts = ["A candid fashion photograph"]
+
+    # ── 2. Subject identity ──
+    subject = f"aeloria woman, {v.get('hair', 'auburn hair in a loose messy bun')}, {v.get('eyes', 'green eyes')}, {v.get('skin', 'fair skin with freckles across nose and cheeks')}"
+    parts.append(subject)
+
+    # ── 3. Wardrobe with fabric/fit/texture detail ──
     if wardrobe:
+        # Ensure neckline is specified (prevents Flux drift)
+        if "neck" not in wardrobe.lower() and "collar" not in wardrobe.lower() and "crop" not in wardrobe.lower():
+            wardrobe = f"{wardrobe}, fitted silhouette following her body shape"
         parts.append(f"wearing {wardrobe}")
+
+    # ── 4. Pose with explicit hand positioning ──
     if pose:
-        parts.append(f"Pose: {pose}")
+        # Ensure hands are explicitly described to prevent extra hands
+        hand_hint = ""
+        if "hand" not in pose.lower() and "arms" not in pose.lower() and "fingers" not in pose.lower():
+            hand_hint = ", both hands visible and naturally positioned"
+        parts.append(f"{pose}{hand_hint}")
+
+    # ── 5. Environment + atmosphere ──
+    parts.append(scene)
+
+    # ── 6. Camera angle/composition ──
     if camera_angle:
         parts.append(camera_angle)
+
+    # ── 7. Technical profile (film stock, shutter, aperture) ──
     if tech_profile:
         parts.append(tech_profile)
+    else:
+        parts.append("Shot on Kodak Portra 400, 50mm lens at f/2.0, natural depth of field")
+
+    # ── 8. Skin realism (anti-plastic) ──
     if char.skin_realism:
         parts.append(char.skin_realism)
+    else:
+        parts.append(
+            "Raw authentic skin with visible pores across the cheeks and nose, "
+            "faint freckles, subtle natural redness around the nose, tiny skin bumps, "
+            "fine peach fuzz catching the light, soft natural oil highlights on the nose "
+            "and forehead — no smoothing, no beauty filter"
+        )
+
+    # ── 9. Identity lock ──
     if char.identity_lock:
         parts.append(char.identity_lock)
+    else:
+        parts.append(
+            "Preserve aeloria's exact identity — same face, auburn hair, "
+            "same recognizable person. Do NOT change facial features or body shape"
+        )
+
+    # ── 10. Final quality + hand anatomy guard ──
     parts.append(
-        "Shot on Kodak Portra 400, natural depth of field, subtle film grain, "
-        "raw unretouched editorial look."
+        "subtle film grain, raw unretouched editorial look, "
+        "natural lighting. Two hands only, correct anatomy, five fingers on each hand"
     )
-    if char.negative_prompt:
-        parts.append(f"Avoid: {char.negative_prompt}")
+
+    # Join as natural-language paragraph (Flux prefers this over tag lists)
     return ". ".join(parts)
 
 
