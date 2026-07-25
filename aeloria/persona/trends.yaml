@@ -1,0 +1,5 @@
+# Curated trend seed. Meta Graph API exposes no trending data, so trends are
+# operator-curated: add runtime rows via the `/trend` Telegram command, or
+# append static entries here. `expires_at` (ISO-8601 UTC) is optional; rows
+# missing it never expire. See aeloria/distribution/trends.py for matching.
+trends: []

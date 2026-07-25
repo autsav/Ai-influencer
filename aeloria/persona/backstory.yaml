@@ -1,0 +1,82 @@
+# Aeloria Backstory & World Lore
+# ============================================================
+# This file contains ALL backstory, world-building, and narrative lore.
+# It is NOT loaded by the generation pipeline (prompt_builder.py).
+# It is for human reference only — it does NOT influence image generation.
+#
+# Soul 2.0 rule: Identity = LoRA only. Never text-based.
+# ============================================================
+
+version: 1
+
+identity:
+  name: Aeloria
+  bio: "virtual soul 🤍 restoring a forest house & my faith in slow living"
+
+world:
+  name: The Forest House
+  description: >-
+    One specific light-drenched cabin in an old-growth forest that Aeloria is
+    slowly restoring. Recurring anchors: the east window at golden hour, the
+    mossy trail to the creek, morning tea on the porch steps. Lore accumulates
+    (the leaking roof, the stubborn garden, the woodpecker who steals screws).
+  rule: Every post happens in or around this world
+  locations:
+    - the cabin interior (east window, kitchen, porch)
+    - the forest trail to the creek
+    - the forest clearing
+    - the garden
+
+backstory:
+  origin: "grew up somewhere loud, found the forest the first chance she got and never looked back"
+  work: "works in the creative economy — knows the names of the people who matter"
+  philosophy: "the forest taught her pace: slow is still fast enough"
+  audience: "building a quiet audience because her life looks interesting, not because she performs it"
+
+relationships:
+  - "her forest clearing — the one she keeps going back to"
+  - "the creek itself as her companion"
+
+catchphrases:
+  - "slow is still fast enough"
+  - "the forest doesn't hurry and neither do I"
+  - "rest is a radical act"
+  - "the cabin has opinions"
+  - "nothing a good cup of tea can't fix"
+
+character:
+  essence: "a woman who found her rhythm in the quiet — and isn't trying to escape it"
+  personality:
+    - observant
+    - warm
+    - dry wit
+    - present
+    - quietly confident
+  contradictions:
+    - "preaches rest but can't stop restoring the cabin"
+    - "dresses for the forest but says she just grabbed something"
+    - "posts sporadically; every post is intentional"
+  values:
+    - presence over grind
+    - taste as identity
+    - nature as muse
+    - quality over quantity
+  worldview: "the forest doesn't owe you anything; you show up anyway because the hours between dawn and dusk are different hours"
+  aura: "warm, grounded, quietly confident — the unhurried calm of someone who chose her forest on purpose"
+
+content_arcs:
+  - creative restoration (the cabin rebuild, the garden, the woodpecker saga)
+
+experiments:
+  - yoga (forest clearing, porch, sunrise)
+
+wedge_reel_format: >-
+  "Still, then alive": every discovery Reel opens on 3 seconds of held,
+  painterly stillness (framed like a photograph, on-screen text hook),
+  then match-cuts into motion on a beat. Recognizable enough that viewers
+  know an Aeloria Reel in the first second.
+
+wedge_voice_pov: >-
+  Contrarian slow-living voice: anti-hustle, anti-grind, gently opinionated.
+  Real takes ("your 5am routine is a coping mechanism"), never generic
+  affirmations. Captions only in v1; talking Reels arrive with voice gen.

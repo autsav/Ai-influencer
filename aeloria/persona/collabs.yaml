@@ -1,0 +1,4 @@
+# Collab/duet target seed. Each entry: {handle, platform, niche, note}.
+# Consumed by aeloria/distribution/collabs.py — matched against the brief's
+# niche at plan time. Append curated targets here or load via future tooling.
+collabs: []

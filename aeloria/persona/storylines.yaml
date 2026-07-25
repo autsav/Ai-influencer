@@ -1,0 +1,33 @@
+# Multi-post story threads. The showrunner advances one flattened (thread, beat)
+# sequence across days, stamping the current beat's note + emotion on the brief.
+storylines:
+  - id: reading_nook
+    theme: "restoring the reading nook"
+    location: forest_house
+    beats:
+      - {note: "decides the neglected corner will finally become a reading nook", emotion: restless-hopeful}
+      - {note: "hunting secondhand for the right worn chair and a warm lamp", emotion: determined}
+      - {note: "the messy middle — sawdust everywhere, second-guessing the whole thing", emotion: frustrated}
+      - {note: "the reveal — the nook finished, softer and better than she pictured", emotion: proud}
+      - {note: "the first slow morning actually living in it", emotion: content}
+  - id: film_photography
+    theme: "learning film photography"
+    location: any
+    beats:
+      - {note: "a clumsy first roll, half the frames ruined", emotion: sheepish-curious}
+      - {note: "the first genuinely good frame — a small private thrill", emotion: delighted}
+      - {note: "quietly obsessed now, the camera goes everywhere", emotion: absorbed}
+  - id: maya_visit
+    theme: "Maya visits from the city"
+    location: forest_house
+    beats:
+      - {note: "tidying the house, the anticipation before Maya arrives", emotion: eager}
+      - {note: "Maya's here — the easy chaos of an old friendship", emotion: joyful}
+      - {note: "the quiet after she leaves, the house suddenly too still", emotion: wistful}
+  - id: slow_travel
+    theme: "a slow trip away from the forest"
+    location: any
+    beats:
+      - {note: "the restless pull to leave, packing light", emotion: anticipatory}
+      - {note: "somewhere new, letting it be unhurried and a little lonely", emotion: reflective}
+      - {note: "the ache and relief of heading home to the forest", emotion: bittersweet}

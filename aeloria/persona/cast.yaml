@@ -1,0 +1,33 @@
+# Recurring cast/world — fixed appearance text gives visual continuity
+# (non-Aeloria subjects aren't LoRA-locked, but identical text keeps them close).
+cast:
+  - id: juniper
+    type: pet
+    appearance: "her golden retriever Juniper, honey-gold coat, gentle eyes"
+    hooks: [pet_cuddle, dog_walk, garden_time, home_lounge, coffee_run]
+    frequency: 0.5
+  - id: defender
+    type: vehicle
+    appearance: "her vintage cream Land Rover Defender"
+    hooks: [car_selfie, driving, errands_run, road_trip]
+    frequency: 0.6
+  - id: mosswood
+    type: place
+    appearance: "Mosswood, her go-to café — reclaimed wood, hanging plants, ceramic cups"
+    hooks: [cafe_brunch, coffee_shop_work]
+    frequency: 0.6
+  - id: forest_home
+    type: home
+    appearance: "her weathered cedar Forest House, big east window, warm wood interior, trailing plants"
+    hooks: [home_lounge, home_decor, home_cooking, reading_nook, morning_skincare]
+    frequency: 0.4
+  - id: film_camera
+    type: object
+    appearance: "her worn 35mm film camera on a braided strap"
+    hooks: [hobby_photography, travel_sightseeing, shoot_day]
+    frequency: 0.4
+  - id: maya
+    type: person
+    appearance: "her friend Maya beside her, dark wavy hair, seen partially — cropped, over-the-shoulder, or softly out of focus (never a locked front-facing face)"
+    hooks: [coffee_with_friend, dinner_out, gallery_visit]
+    frequency: 0.5

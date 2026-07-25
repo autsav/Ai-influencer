@@ -1,0 +1,497 @@
+# Influencer-life activity library — ~40 EARTHY day-in-the-life beats.
+# Every activity keeps Aeloria recognizable: linen/knits, ceramic, wood, film
+# camera, rustic/indie venues. shopping = farmers market, nightlife = candlelit
+# wine bar, work = a cabin desk.
+# `indoor: true` marks interiors (bathrooms, kitchens, vanities, gyms, café/bar
+# interiors, studios, bedrooms); the beat sheet omits the OUTDOOR LOCATION_SCENE
+# clause for these since `setting` already describes the interior. Omitted =>
+# outdoor/ambiguous-outdoor (defaults false).
+activities:
+  # --- get_ready ---
+  - id: grwm_makeup
+    category: get_ready
+    indoor: true
+    subjects:
+      - "at a mirror mid-makeup, a brush in hand, half-done and focused"
+      - "leaning into the mirror doing her mascara, lips parted"
+    setting: "a soft-lit vanity with scattered earthy-toned products and a linen towel"
+    mood: focused_playful
+    style_hint: selfie
+    signal: true
+    fits_locations: anywhere
+    format_affinity: [carousel, static]
+  - id: morning_skincare
+    category: get_ready
+    indoor: true
+    subjects:
+      - "patting in serum with damp skin, fresh-faced and calm"
+      - "wrapped in a towel doing her skincare, dewy"
+    setting: "a bright bathroom with plants and a ceramic dish of products"
+    mood: relaxed
+    style_hint: film
+    signal: true
+    fits_locations: anywhere
+    format_affinity: [carousel, static]
+  - id: evening_wind_down
+    category: get_ready
+    indoor: true
+    subjects:
+      - "brushing out damp hair by lamplight, unhurried before bed"
+      - "pulling on a knit sweater over pajamas, sleepy and soft"
+    setting: "a warm bedroom corner with a linen throw and a single lamp"
+    mood: relaxed
+    style_hint: film
+    signal: false
+    fits_locations: home_only
+    format_affinity: [static]
+
+  # --- style ---
+  - id: mirror_ootd
+    category: style
+    indoor: true
+    subjects:
+      - "a full-length mirror OOTD selfie, phone half-covering her face"
+      - "holding two outfits up to herself in the mirror, deciding"
+    setting: "a bedroom corner with a leaning mirror and an open linen wardrobe"
+    mood: cool
+    style_hint: selfie
+    signal: true
+    fits_locations: anywhere
+    format_affinity: [reel, static]
+  - id: car_selfie
+    category: style
+    subjects:
+      - "a car selfie in the driver's seat, sun visor down, soft smile"
+      - "leaning out the window of the Defender, hair loose in the wind"
+    setting: "the front seat of her vintage cream Land Rover Defender"
+    mood: cool
+    style_hint: selfie
+    signal: true
+    fits_locations: anywhere
+    format_affinity: [static, reel]
+  - id: thrift_flip
+    category: style
+    indoor: true
+    subjects:
+      - "holding up a thrifted linen jacket in a sunlit shop, considering"
+      - "trying on a knit cardigan in front of a shop mirror, pleased"
+    setting: "a rustic secondhand shop with wood racks and warm light"
+    mood: joyful
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [reel, carousel]
+
+  # --- food ---
+  - id: home_cooking
+    category: food
+    indoor: true
+    subjects:
+      - "chopping herbs at the counter, steam rising, unhurried"
+      - "plating a rustic breakfast, morning light across the wood"
+    setting: "a warm wood kitchen with hanging dried herbs and ceramic bowls"
+    mood: relaxed
+    style_hint: film
+    signal: false
+    fits_locations: home_only
+    format_affinity: [carousel, static]
+  - id: cafe_brunch
+    category: food
+    indoor: true
+    subjects:
+      - "at a café table with a flat white and a pastry, mid-laugh"
+      - "reading over coffee by the café window, sunlit"
+    setting: "a cozy indie café — reclaimed wood, hanging plants, ceramic cups"
+    mood: joyful
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [static, reel]
+  - id: farmers_market
+    category: food
+    subjects:
+      - "filling a woven basket with produce at a market stall, chatting with the vendor"
+      - "holding up a bunch of dahlias at the market, sunlit and glad"
+    setting: "an outdoor farmers market with wood crates and linen-draped stalls"
+    mood: joyful
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [carousel, reel]
+
+  # --- fitness ---
+  - id: gym_set
+    category: fitness
+    indoor: true
+    subjects:
+      - "mid dumbbell set, determined, a light sheen on the skin"
+      - "post-set catching her breath against the rack"
+    setting: "a moody industrial gym with warm bulbs and worn equipment"
+    mood: determined
+    style_hint: flash
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [reel]
+  - id: yoga_flow
+    category: fitness
+    indoor: true
+    subjects:
+      - "mid downward-dog on a jute mat, calm and centered"
+      - "seated in stillness after a flow, eyes closed, soft light"
+    setting: "a sunlit wood-floored room with a linen curtain and a plant corner"
+    mood: serene
+    style_hint: film
+    signal: false
+    fits_locations: home_only
+    format_affinity: [reel, static]
+  - id: forest_run
+    category: fitness
+    subjects:
+      - "mid-stride on a misty forest trail, breath visible, focused"
+      - "pausing on the trail to stretch, hands on hips, catching her breath"
+    setting: "a quiet forest trail with damp earth and tall trees"
+    mood: determined
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [reel, static]
+
+  # --- work ---
+  - id: shoot_day
+    category: work
+    indoor: true
+    subjects:
+      - "adjusting a phone on a tripod with a ring light, filming herself, behind-the-scenes"
+      - "reviewing shots on her camera between takes, laughing at a blooper"
+    setting: "her cabin corner set up as a shoot — ring light, tripod, plants"
+    mood: focused_playful
+    style_hint: film
+    signal: true
+    fits_locations: home_only
+    format_affinity: [reel, static]
+  - id: pr_flatlay
+    category: work
+    indoor: true
+    subjects:
+      - "arranging a flatlay of earthy products and dried flowers from above"
+      - "unboxing a PR package, holding a product up to the light, curious"
+    setting: "a linen backdrop on the floor with props arranged around"
+    mood: focused_playful
+    style_hint: film
+    signal: true
+    fits_locations: anywhere
+    format_affinity: [carousel, static]
+  - id: coffee_shop_work
+    category: work
+    indoor: true
+    subjects:
+      - "typing on a laptop at a café corner table, coffee going cold"
+      - "sketching notes in a paper notebook, café hum around her"
+    setting: "a cozy indie café — reclaimed wood, hanging plants, ceramic cups"
+    mood: focused_playful
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [static, carousel]
+  - id: cabin_desk_work
+    category: work
+    indoor: true
+    subjects:
+      - "at her cabin desk editing on a laptop, a mug of tea steaming beside her"
+      - "handwriting in a planner at the desk, morning light through the window"
+    setting: "a cabin desk by the big east window, wood surface, ceramic mug"
+    mood: focused_playful
+    style_hint: film
+    signal: true
+    fits_locations: home_only
+    format_affinity: [static, carousel]
+
+  # --- home ---
+  - id: reading_nook
+    category: home
+    indoor: true
+    subjects:
+      - "curled in a reading nook with a paperback and tea, absorbed"
+      - "stretching in the nook mid-chapter, soft and warm"
+    setting: "a plant-filled reading nook by the big east window"
+    mood: reflective
+    style_hint: film
+    signal: false
+    fits_locations: home_only
+    format_affinity: [static]
+  - id: home_decor
+    category: home
+    indoor: true
+    subjects:
+      - "rearranging dried flowers and ceramics on a shelf, considering"
+      - "watering trailing plants by the window, unhurried"
+    setting: "the warm wood interior of the Forest House"
+    mood: relaxed
+    style_hint: film
+    signal: false
+    fits_locations: home_only
+    format_affinity: [carousel, static]
+  - id: home_lounge
+    category: home
+    indoor: true
+    subjects:
+      - "sprawled on the linen sofa with the dog, low afternoon light"
+      - "curled under a knit blanket by the window, content"
+    setting: "the Forest House living room, warm wood and trailing plants"
+    mood: relaxed
+    style_hint: film
+    signal: false
+    fits_locations: home_only
+    format_affinity: [static, carousel]
+
+  # --- errands ---
+  - id: coffee_run
+    category: errands
+    subjects:
+      - "walking the street with a to-go cup, glancing back over her shoulder"
+      - "crossing at a light with her coffee, unbothered and cool"
+    setting: "a sunlit street outside a café"
+    mood: cool
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [reel, static]
+  - id: driving
+    category: errands
+    subjects:
+      - "driving the Defender down a tree-lined lane, one hand on the wheel"
+      - "stopped at a light, sunglasses on, elbow out the window"
+    setting: "a quiet tree-lined road"
+    mood: cool
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [reel, static]
+  - id: errands_run
+    category: errands
+    subjects:
+      - "loading a linen tote into the Defender's boot, list in hand"
+      - "checking off a paper list outside a row of small shops"
+    setting: "a rustic high street with small independent shops"
+    mood: cool
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [static, reel]
+
+  # --- social ---
+  - id: dinner_out
+    category: social
+    indoor: true
+    subjects:
+      - "at a candlelit dinner table, glass raised, mid-laugh"
+      - "leaning back at the table, warm and glowing, telling a story"
+    setting: "a candlelit wine bar with warm wood and low light"
+    mood: joyful
+    style_hint: paparazzi
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [static, reel]
+  - id: coffee_with_friend
+    category: social
+    indoor: true
+    subjects:
+      - "leaning across a café table mid-conversation with Maya, laughing"
+      - "clinking mugs with Maya at a corner table, easy and warm"
+    setting: "a cozy indie café — reclaimed wood, hanging plants, ceramic cups"
+    mood: joyful
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [static, carousel]
+  - id: gallery_visit
+    category: social
+    indoor: true
+    subjects:
+      - "pointing out a piece to Maya in a quiet gallery, hushed and curious"
+      - "standing before a painting with Maya beside her, both absorbed"
+    setting: "a small indie gallery with pale wood floors"
+    mood: reflective
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [static, carousel]
+
+  # --- travel ---
+  - id: travel_sightseeing
+    category: travel
+    subjects:
+      - "pausing before a landmark with her film camera, taking it in"
+      - "wandering a market abroad, curious, a tote on her shoulder"
+    setting: "an iconic street of the destination city"
+    mood: joyful
+    style_hint: film
+    signal: false
+    fits_locations: travel_only
+    format_affinity: [reel, static]
+  - id: hotel_balcony
+    category: travel
+    subjects:
+      - "on a hotel balcony wrapped in a robe with coffee, city or sea beyond"
+      - "leaning on the balcony rail at golden hour, hair loose"
+    setting: "a boutique hotel balcony overlooking the destination"
+    mood: relaxed
+    style_hint: film
+    signal: false
+    fits_locations: travel_only
+    format_affinity: [static]
+  - id: airport_departure
+    category: travel
+    subjects:
+      - "at the airport with a linen tote and a coffee, sunglasses on, mid-stride"
+      - "waiting at the gate, feet up on her carry-on, relaxed"
+    setting: "a sunlit airport terminal with big windows"
+    mood: cool
+    style_hint: flash
+    signal: false
+    fits_locations: travel_only
+    format_affinity: [reel, static]
+  - id: road_trip
+    category: travel
+    subjects:
+      - "the Defender loaded up, map spread on the dash, ready to go"
+      - "a pit-stop selfie beside the Defender at a scenic overlook"
+    setting: "a scenic overlook off a long open road"
+    mood: joyful
+    style_hint: film
+    signal: false
+    fits_locations: travel_only
+    format_affinity: [reel, static]
+
+  # --- wellness ---
+  - id: spa_bath
+    category: wellness
+    indoor: true
+    subjects:
+      - "in a bath with a clay mask, eyes closed, serene"
+      - "wrapped in a towel post-spa, dewy and calm"
+    setting: "a candlelit stone bathroom with eucalyptus"
+    mood: serene
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [static]
+  - id: forest_bathing
+    category: wellness
+    subjects:
+      - "standing still among tall trees, eyes closed, breathing slow"
+      - "resting a palm against mossy bark, quiet and present"
+    setting: "a hushed, mist-softened stretch of forest"
+    mood: serene
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [static, reel]
+  - id: tea_ritual
+    category: wellness
+    indoor: true
+    subjects:
+      - "pouring tea from a ceramic pot, steam curling, unhurried"
+      - "cupping a warm mug with both hands, eyes soft, present"
+    setting: "a low wood table by the window with a ceramic tea set"
+    mood: relaxed
+    style_hint: film
+    signal: false
+    fits_locations: home_only
+    format_affinity: [static]
+
+  # --- pet ---
+  - id: pet_cuddle
+    category: pet
+    subjects:
+      - "curled on the sofa with her golden retriever, laughing as he leans in"
+      - "kneeling to hug the dog in the garden, foreheads together"
+    setting: "the Forest House living room or garden"
+    mood: joyful
+    style_hint: film
+    signal: false
+    fits_locations: home_only
+    format_affinity: [reel, static]
+  - id: dog_walk
+    category: pet
+    subjects:
+      - "on a forest trail walking the dog, leash loose, mid-laugh"
+      - "pausing on the walk as the dog looks up at her"
+    setting: "a misty forest trail"
+    mood: joyful
+    style_hint: film
+    signal: false
+    fits_locations: home_only
+    format_affinity: [reel, static]
+  - id: garden_time
+    category: pet
+    subjects:
+      - "tossing a ball for the dog in the garden, both mid-motion"
+      - "sitting on the garden steps with the dog's head in her lap"
+    setting: "the wildflower-edged garden behind the Forest House"
+    mood: joyful
+    style_hint: film
+    signal: false
+    fits_locations: home_only
+    format_affinity: [reel, static]
+
+  # --- hobby ---
+  - id: hobby_photography
+    category: hobby
+    subjects:
+      - "crouched with her film camera to her eye, framing a shot"
+      - "reviewing negatives at a light table, curious"
+    setting: "outdoors in nature or at a cluttered creative desk"
+    mood: focused_playful
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [static, reel]
+  - id: pottery_studio
+    category: hobby
+    indoor: true
+    subjects:
+      - "centering clay on the wheel, hands muddy, focused"
+      - "trimming a leather-hard bowl, wood shavings of clay curling away"
+    setting: "a sunlit studio with shelves of unglazed ceramic pieces"
+    mood: focused_playful
+    style_hint: film
+    signal: false
+    fits_locations: anywhere
+    format_affinity: [carousel, reel]
+  - id: journaling
+    category: hobby
+    indoor: true
+    subjects:
+      - "writing by lamplight in a leather notebook, unhurried"
+      - "sketching in the margins of her journal, tea cooling beside her"
+    setting: "the reading nook with a low lamp and a stack of paperbacks"
+    mood: reflective
+    style_hint: film
+    signal: false
+    fits_locations: home_only
+    format_affinity: [static]
+  - id: ootd_transition
+    category: style
+    indoor: true
+    subjects:
+      - "an outfit-reveal transition, spinning from a plain look into a fully styled trending outfit, confident"
+      - "mid outfit-change reveal, arms opening as the new look lands, striking editorial energy"
+    setting: "a bright bedroom corner with a leaning full-length mirror and an open wardrobe"
+    mood: cool
+    style_hint: selfie
+    signal: true
+    fits_locations: anywhere
+    format_affinity: [reel]
+  - id: styling_how_to
+    category: style
+    indoor: true
+    subjects:
+      - "laying out three ways to style one trending piece, pointing to the details, teaching"
+      - "holding a garment up to camera mid styling-tip, mid-explanation and self-assured"
+    setting: "a linen-draped surface with a rail of curated trending pieces and accessories"
+    mood: focused_playful
+    style_hint: film
+    signal: true
+    fits_locations: anywhere
+    format_affinity: [carousel, static]

@@ -1,0 +1,36 @@
+# Environment
+.env
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Models — too large for git, stored locally / HuggingFace
+models/
+*.safetensors
+*.pt
+*.ckpt
+*.gguf
+
+# Generated outputs
+output/
+dry_run_output/
+
+# Training data & reference images
+data/
+reference_images/
+
+# Node / TS router subtree
+node_modules/
+
+# Persona face reference (contains embeddings)
+aeloria/persona/face_ref.json
+
+# Superpowers planning docs
+.superpowers/
+
+# Scripts — one-off experiment scripts (not core pipeline)
+scripts/replicate_stadium_carousel.py
+scripts/single_pose.py
+scripts/kontext_pipeline.py
+scripts/image_to_image.py

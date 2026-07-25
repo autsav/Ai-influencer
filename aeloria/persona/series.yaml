@@ -1,0 +1,31 @@
+# Named episodic series — recurring formats that drive return viewers.
+# Each: slug, content_format, cadence_per_week, title_template ({n} = episode).
+series:
+  - slug: forest-mornings
+    content_format: reel
+    cadence_per_week: 2
+    title_template: "Forest Mornings · ep.{n}"
+  - slug: cozy-guide
+    content_format: carousel
+    cadence_per_week: 2
+    title_template: "Cozy Guide · ep.{n}"
+  - slug: trail-notes
+    content_format: static
+    cadence_per_week: 1
+    title_template: "Trail Notes · ep.{n}"
+  - slug: postcards-from-tokyo
+    content_format: reel
+    cadence_per_week: 3
+    title_template: "Postcards from Tokyo · ep.{n}"
+  - slug: postcards-from-paris
+    content_format: reel
+    cadence_per_week: 3
+    title_template: "Postcards from Paris · ep.{n}"
+  - slug: postcards-from-new_york
+    content_format: reel
+    cadence_per_week: 3
+    title_template: "Postcards from New York · ep.{n}"
+  - slug: postcards-from-london
+    content_format: reel
+    cadence_per_week: 3
+    title_template: "Postcards from London · ep.{n}"

@@ -1,0 +1,73 @@
+# Soul ID — Scope Definition
+# ============================================================
+# This document defines EXACTLY what the Aeloria Soul ID (LoRA) contains
+# and what it does NOT contain. It is the binding contract for the generation
+# pipeline.
+#
+# RULE: The LoRA IS the Soul ID. Everything else (text, backstory, world)
+# is ephemeral and must NEVER be baked into prompt conditioning.
+# ============================================================
+
+version: 1
+
+soul_id:
+  # ── What the LoRA captures ────────────────────────────────
+  scope: physical_appearance_only
+
+  includes:
+    - body type (tall, slender, athletic)
+    - skin texture (pore-level detail, peach fuzz, freckles)
+    - facial structure (face shape, eye shape, nose, lips)
+    - hair (auburn color, typical style: bun or loose, escaping strands)
+    - eye color (green)
+    - general age appearance (mid-20s adult woman)
+    - skin tone (fair with freckles across nose and cheeks)
+
+  # ── What the LoRA does NOT capture ──────────────────────
+  excludes:
+    - backstory or origin
+    - location or setting (forest, cabin, city — all ephemeral)
+    - wardrobe or clothing (user-provided per generation)
+    - mood or emotional tone (user-provided per generation)
+    - camera style or lighting setup
+    - expression repertoire (user-provided per generation)
+    - pose or mannerism set (user-provided per generation)
+
+  # ── Training context ─────────────────────────────────────
+  training_note: >-
+    Reference images showed Aeloria in the Forest House context (cabin porch,
+    forest clearing, creek trail). That context is a TRAINING ARTIFACT, NOT a
+    Soul ID component. The model must generate Aeloria's identity correctly in
+    ANY location — city street, beach, mountain, studio — regardless of what
+    was in the training images.
+
+  training_location: "The Forest House, West Sussex countryside (summer 2024)"
+  training_image_count: "~30 curated reference images"
+  training_model: "FLUX.1-dev LoRA, rank 128, trained on Replicate"
+
+# ── Generation Rules ─────────────────────────────────────────
+# These rules are enforced by tests in tests/test_prompt_builder.py.
+# Any code that embeds backstory/lore in prompts is a violation.
+generation_rules:
+  - "Identity always from LoRA + face_gate — never from text description"
+  - "Physical appearance always from visual_dna fields — no invented descriptors"
+  - "never reference The Forest House, cabin, forest, creek in prompt text"
+  - "location = user-provided brief override only"
+  - "wardrobe = user-provided brief override only"
+  - "mood = user-provided brief override only"
+  - "camera style = user-provided brief override only"
+  - "backstory is never loaded by prompt_builder.py"
+
+# ── Testing contract ────────────────────────────────────────
+# Any image that passes face_gate (cosine ≥ 0.52 against face_ref.json)
+# and has the correct visual_dna descriptors is a valid Aeloria image.
+# Location, wardrobe, mood, and camera are NOT identity signals.
+
+face_gate:
+  model: InsightFace buffalo_l
+  threshold: 0.52
+  reference: "aeloria/persona/face_ref.json"
+
+lora:
+  url: "https://couch.fly.dev/storage/v1/files/aeloria-v4.safetensors"
+  scale: 0.85  # configured in aeloria/config.py — aeloria_lora_scale

@@ -1,0 +1,1 @@
+"""Showrunner: weekly beat sheet + daily micro-pass (rule-based, $0)."""
