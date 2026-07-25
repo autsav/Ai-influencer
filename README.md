@@ -1,162 +1,193 @@
-# AI Influencer Platform — Setup Guide
+# Aeloria — AI Influencer Pipeline
 
-**Stack:** FastAPI · Supabase free · Cloudflare R2 free · fal.ai · Meta Graph API · Railway $5
-**Estimated monthly cost: ~$20–22**
+Automated end-to-end content generation pipeline for AI influencer accounts.
+Image generation → voice/lip-sync → QC validation → publish queue → analytics feedback loop.
 
----
-
-## 1. Clone & install
+## Quick Start
 
 ```bash
-git clone <your-repo>
-cd ai-influencer
+# 1. Install dependencies
+python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env
+
+# 2. Configure environment
+cp .env.example .env  # Add your API keys
+
+# 3. Run a single generation
+python -m pipeline.runner --config config/pipeline.json --scene "sitting at a London café, morning light"
+
+# 4. Dry run (no API calls, logs only)
+python -m pipeline.runner --config config/pipeline.json --scene "walking through Covent Garden" --dry-run
 ```
 
----
+## Pipeline Stages
 
-## 2. Supabase (free tier)
+```
+JSON Config → Image Generation (FAL Flux LoRA) → Post-Processing (PIL)
+            → QC Validation (dimensions + artifacts + face gate)
+            → Publish Queue (queue/scheduled_prompts.json)
+            → [Optional: Voice (ElevenLabs) + Lip-Sync (SyncLabs/Hedra)]
+```
 
-1. Create project at [supabase.com](https://supabase.com)
-2. SQL editor → paste + run `bootstrap.sql`
-3. Edit the seed INSERT values (face_reference_urls, core_prompt_base)
-4. Copy `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` → `.env`
-5. Copy the generated `character_profiles.id` UUID → `CHARACTER_ID` in `.env`
+### Stage 1: Image Generation (`pipeline/image_stage.py`)
+- FAL Flux LoRA with character identity (scale 0.7, guidance 3.5, 40 steps)
+- PIL post-processing: WB correction + sharpen + vignette (zero API cost)
+- Async execution via `asyncio` + `run_in_executor`
 
----
+### Stage 2: QC Validation (`pipeline/qc_stage.py`)
+Automated quality checks before publishing:
+- **Dimensions**: minimum 512×512
+- **File size**: max 20MB
+- **Aspect ratio**: matches expected (4:5 default)
+- **Artifact detection**: Laplacian variance (blur), solid color regions, dead pixel ratio
+- **Face gate**: InsightFace cosine similarity to character reference (threshold 0.35)
 
-## 3. Cloudflare R2
+### Stage 3: Voice & Lip-Sync (`pipeline/voice_stage.py`)
+- ElevenLabs TTS (primary) with configurable voice ID, stability, similarity
+- SyncLabs lip-sync (image + audio → talking video)
+- Hedra lip-sync (placeholder — implement when API key available)
 
-1. [dash.cloudflare.com](https://dash.cloudflare.com) → R2 → Create bucket → name: `ig-media`
-2. Bucket → Settings → **Public Access → Allow Access**
-3. Copy the `r2.dev` public URL → `R2_PUBLIC_BASE_URL` in `.env`
-4. R2 → Manage R2 API Tokens → Create token (Object Read & Write)
-5. Copy Account ID + Access Key + Secret → `.env`
+### Stage 4: Publish Queue (`pipeline/publish_stage.py`)
+- All generated content goes to `queue/scheduled_prompts.json`
+- Status tracking: `pending → generating → qc_passed → qc_failed → published`
+- Queue can be processed in batch: `python -m pipeline.runner --queue`
 
-> **Upload your character reference face images to R2 first**, copy their public URLs,
-> then paste them into the `face_reference_urls` array in `bootstrap.sql` before seeding.
+## Scripts
 
----
-
-## 4. fal.ai
-
-1. [fal.ai](https://fal.ai) → sign up → API Keys → create key
-2. Paste → `FAL_KEY` in `.env`
-
----
-
-## 5. Meta Graph API
-
-1. [developers.facebook.com](https://developers.facebook.com) → create app → add Instagram product
-2. Get a **short-lived token** → exchange for **long-lived token** (60 days):
-   ```
-   GET https://graph.facebook.com/v23.0/oauth/access_token
-     ?grant_type=fb_exchange_token
-     &client_id=APP_ID
-     &client_secret=APP_SECRET
-     &fb_exchange_token=SHORT_LIVED_TOKEN
-   ```
-3. Paste long-lived token → `META_LONG_LIVED_TOKEN` in `.env`
-4. Get IG User ID:
-   ```
-   GET https://graph.facebook.com/v23.0/me/accounts?access_token=TOKEN
-   ```
-   Then: `GET /v23.0/{page_id}?fields=instagram_business_account&access_token=TOKEN`
-5. Paste → `IG_USER_ID` in `.env`
-
----
-
-## 6. Anthropic
-
-1. [console.anthropic.com](https://console.anthropic.com) → API Keys → create
-2. Paste → `ANTHROPIC_API_KEY` in `.env`
-
----
-
-## 7. Test locally
+### Auto-Tagger (`scripts/auto_tagger.py`)
+Generates detailed .txt captions for LoRA training dataset images.
 
 ```bash
-uvicorn main:app --reload --port 8000
+# Tag all images in a directory using Moondream2 (FAL, $0.005/image)
+python scripts/auto_tagger.py --input /path/to/dataset --trigger "aeloria woman"
+
+# Use local Qwen2.5-VL via Ollama (free, ~12GB RAM)
+python scripts/auto_tagger.py --input /path/to/dataset --trigger "aeloria woman" --backend ollama
+
+# Dry run (list files only)
+python scripts/auto_tagger.py --input /path/to/dataset --dry-run
 ```
 
-Open http://localhost:8000/health — verify scheduler shows all jobs with next_run times.
+Each image gets a `<filename>.txt` with a LoRA-ready caption containing:
+- Trigger token at the start
+- Physical appearance, pose, expression, wardrobe, setting, lighting, camera
+- Training suffix: "photorealistic, detailed skin texture, natural lighting"
 
-**Test each stage:**
-```bash
-# 1. Generate one batch (creates 3 queue rows)
-curl -X POST http://localhost:8000/trigger/generate
-
-# 2. Publish image
-curl -X POST http://localhost:8000/trigger/publish/image
-
-# 3. Check metrics
-curl -X POST http://localhost:8000/trigger/metrics
-
-# 4. Run optimizer (needs >3 published posts with analytics)
-curl -X POST http://localhost:8000/trigger/optimize
-```
-
----
-
-## 8. Deploy to Railway
+### Analytics Feedback Loop (`scripts/analytics_loop.py`)
+Reads performance metrics, LLM analyzes top posts, generates new content ideas → queue.
 
 ```bash
-# Install Railway CLI
-npm install -g @railway/cli
+# Analyze JSON metrics and add 5 new ideas to queue
+python scripts/analytics_loop.py --metrics data/performance.json --top-n 10 --ideas 5
 
-railway login
-railway init          # link to new project
-railway up            # deploy
+# CSV input
+python scripts/analytics_loop.py --metrics data/performance.csv --top-n 5
 
-# Set env vars
-railway variables set FAL_KEY=xxx SUPABASE_URL=xxx ...
+# Dry run (analyze without adding to queue)
+python scripts/analytics_loop.py --metrics data/performance.json --dry-run
 ```
 
-Or paste all `.env` values in Railway Dashboard → Variables.
-
-Railway auto-detects `railway.toml` and runs:
-```
-uvicorn main:app --host 0.0.0.0 --port $PORT
-```
-
----
-
-## File structure
-
-```
-ai-influencer/
-├── main.py                         # FastAPI app + scheduler start
-├── requirements.txt
-├── railway.toml                    # Railway deploy config
-├── bootstrap.sql                   # Run once in Supabase SQL editor
-├── .env.example
-└── src/
-    ├── config.py                   # All settings (Pydantic)
-    ├── db/client.py                # All Supabase reads/writes
-    ├── generation/
-    │   ├── fal_client.py           # Flux 2 Pro (images) + Wan 2.6 (video)
-    │   ├── prompt_builder.py       # Assembles prompts from style_weights
-    │   └── caption.py              # Claude Haiku caption generator
-    ├── storage/r2.py               # Cloudflare R2 upload
-    ├── publishing/meta.py          # Meta 3-step container flow + insights
-    ├── scheduler/
-    │   ├── jobs.py                 # APScheduler cron timings
-    │   └── orchestrator.py        # Generate + publish + metrics logic
-    ├── optimization/optimizer.py  # Nightly LLM feedback loop
-    └── auth/token_refresh.py      # Meta 60-day token auto-refresh
+Expected metrics format (CSV or JSON array):
+```json
+[
+  {"scene": "café morning", "wardrobe": "knit sweater", "pose": "sitting", 
+   "views": 12000, "likes": 850, "comments": 45, "saves": 120, "shares": 30}
+]
 ```
 
----
+The LLM (via `aeloria.llm_router`: Claude → Ollama → MiniMax) analyzes patterns and outputs
+content ideas with predicted engagement levels and rationale, added directly to the queue.
 
-## Monthly cost at 3 posts/day
+## CLI Usage
 
-| Service | Cost |
-|---|---|
-| fal.ai images (180/mo × ~$0.04) | ~$7 |
-| fal.ai video — Wan 2.6 (30 × 5s × $0.05) | ~$7.50 |
-| Supabase free tier | $0 |
-| Cloudflare R2 free tier (10 GB, free egress) | $0 |
-| Railway Hobby | $5 |
-| Anthropic (Haiku captions + Sonnet optimizer) | ~$1.50 |
-| **Total** | **~$21/month** |
+### Single Generation
+```bash
+python -m pipeline.runner \
+  --config config/pipeline.json \
+  --scene "sitting at a London café, morning light" \
+  --wardrobe "cream knit sweater and jeans" \
+  --pose "hands around a coffee cup, warm half-smile" \
+  --camera "eye-level 50mm, shallow DOF"
+```
+
+### With Voice
+```bash
+python -m pipeline.runner \
+  --config config/pipeline.json \
+  --scene "walking through Hyde Park" \
+  --voice "A beautiful morning in the park..."
+```
+
+### Process Queue
+```bash
+# Process all pending entries
+python -m pipeline.runner --config config/pipeline.json --queue
+```
+
+### Dry Run
+```bash
+python -m pipeline.runner --config config/pipeline.json --scene "test scene" --dry-run
+```
+
+## Configuration
+
+### `config/pipeline.json`
+Full pipeline config — character identity, voice settings, QC thresholds, stages.
+
+### `config/character.json`
+Character-only config — can be loaded separately for prompt generation.
+
+### Environment Variables (`.env`)
+```
+FAL_KEY=your-fal-key
+ELEVENLABS_API_KEY=your-elevenlabs-key
+SYNCLABS_API_KEY=your-synclabs-key
+SUPABASE_URL=...
+SUPABASE_SERVICE_KEY=...
+R2_ACCOUNT_ID=...
+R2_ACCESS_KEY_ID=...
+R2_SECRET_ACCESS_KEY=...
+R2_PUBLIC_BASE_URL=...
+```
+
+## Logging
+
+All pipeline operations log to `logs/pipeline.log` (rotating, 5MB × 3 files).
+Dry-run mode logs to console only.
+
+## Project Structure
+
+```
+pipeline/
+├── __init__.py          # Package exports
+├── config_loader.py     # JSON config loading + validation
+├── image_stage.py       # Async FAL Flux LoRA generation + post-processing
+├── voice_stage.py       # Async ElevenLabs TTS + SyncLabs/Hedra lip-sync
+├── qc_stage.py          # Automated QC: dimensions, artifacts, face gate
+├── publish_stage.py     # Queue management (queue/scheduled_prompts.json)
+└── runner.py            # Async orchestrator with error handling + dry-run
+
+scripts/
+├── auto_tagger.py       # Auto-caption dataset images for LoRA training
+├── analytics_loop.py    # LLM feedback loop: metrics → ideas → queue
+└── train_character_lora/  # LoRA training scripts
+
+config/
+├── character.json       # Character identity config
+└── pipeline.json        # Full pipeline config
+
+queue/
+└── scheduled_prompts.json   # Content queue with status tracking
+
+logs/
+└── pipeline.log         # Rotating pipeline log
+
+aeloria/                 # Core influencer platform (FastAPI app, publishing, engagement)
+├── generation/          # Image/video generation, prompt engines, post-processing
+├── persona/             # Character YAML configs
+├── publishing/          # Instagram + Fanvue publishing
+├── engagement/          # DM orchestration, re-engagement
+├── showrunner/          # Content calendar, beat sheets, storylines
+├── optimizer/           # Nightly scoring + strategy weights
+└── compliance/          # C2PA legal compliance
+```
