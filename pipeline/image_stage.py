@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 _ASPECT_TO_SIZE = {
     "9:16": "portrait_16_9",
-    "4:5": "portrait_4_3",
+    "4:5": "portrait_16_9",  # 896×1152 = 0.778, closer to 4:5 (0.8) than portrait_4_3 (0.75)
     "1:1": "square_hd",
     "16:9": "landscape_16_9",
 }

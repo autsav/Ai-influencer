@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": "post_864d551c",
+    "prompt": "A candid fashion photograph. aeloria woman, auburn hair in a loose messy bun with flyaway strands framing her face, green eyes, fair skin with freckles across nose and cheeks, visible pores, peach fuzz. sitting at a London caf\u00e9 near the window, morning light streaming in, a cup of coffee on the table. wearing oversized cream chunky-knit round-neck sweater over high-waisted wide-leg blue jeans with gold hoop earrings. Pose: hands wrapped around a warm coffee cup, looking directly at the camera with a soft half-smile. eye-level 50mm, shallow depth of field, blurred caf\u00e9 background. Shot on Kodak Portra 400, natural depth of field, subtle film grain, raw unretouched editorial look.",
+    "scene": "sitting at a London caf\u00e9 near the window, morning light streaming in, a cup of coffee on the table",
+    "wardrobe": "oversized cream chunky-knit round-neck sweater over high-waisted wide-leg blue jeans with gold hoop earrings",
+    "pose": "hands wrapped around a warm coffee cup, looking directly at the camera with a soft half-smile",
+    "camera_angle": "eye-level 50mm, shallow depth of field, blurred caf\u00e9 background",
+    "status": "qc_passed",
+    "image_path": "output/pipeline/post_864d551c.png",
+    "qc_result": {},
+    "created_at": "2026-07-25T16:04:22.165503+00:00",
+    "updated_at": "2026-07-25T16:04:22.165503+00:00",
+    "seed": 1228117344,
+    "cost_usd": 0.05
+  },
+  {
+    "id": "post_716df117",
+    "prompt": "A candid fashion photograph. aeloria woman, auburn hair in a loose messy bun with flyaway strands framing her face, green eyes, fair skin with freckles across nose and cheeks, visible pores, peach fuzz. walking through Covent Garden market, afternoon light through the glass roof. wearing oversized cream chunky-knit round-neck sweater over high-waisted wide-leg blue jeans with gold hoop earrings and white sneakers. Pose: Staring into the lens without blinking, unsmiling, chin slightly down, eyes up, predatory and captivating. Worm's-eye with foreground elements (flowers, steps, puddle) creating depth layers below the subject. Shot on Kodak Portra 400, natural depth of field, subtle film grain, raw unretouched editorial look.",
+    "scene": "walking through Covent Garden market, afternoon light through the glass roof",
+    "wardrobe": "oversized cream chunky-knit round-neck sweater over high-waisted wide-leg blue jeans with gold hoop earrings and white sneakers",
+    "pose": "Staring into the lens without blinking, unsmiling, chin slightly down, eyes up, predatory and captivating",
+    "camera_angle": "Worm's-eye with foreground elements (flowers, steps, puddle) creating depth layers below the subject",
+    "status": "qc_passed",
+    "image_path": "output/pipeline/post_716df117.png",
+    "qc_result": {},
+    "created_at": "2026-07-25T16:45:09.782093+00:00",
+    "updated_at": "2026-07-25T16:45:09.782093+00:00",
+    "seed": 42,
+    "cost_usd": 0.05
+  }
+]

@@ -29,7 +29,7 @@ class TestGenerateVideo:
         get_settings.cache_clear()
 
         with patch("aeloria.generation.video_engine.get_settings", return_value=get_settings()):
-            with pytest.raises(ValueError, match="Unsupported engine"):
+            with pytest.raises(ValueError, match="Unknown video engine"):
                 generate_video(b"fake", "prompt", "unknown")
 
     def test_noop_when_image_bytes_empty(self, monkeypatch):

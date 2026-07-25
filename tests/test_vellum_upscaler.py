@@ -18,6 +18,7 @@ class TestVellumUpscaler:
     def test_init_reads_vellum_key_from_settings(self, monkeypatch):
         monkeypatch.setenv("VELLUM_API_KEY", "vellum-test-key")
         from aeloria.config import get_settings
+        get_settings.cache_clear()
         vellum = VellumUpscaler(get_settings())
         assert vellum._api_key == "vellum-test-key"
 
@@ -25,6 +26,7 @@ class TestVellumUpscaler:
         """When key is set, mocked HTTP returns upscaled bytes."""
         monkeypatch.setenv("VELLUM_API_KEY", "fake-key")
         from aeloria.config import get_settings
+        get_settings.cache_clear()
         vellum = VellumUpscaler(get_settings())
 
         mock_resp = MagicMock()

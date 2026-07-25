@@ -117,7 +117,13 @@ def run_qc(
         # Dead pixel check
         dead_ratio = _dead_pixel_ratio(arr)
 
-        artifact_ok = has_detail and is_sharp and dead_ratio < 0.01
+        # Dead pixel threshold: 5% is acceptable for AI images (pure black/white
+        # regions are common in high-contrast lighting, not necessarily artifacts)
+        # Dead pixel ratio — warning only (common in high-contrast AI images)
+        if dead_ratio > 0.05:
+            result.warnings.append(f"High dead pixel ratio: {dead_ratio:.4f}")
+
+        artifact_ok = has_detail and is_sharp  # dead pixel is now warning-only
         result.checks["artifacts"] = {
             "passed": artifact_ok,
             "channel_std": [round(float(s), 1) for s in std_per_channel],

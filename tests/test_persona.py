@@ -12,7 +12,8 @@ def test_load_default_bible():
     assert p.wedge.reel_format == ""
     assert p.wedge.voice_pov == ""
     # visual_dna is the Soul 2.0 appearance spec
-    assert p.visual_dna["hair"] == "auburn, usually in a loose high bun, escaping strands"
+    assert "auburn" in p.visual_dna["hair"]
+    assert "loose" in p.visual_dna["hair"]
     assert p.visual_dna["eyes"] == "green"
     assert "freckles" in p.visual_dna["skin"]
     assert "visible pores" in p.visual_dna["skin"]

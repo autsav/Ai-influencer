@@ -59,7 +59,7 @@ def test_phase2_settings_defaults(monkeypatch):
     # Skin-realism LoRA disabled by default (Juggernaut is natively realistic).
     assert s.realism_lora_url.endswith("flux-RealismLora/resolve/main/lora.safetensors")
     assert s.realism_lora_scale == 0.45
-    assert s.aeloria_lora_scale == 0.85
+    assert s.aeloria_lora_scale == 0.7
     assert s.image_guidance_scale == 1.9
 
 
