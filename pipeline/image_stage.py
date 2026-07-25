@@ -40,7 +40,8 @@ class ImageResult:
 
 
 def _build_prompt(char: CharacterConfig, scene: str, wardrobe: str = "",
-                  pose: str = "", camera_angle: str = "") -> str:
+                  pose: str = "", camera_angle: str = "",
+                  tech_profile: str = "") -> str:
     """Build a Flux-ready prompt from character config + scene parameters."""
     v = char.visual_dna
     parts = [
@@ -55,6 +56,8 @@ def _build_prompt(char: CharacterConfig, scene: str, wardrobe: str = "",
         parts.append(f"Pose: {pose}")
     if camera_angle:
         parts.append(camera_angle)
+    if tech_profile:
+        parts.append(tech_profile)
     if char.skin_realism:
         parts.append(char.skin_realism)
     if char.identity_lock:
@@ -91,6 +94,7 @@ async def generate_image(
     wardrobe: str = "",
     pose: str = "",
     camera_angle: str = "",
+    tech_profile: str = "",
     seed: int | None = None,
     dry_run: bool = False,
 ) -> ImageResult:
@@ -102,13 +106,14 @@ async def generate_image(
         wardrobe: Optional wardrobe override
         pose: Optional pose description
         camera_angle: Optional camera angle/composition
+        tech_profile: Optional technical/photographic profile modifier
         seed: Reproducibility seed
         dry_run: If True, return a placeholder without calling FAL
     """
     if seed is None:
         seed = random.randint(0, 2**31)
 
-    prompt = _build_prompt(char, scene, wardrobe, pose, camera_angle)
+    prompt = _build_prompt(char, scene, wardrobe, pose, camera_angle, tech_profile)
     image_size = _ASPECT_TO_SIZE.get(char.aspect_ratio, "portrait_4_3")
 
     logger.info("Image stage: seed=%d scene=%s", seed, scene[:60])

@@ -1,15 +1,17 @@
 """
-200 creative camera angles + poses used by fashion editorial, street style,
-cinematography, and Instagram lifestyle photographers.
+300 creative camera angles + poses + technical profiles used by fashion editorial,
+street style, cinematography, Instagram lifestyle, and viral content creators.
 
-Researched from:
+Sources:
 - Fashion editorial: Annie Leibovitz, Mario Testino, Helmut Newton, Steven Meisel, Tim Walker
 - Street style: Phil Oh, Tommy Ton, Adam Katz Sinding, Craig Arend
 - Cinematography: Dutch angles, dolly zoom, rack focus, low-angle hero shots
 - Art photography: Richard Avedon, Irving Penn, Guy Bourdin, Sarah Moon
 - Instagram lifestyle: most engaging pose patterns 2024-2026
+- Viral pose & angle research: 100-entry curated list from trending IG/TikTok content
 
-100 camera angles + 100 poses = 200 total creative variations.
+100 camera angles (editorial) + 100 poses (editorial) +
+35 viral poses + 35 viral camera angles + 30 viral technical profiles = 300 total.
 """
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -136,6 +138,47 @@ CREATIVE_CAMERA_ANGLES = [
     "Extreme right-weighted composition with the subject pressed against the edge, looking back into the frame",
     "Subject bisected by a strong vertical line (pillar, shadow edge) splitting the frame into two halves",
     "Off-center subject with the horizon line placed at the very top, 85% of the frame is ground or floor",
+
+    # ── VIRAL CAMERA ANGLES (101-135) — Trending IG/TikTok perspectives ────────
+    # Unconventional & distorted perspectives
+    "0.5x ultra-wide overhead bobblehead angle — phone held high above subject, head oversized, body shrunken, Y2K aesthetic",
+    "Worm's-eye ground level — camera resting on asphalt pointing straight up as subject walks over or stands above",
+    "Fish-eye action cam POV — ultra-wide 180-degree lens held at chest level, immersive skate-culture distortion",
+    "Ground-level puddle reflection — angle millimeters above a wet floor capturing the flipped reflection as primary subject",
+    "Through-the-glass refraction — shooting through condensation-covered coffee shop window or vehicle glass",
+    "Pinhole keyhole frame — camera obscured by a narrow door gap, fence slat, or fingers for voyeuristic feel",
+    # Cinematic & editorial framing
+    "Anamorphic wide-screen 2.39:1 — ultra-wide cinematic horizon cropping with letterbox bars",
+    "Dutch-angle tilt 15-30 degrees deliberate camera tilt adding tension and dynamic energy to street shots",
+    "Over-the-shoulder depth frame — subject in focus between shoulder and head of someone in foreground",
+    "Vertical aerial 90-degree flat lay — drone or boom arm pointing straight down at subject on patterned ground",
+    "Extreme macro close-up — tight crop on iris, lip texture, skin grain, or jewelry details",
+    "Car side-mirror silhouette — camera pointed at side mirror framing driver's eyes or passing background",
+    "Escalator stairwell diagonal depth — shooting along parallel diagonal railing lines for geometric vanishing points",
+    # Layered & environmental angles
+    "Foreground foliage blur — shooting through leaves, curtains, or glassware so edges melt into soft foreground bokeh",
+    "Phone-in-frame dual media — person holding a phone recording video, showing both person and their screen live",
+    "Under-the-table low pitch — camera on a chair or under a table looking up at a conversation",
+    "Wine-glass liquid distortion — looking at subject distorted through a glass of water or wine",
+    "High balcony surveillance angle — camera looking down from 3rd/4th story balcony onto street level",
+    "Mirror-in-mirror reflection tunnel — capturing repeated reflections across two opposing mirrors",
+    "Headlight backlight low angle — subject standing directly in front of car headlights at night, stark rim lighting",
+    # Dynamic & spatial framing
+    "Low-angle skylight silhouette — looking straight up at subject framed against skyscrapers or cloud silhouettes",
+    "Low-motion panning tracking angle — camera moving parallel to running/walking subject at foot height",
+    "Peeking corner framing — subject cut off by 50% of frame using a solid wall as foreground",
+    "Sunset rim profile angle — camera aligned with setting sun casting halo blur behind subject's profile",
+    "Window reflection layering — double-exposure effect by capturing subject inside through reflective window",
+    "Underwater waterline split — 50% submerged camera showing half underwater and half above surface",
+    "Through-the-lens lens-flip — holding secondary optical lens or prism in front for flare artifacts",
+    "Overhead dining table frame — top-down grid view of food plates, hands, and drinks in active interaction",
+    "Drive-by flash night angle — shooting out of moving car window at stationary subject with direct flash",
+    "Staircase spiral rise — looking straight up or down through center hole of spiral staircase",
+    "Shadow-drop overhead — high noon light casting long vertical shadows recorded from directly above",
+    "Subway car door frame — using closing glass doors of a train as natural frame",
+    "Close-horizon split — horizon line in bottom 10% of frame giving massive headroom to sky",
+    "Handheld shoulder cam drift — subtle organic micro-shakiness mimicking 90s camcorder documentary footage",
+    "Tunnel vanishing-point frame — subject centered dead-middle at end of symmetrical tunnel or hallway",
 ]
 
 
@@ -255,6 +298,46 @@ CREATIVE_POSES = [
     "One hand touching a wall or surface, fingers trailing along it as she walks, feeling the texture",
     "Holding a flower or leaf up to the light, examining it, backlit, the veins visible through the petals",
     "Both hands on her own cheeks, palms flat, pushing her face slightly, playful and distorted",
+
+    # ── VIRAL POSES (101-135) — Trending IG/TikTok poses ────────────────────────
+    # Dynamic & motion poses
+    "0.5x ultra-wide crouch — squatting low toward the ultra-wide lens, shoes and hands look oversized, dynamic Y2K look",
+    "Candid flash turn — turning face toward camera mid-step as direct flash fires in low light",
+    "Motion strut exit-frame — walking fast out of frame while looking back over one shoulder",
+    "Hand-to-lens shield — holding hand up toward camera, blurring foreground while keeping face in focus",
+    "Mid-movement hair adjust — tucking hair or adjusting cap naturally, capturing motion not static posing",
+    "Sidewalk sit knees-hugged — sitting low on curb or steps, knees pulled in, looking casually sideways",
+    "Wind-swept jacket grab — pulling coat or hoodie collar up while looking down, documentary editorial feel",
+    "Puddle-step jump — frozen mid-air or stepping into surface reflection for dynamic liquid motion",
+    # Relaxed & candid poses
+    "Table lean palms on chin — leaning across dining or cafe table, elbows up, looking straight into lens",
+    "Car window sunkissed lean — resting head against car window during golden hour",
+    "Over-the-shoulder mirror glare — looking back into rearview or bathroom mirror instead of directly at camera",
+    "Doorway frame lean — shoulder pressed against door frame, relaxed posture, light catching half the face",
+    "Lying down overhead look — lying on grass or floor, head tilted up toward bird's-eye camera",
+    "Elevator ceiling gaze — looking up toward ultra-wide camera mounted near top corner of elevator",
+    "Service bar lean — resting elbows on counter or coffee bar, captured from over-the-counter perspective",
+    "Metro train window squint — sitting by train window with motion-blurred city lights passing behind",
+    # Editorial & street poses
+    "Face-covering flash — raising drink, magazine, or hands to partially obscure face from bright direct flash",
+    "Back-turned shadow stance — facing completely away from camera toward strong light source for sharp silhouette",
+    "Glasses-adjust crouch — kneeling on one knee while adjusting sunglasses or eyeglasses with one hand",
+    "Architectural frame-in — posing small within massive doorway, alleyway, or concrete arch",
+    "Floor-sitting backward stretch — sitting on floor with hands leaning back, angled toward camera",
+    "Night market glance — looking over fruit stalls or street vendor lights with direct ambient glow on skin",
+    "Rain hood pulled tight — looking straight at lens under wet hood or transparent umbrella",
+    "Golden-hour rim-light turn — turning into sunset so light wraps around profile and hair",
+    # Detail & lifestyle poses
+    "Sunglasses reflection pose — close up showing camera or scenery reflected in dark lenses",
+    "Product hand-in-frame — holding drink, camera, or food toward foreground with subject soft-focused behind",
+    "Cross-legged rooftop edge — sitting casually on elevated ledge looking out over city geometry",
+    "Unbuttoned cuff adjustment — looking down while adjusting jacket cuff or wristwatch",
+    "Newspaper book shield — reading or holding open media partially covering lower face",
+    "Casual balcony stretch — arms hanging over railing, shot from lower floor looking up",
+    "Street-corner wall lean — back flat against urban brick or concrete wall, one leg bent",
+    "Tucking hair behind ear half profile — subtle intimate side profile shot mid-gesture",
+    "Skate-park low board lean — holding board low to ground with ultra-wide distorted perspective",
+    "Ambient coffee sip — capturing steam and face framed right above the mug",
 ]
 
 
@@ -274,3 +357,45 @@ HAIR_LOCK_SUFFIX = (
     "same hairstyle with only minor natural variation — strands may shift but the "
     "overall style, color, and length must remain identical across all images"
 )
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 30 VIRAL CAMERA SETTINGS & TECHNICAL PROFILES
+# These are appended to prompts as photographic technique modifiers.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+VIRAL_TECHNICAL_PROFILES = [
+    # ── Motion & exposure configurations (1-10) ───────────────────────────────
+    "Intentional slow shutter motion blur, shutter 1/4s to 1/15s, low ISO, dynamic light trails and body movement",
+    "Point-and-shoot hard flash, direct on-camera flash, 1/125s, f/8, ISO 400, harsh high-contrast Y2K night aesthetic",
+    "Ultra-wide 13mm-16mm perspective, 0.5x digital or ultra-wide lens close to subject, distorted edges",
+    "Ultra-shallow depth of field, f/1.2 to f/1.8 on full-frame, buttery background blur isolating subject",
+    "High ISO analog grain profile, ISO 1600-3200, textured vintage warmth, visible film grain",
+    "Frozen action high-speed shutter, 1/2000s to 1/4000s, crisp splash drops, hair flicks, street jumps",
+    "Cinematic 180-degree shutter sync, 24fps, shutter 1/48s or 1/50s, organic motion blur",
+    "Under-exposed shadow priority, exposure bias -1.0 to -1.5 EV, dark moody shadows, preserved highlights",
+    "Rear-curtain flash trailing, rear-curtain sync, 1/4s shutter, flash at end of exposure, motion streaks behind sharp subject",
+    "Tracking panning shutter, 1/20s to 1/30s, physically tracking moving subject, background blurs sideways while subject stays sharp",
+    # ── Optics, filters & color profiles (11-20) ──────────────────────────────
+    "Black mist bloom diffusion, 1/4 or 1/2 strength mist filter, bloomed highlights, softened skin tones",
+    "Cool teal and warm gold white balance shift, custom WB 5600K, cyan/amber split-toning, modern cinematic",
+    "High FPS slow-motion drift, 120fps/240fps capture, 24fps playback, smooth physical drops and hair movement",
+    "Flat log profile, S-Log3 or D-Log M, maximum highlight and shadow detail for color grading",
+    "Monochromatic deep blacks, high-contrast B&W with red filter simulation, darkened skies, sharpened skin grain",
+    "Saturated accent primary pop, selective color saturation on red/yellow/blue against muted background",
+    "Overexposed soft pastel EV, exposure bias +1.0 EV, low contrast, dreamy filmic tones",
+    "Telephoto compression, 85mm-135mm at f/2.0, flattened perspective, background pulled closer",
+    "Small-aperture starburst, f/11 to f/16, street lamps and headlights become multi-point light flares",
+    "Native 9:16 aspect ratio, vertical grid overlays for mobile platform composition",
+    # ── Advanced capture & automation modes (21-30) ───────────────────────────
+    "Burst mode sequential action, 10+ fps continuous shooting, micro-second candid moment selection",
+    "Zone focus street preset, f/8, manual focus 2 meters, 1/500s, instantaneous street snaps without focus lag",
+    "Halation and light leak emulation, vintage adapted manual lens like Helios 44-2, swirly bokeh, uncontrolled flare",
+    "HDR log tone mapping, detail in bright skies and dark street shadows simultaneously",
+    "Flash-off low light handheld night mode, multi-frame noise reduction, crisp night shots without flash",
+    "Ultra-wide lens distortion correction off, raw spherical edge bending preserved",
+    "Auto-ISO shutter floor cap, auto ISO with minimum 1/250s enforced, no unintentional blur in fast environments",
+    "Macro stacking minimum focus distance, 1:1 reproduction ratio, hyper-detailed textures",
+    "Raw uncompressed 14-bit capture, maximum color adjustment and grain addition latitude in post",
+    "Live optical prism refraction, handheld crystal glass against lens, rainbow flares split across frame",
+]

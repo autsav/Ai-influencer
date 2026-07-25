@@ -60,10 +60,15 @@ def setup_logging(log_file: str = "logs/pipeline.log", dry_run: bool = False):
     logging.basicConfig(level=logging.INFO, format=fmt, handlers=handlers)
 
 
-def auto_select_creative(pose: str, camera_angle: str, seed: int | None = None) -> tuple[str, str]:
-    """Auto-select pose and camera from the 200-entry creative database."""
+def auto_select_creative(pose: str, camera_angle: str, seed: int | None = None) -> tuple[str, str, str]:
+    """Auto-select pose, camera, and technical profile from the 300-entry creative database."""
+    tech_profile = ""
     try:
-        from aeloria.generation.creative_database import CREATIVE_CAMERA_ANGLES, CREATIVE_POSES
+        from aeloria.generation.creative_database import (
+            CREATIVE_CAMERA_ANGLES,
+            CREATIVE_POSES,
+            VIRAL_TECHNICAL_PROFILES,
+        )
         rng = random.Random(seed)
         if not pose:
             pose = rng.choice(CREATIVE_POSES)
@@ -71,9 +76,12 @@ def auto_select_creative(pose: str, camera_angle: str, seed: int | None = None) 
         if not camera_angle:
             camera_angle = rng.choice(CREATIVE_CAMERA_ANGLES)
             logger.info("Auto-selected camera: %s", camera_angle[:60])
+        # Always pick a random technical profile for variety
+        tech_profile = rng.choice(VIRAL_TECHNICAL_PROFILES)
+        logger.info("Auto-selected tech: %s", tech_profile[:60])
     except ImportError:
         logger.warning("creative_database not available — using empty pose/camera")
-    return pose, camera_angle
+    return pose, camera_angle, tech_profile
 
 
 async def process_single(
@@ -88,8 +96,8 @@ async def process_single(
     """Process a single content request through all enabled stages.
     Retries image generation + QC up to MAX_RETRIES times with re-seed on failure.
     """
-    # Auto-select creative pose/camera if not provided
-    pose, camera_angle = auto_select_creative(pose, camera_angle, seed)
+    # Auto-select creative pose/camera/tech if not provided
+    pose, camera_angle, tech_profile = auto_select_creative(pose, camera_angle, seed)
 
     entry_id = f"post_{uuid.uuid4().hex[:8]}"
     t0 = time.time()
@@ -99,6 +107,7 @@ async def process_single(
         "wardrobe": wardrobe,
         "pose": pose,
         "camera_angle": camera_angle,
+        "tech_profile": tech_profile,
         "stages": {},
         "total_cost": 0.0,
         "total_time": 0.0,
@@ -117,6 +126,7 @@ async def process_single(
             try:
                 img_result = await generate_image(
                     config.character, scene, wardrobe, pose, camera_angle,
+                    tech_profile=tech_profile,
                     seed=seed if attempt == 1 else None,  # re-seed on retry
                     dry_run=config.dry_run,
                 )
