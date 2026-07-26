@@ -77,7 +77,7 @@ class Settings(BaseSettings):
     # ── Character Consistency Engine ───────────────────────────
     # PuLID: zero-shot face identity conditioning (Pass 1)
     pulid_enabled: bool = True
-    pulid_model: str = "fal-ai/pulid-flux"
+    pulid_model: str = "fal-ai/flux-pulid"
     pulid_weight: float = 0.85  # clamped to [0.6, 1.1] at runtime
     pulid_cost_usd: float = 0.06
     # Face Detailer: Pass 2 inpainting refinement for facial artifacts

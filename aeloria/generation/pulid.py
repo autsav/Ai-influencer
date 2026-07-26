@@ -24,7 +24,7 @@ from aeloria.generation.fal_images import ImageResult, GenerationError
 log = logging.getLogger(__name__)
 
 # fal.ai PuLID endpoint — Flux.1 + PuLID face identity
-PULID_MODEL = "fal-ai/pulid-flux"
+PULID_MODEL = "fal-ai/flux-pulid"
 PULID_COST_USD = 0.06  # slightly more than base FLUX due to identity conditioning
 
 
