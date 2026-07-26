@@ -29,7 +29,7 @@ class FanProfile:
     conversation_history: list[dict] = field(default_factory=list)
     # Personality signals
     engagement_score: float = 0.5  # 0–1; higher = more receptive to pitches
-    preferred_topics: list[str] = field(default_factory=list)  # e.g. ["wellness", "travel"]
+    preferred_topics: list[str] = field(default_factory=list)  # e.g. ["ai automation", "ai tools"]
 
 
 class DMOrchestrator:
@@ -134,7 +134,7 @@ class DMOrchestrator:
 
     def _generate_response(self, fan: FanProfile, inbound_message: str) -> str:
         """
-        Call the LLM (Claude/Gemini) to produce a context-aware DM response.
+        Call the LLM router (MiniMax → Ollama → Claude Code) to produce a context-aware DM response.
 
         The prompt is carefully engineered to:
         - Remember prior conversation
@@ -142,9 +142,7 @@ class DMOrchestrator:
         - Wait for a natural conversational opening
         - Sound intimate, not spammy
         """
-        if not self._anthropic_key:
-            # Fallback to a simple rule-based response
-            return "Thanks for your message! Check out my latest posts 💚"
+        from aeloria.llm_router import llm_generate
 
         purchased_ids = ", ".join(fan.purchased_ppvs) or "none"
         history_text = "\n".join(
@@ -153,7 +151,7 @@ class DMOrchestrator:
         ) or "No prior conversation."
 
         system_prompt = (
-            "You are Aeloria, a 24-year-old wellness influencer. You respond to fans "
+            "You are Aeloria, a 24-year-old AI entrepreneur influencer. You respond to fans "
             "via DM in a warm, intimate, personal tone — never salesy or pushy. "
             f"The fan '{fan.username}' is on your Fanvue page. "
             f"They have already purchased these PPV content IDs: {purchased_ids}. "
@@ -161,35 +159,19 @@ class DMOrchestrator:
             "If the message is a greeting, respond warmly and naturally — do not pitch. "
             "If the fan shows interest (asks about content, compliments you, asks for more), "
             "gently mention an unpurchased PPV that fits their interests. "
-            f"Their interests include: {', '.join(fan.preferred_topics) or 'general wellness'}. "
+            f"Their interests include: {', '.join(fan.preferred_topics) or 'AI automation and business tools'}. "
             "Keep replies short — 1 to 3 sentences max. Use light emoji."
         )
 
         user_prompt = (
+            f"{system_prompt}\n\n"
             f"Conversation so far:\n{history_text}\n\n"
             f"Fan just sent: {inbound_message}\n\n"
             "Your reply:"
         )
 
         try:
-            with httpx.Client(timeout=30.0) as client:
-                resp = client.post(
-                    "https://api.anthropic.com/v1/messages",
-                    headers={
-                        "x-api-key": self._anthropic_key,
-                        "anthropic-version": "2023-06-01",
-                        "content-type": "application/json",
-                    },
-                    json={
-                        "model": "claude-3-5-haiku-20241022",
-                        "max_tokens": 300,
-                        "system": system_prompt,
-                        "messages": [{"role": "user", "content": user_prompt}],
-                    },
-                )
-                resp.raise_for_status()
-                data = resp.json()
-                return data["content"][0]["text"].strip()
+            return llm_generate(user_prompt, timeout=30).strip()
         except Exception as exc:
             logger.error("LLM response generation failed: %s", exc)
             return "Thanks for reaching out! I'll get back to you soon 💚"

@@ -8,7 +8,7 @@ import yaml
 DEFAULT_PATH = Path(__file__).parent.parent / "persona" / "collabs.yaml"
 
 # niche keys we match on (subset of seo.NICHE_TAGS keys)
-NICHE_KEYS = ["wellness", "fitness", "travel", "gaming"]
+NICHE_KEYS = ["ai automation", "ai tools", "founder lifestyle", "case studies", "future of business"]
 
 
 def load(path: str | None = None) -> list[dict]:
@@ -24,7 +24,7 @@ def load(path: str | None = None) -> list[dict]:
 
 def match(entries: list[dict], niche: str) -> list[dict]:
     """Return entries whose niches overlap the niche label.
-    niche is a free-text label like 'wellness + nature (slow living, forest life)';
+    niche is a free-text label like 'AI automation for business (workflows, tools, case studies)';
     we match if any NICHE_KEY is a substring of the label AND in the entry's niches."""
     label = (niche or "").lower()
     wanted = {k for k in NICHE_KEYS if k in label}

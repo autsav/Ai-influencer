@@ -116,7 +116,7 @@ class ReengagementCron:
         """
         name = fan.get("username", "there")
         topics = fan.get("preferred_topics", [])
-        topic_str = ", ".join(topics) if topics else "wellness and slow living"
+        topic_str = ", ".join(topics) if topics else "AI automation and business workflows"
 
         if last_convo:
             # Reference something specific from their last message

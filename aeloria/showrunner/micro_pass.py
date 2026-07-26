@@ -67,12 +67,12 @@ def inject_trendjack(db, persona, today, settings) -> dict | None:
 
     slot_day = str(today + timedelta(days=1))
     note = trend.get("note", "") or ref
-    hook = f"Trend-jack: open on {note}, match-cut to Aeloria's forest-house take within 3s."
+    hook = f"Trend-jack: open on {note}, match-cut to Aeloria's AI-entrepreneur take within 3s."
     row = {
         "arc_id": None, "slot_day": slot_day, "slot_type": "reel",
         "content_format": "reel", "cta_kind": "comment", "audience": "discovery",
         "beat": f"trend reel: {note}", "signature": None, "hook_spec": hook,
-        "prompt_seed": f"aeloria forest-house take on trend '{ref}'",
+        "prompt_seed": f"aeloria AI-entrepreneur take on trend '{ref}'",
         "caption_brief": f"react to trending {trend.get('kind', 'audio')} '{ref}' in Aeloria's voice; invite replies",
         "platforms": ["instagram"], "engine": "fal",
         "distribution_plan": {"trend_ref": ref},

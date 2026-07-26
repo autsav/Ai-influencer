@@ -12,27 +12,23 @@ from aeloria.persona.loader import Persona
 # (#6 3-second text overlay). Deterministic pick by brief hash — POV / curiosity /
 # loss-aversion / save framings. Falls back to activity words when no category.
 _REEL_HOOKS: dict[str, list[str]] = {
-    "get_ready": ["get ready with me", "the slow-morning face", "grwm, unhurried"],
-    "style": ["outfit of the day", "one piece, styled 3 ways", "POV: you found the fit", "the piece everyone asks about"],
-    "food": ["save this one", "the easiest thing i make", "what i actually eat"],
-    "fitness": ["the 15-minute version", "no gym needed", "you're doing this wrong"],
-    "work": ["behind the scenes", "how it really gets made", "a day on set"],
-    "home": ["slow home reset", "the cozy corner nobody sees", "little home things"],
-    "errands": ["come with me", "romanticize the mundane", "a slow errand day"],
-    "social": ["come hang out", "a night out with me", "the good kind of chaos"],
-    "travel": ["add this to the list", "you have to see this", "come with me here"],
-    "wellness": ["your sign to slow down", "the reset you needed", "soft life hours"],
-    "pet": ["ok but the dog", "my favorite coworker", "him, again"],
-    "hobby": ["a little hobby hour", "making something slow", "the analog way"],
+    "founder_lifestyle": ["this saves me 6 hours every day", "the workflow nobody's talking about", "POV: you found the tool", "built this in one coffee"],
+    "style": ["outfit of the day", "founder fit check", "smart casual, always"],
+    "food": ["save this one", "coffee shop build", "where I actually work"],
+    "fitness": ["the 15-minute version", "no gym needed", "energy for the build"],
+    "work": ["this AI replaced 3 employees", "behind the workflow", "watch this automate"],
+    "social": ["come hang out", "coworking with me", "the good kind of networking"],
+    "personal_growth": ["your sign to start building", "AI creates freedom", "the book that changed my approach"],
 }
 
 # Static, curated per-niche tag pools. Kept small so the "3-5 tags, no wall"
 # persona rule is structurally enforced.
 NICHE_TAGS: dict[str, list[str]] = {
-    "wellness": ["#slowliving", "#forestlife", "#wellness", "#nature", "#mindful"],
-    "fitness": ["#trailrunning", "#mobility", "#recovery", "#morningrun", "#fitness"],
-    "travel": ["#travel", "#wander", "#cabinlife", "#getoutside", "#offgrid"],
-    "gaming": ["#cozygaming", "#gaming", "#indiegames", "#cozyvibes"],
+    "ai automation": ["#AIAutomation", "#AIWorkflow", "#AutomationFirst", "#BusinessAI", "#FutureOfWork"],
+    "ai tools": ["#AITools", "#AIForBusiness", "#TechTools", "#Productivity", "#AI"],
+    "founder lifestyle": ["#FounderLife", "#EntrepreneurLife", "#StartupFounder", "#FounderMode", "#TechLifestyle"],
+    "case studies": ["#BusinessRedesign", "#AITransformation", "#SmallBusinessAI", "#CaseStudy", "#BusinessGrowth"],
+    "future of business": ["#FutureOfWork", "#AI future", "#BusinessTransformation", "#AutomationFirst", "#NextGenBusiness"],
 }
 
 STOPWORDS = {
@@ -53,7 +49,7 @@ def _niche_keys(persona: Persona) -> list[str]:
             if k in label.lower() and k not in keys:
                 keys.append(k)
     if not keys:
-        keys = ["wellness"]
+        keys = ["ai automation"]
     return keys
 
 

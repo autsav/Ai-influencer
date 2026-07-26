@@ -92,6 +92,7 @@ async def process_single(
     camera_angle: str = "",
     voice_script: str = "",
     seed: int | None = None,
+    aesthetic_tier: str = "",
 ) -> dict:
     """Process a single content request through all enabled stages.
     Retries image generation + QC up to MAX_RETRIES times with re-seed on failure.
@@ -129,6 +130,7 @@ async def process_single(
                     tech_profile=tech_profile,
                     seed=seed if attempt == 1 else None,  # re-seed on retry
                     dry_run=config.dry_run,
+                    aesthetic_tier=aesthetic_tier,
                 )
                 image_bytes = img_result.image_bytes
                 result["stages"]["image"] = {
@@ -244,6 +246,7 @@ async def process_carousel(
     wardrobe: str,
     slides: int,
     seed: int | None = None,
+    aesthetic_tier: str = "",
 ) -> list[dict]:
     """Generate a carousel: same outfit + location, rotating pose/camera/lighting."""
     logger.info("Carousel mode: %d slides, scene=%s, wardrobe=%s", slides, scene[:50], wardrobe[:50])
@@ -255,6 +258,7 @@ async def process_carousel(
             scene=scene,
             wardrobe=wardrobe,
             seed=seed + i if seed else None,
+            aesthetic_tier=aesthetic_tier,
         )
         result["carousel_slide"] = i + 1
         results.append(result)
@@ -279,6 +283,7 @@ async def process_queue(config: PipelineConfig) -> list[dict]:
             pose=entry.get("pose", ""),
             camera_angle=entry.get("camera_angle", ""),
             voice_script=entry.get("voice_script", ""),
+            aesthetic_tier=entry.get("aesthetic_tier", ""),
         )
         if result["errors"]:
             update_entry(entry["id"], {"status": "qc_failed", "errors": result["errors"]})
@@ -324,6 +329,8 @@ def main():
     parser.add_argument("--slides", type=int, default=3,
                         help="Number of carousel slides (default: 3)")
     parser.add_argument("--dry-run", action="store_true", help="Skip API calls, log only")
+    parser.add_argument("--aesthetic-tier", default="",
+                        help="Aesthetic tier: editorial, moody, intimate_stories, fanvue_raw (auto-selected if empty)")
     args = parser.parse_args()
 
     if args.status:
@@ -339,7 +346,7 @@ def main():
 
     if args.carousel and args.scene:
         results = asyncio.run(process_carousel(
-            config, args.scene, args.wardrobe, args.slides, args.seed
+            config, args.scene, args.wardrobe, args.slides, args.seed, args.aesthetic_tier
         ))
         print(json.dumps(results, indent=2, default=str))
     elif args.queue:
@@ -347,7 +354,7 @@ def main():
         print(json.dumps(results, indent=2, default=str))
     elif args.scene:
         result = asyncio.run(process_single(
-            config, args.scene, args.wardrobe, args.pose, args.camera, args.voice, args.seed
+            config, args.scene, args.wardrobe, args.pose, args.camera, args.voice, args.seed, args.aesthetic_tier
         ))
         print(json.dumps(result, indent=2, default=str))
     else:

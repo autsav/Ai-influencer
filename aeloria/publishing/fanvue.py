@@ -68,7 +68,8 @@ class FanvueClient:
         files: dict | None = None,
     ) -> dict:
         if not self._key:
-            raise RuntimeError("Fanvue API key not configured (FANVUE_API_KEY)")
+            logger.warning("Fanvue %s %s skipped — no API key configured", method, path)
+            return {}
 
         try:
             with httpx.Client(timeout=self._timeout) as client:
@@ -110,6 +111,8 @@ class FanvueClient:
             "/media/upload",
             files={"file": (filename, file_bytes, content_type)},
         )
+        if not result:
+            return ""
         media_id: str = result.get("id") or result.get("media_id") or ""
         logger.info("Fanvue media uploaded: %s", media_id)
         return media_id
@@ -134,6 +137,9 @@ class FanvueClient:
         # Attach media
         if post.media_bytes and post.media_urls:
             raise ValueError("Provide either media_bytes or media_urls, not both.")
+
+        if not post.media_bytes and not post.media_urls:
+            raise ValueError("media_bytes or media_urls is required to create a post.")
 
         if post.media_bytes:
             # Upload first

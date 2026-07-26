@@ -61,7 +61,7 @@ class TestReengagementCron:
         fan = {"username": "bob", "preferred_topics": []}
         nudge = cron._build_nudge(fan, None)
         assert "bob" in nudge
-        assert "wellness" in nudge  # default topic
+        assert "AI automation" in nudge  # default topic
 
     def test_fanvue_send_noop_without_key(self, monkeypatch):
         """_fanvue_send returns False when key is empty."""

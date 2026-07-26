@@ -1,33 +1,32 @@
-# Recurring cast/world — fixed appearance text gives visual continuity
-# (non-Aeloria subjects aren't LoRA-locked, but identical text keeps them close).
+# Recurring cast/world — fixed appearance text gives visual continuity.
 cast:
-  - id: juniper
-    type: pet
-    appearance: "her golden retriever Juniper, honey-gold coat, gentle eyes"
-    hooks: [pet_cuddle, dog_walk, garden_time, home_lounge, coffee_run]
-    frequency: 0.5
-  - id: defender
-    type: vehicle
-    appearance: "her vintage cream Land Rover Defender"
-    hooks: [car_selfie, driving, errands_run, road_trip]
-    frequency: 0.6
-  - id: mosswood
-    type: place
-    appearance: "Mosswood, her go-to café — reclaimed wood, hanging plants, ceramic cups"
-    hooks: [cafe_brunch, coffee_shop_work]
-    frequency: 0.6
-  - id: forest_home
-    type: home
-    appearance: "her weathered cedar Forest House, big east window, warm wood interior, trailing plants"
-    hooks: [home_lounge, home_decor, home_cooking, reading_nook, morning_skincare]
-    frequency: 0.4
-  - id: film_camera
+  - id: macbook
     type: object
-    appearance: "her worn 35mm film camera on a braided strap"
-    hooks: [hobby_photography, travel_sightseeing, shoot_day]
+    appearance: "her MacBook Pro, silver, sticker-free, clean modern setup"
+    hooks: [desk_workflow, coffee_shop_build, building_workflow, remote_work, dashboard_check]
+    frequency: 0.9
+  - id: notebook
+    type: object
+    appearance: "her minimal dotted notebook with workflow sketches and notes"
+    hooks: [notebook_planning, whiteboard_thinking, tool_comparison, reading]
+    frequency: 0.5
+  - id: coffee
+    type: object
+    appearance: "a ceramic coffee mug or flat white in a modern cup"
+    hooks: [desk_workflow, coffee_shop_build, cafe_brunch, city_walk, client_call]
+    frequency: 0.7
+  - id: backpack
+    type: object
+    appearance: "a minimal black technical backpack — laptop, notebook, charger"
+    hooks: [airport_work, city_walk, conference_scene, remote_work]
     frequency: 0.4
-  - id: maya
-    type: person
-    appearance: "her friend Maya beside her, dark wavy hair, seen partially — cropped, over-the-shoulder, or softly out of focus (never a locked front-facing face)"
-    hooks: [coffee_with_friend, dinner_out, gallery_visit]
+  - id: coworking_space
+    type: place
+    appearance: "a modern coworking space — bright, white desks, plants, other founders working"
+    hooks: [dashboard_check, whiteboard_thinking, coworking_social, success_metrics]
+    frequency: 0.5
+  - id: home_office
+    type: home
+    appearance: "her minimal home office — clean white desk, MacBook, warm desk lamp, one plant, notebook"
+    hooks: [desk_workflow, testing_tools, building_workflow, content_filming, notebook_planning]
     frequency: 0.5

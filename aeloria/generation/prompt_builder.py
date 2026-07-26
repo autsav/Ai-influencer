@@ -57,11 +57,12 @@ _POSSIBLE_MANNERISMS = [
 ]
 
 _POSSIBLE_PROPS = [
-    "a structured leather handbag",
+    "a MacBook Pro open on the desk",
     "a ceramic coffee mug held loosely",
-    "a pair of sunglasses tucked into her hair",
-    "a delicate gold chain necklace catching the light",
-    "a linen scarf draped loosely around her shoulders",
+    "a minimal dotted notebook with workflow sketches",
+    "a pair of earbuds, one in, one dangling",
+    "a simple leather strap watch catching the light",
+    "a black technical backpack slung over one shoulder",
     "", "", "",  # ~1/3 of shots carry no prop
 ]
 
@@ -74,22 +75,22 @@ _POSSIBLE_HAIR = [
     "auburn hair loose and wind-tousled",
 ]
 
-# Outfit pool — physical clothing description only, no scene context.
+# Outfit pool — smart casual, neutral colours. Same female character.
 _POSSIBLE_OUTFITS = [
-    "an oversized chunky-knit sweater over fitted trousers",
-    "a linen shirt tucked into high-waisted wide-leg jeans with gold hoop earrings",
-    "a ribbed knit top and wide-leg trousers in tonal earthy tones",
-    "a structured linen dress belted at the waist with gold hoop earrings and sandals",
-    "a soft knit halter and high-waisted wide-leg linen pants with layered gold jewelry",
-    "an oversized linen shirt as a jacket over a tank and shorts",
-    "a utility vest with a white tee and cargo trousers",
-    "a cropped cardigan with low-slung wide-leg trousers",
-    "a vintage cotton dress with knee-high leather boots",
-    "a body-skimming knit midi dress",
-    "a soft suede jacket over a slip dress",
-    "a fitted turtleneck under a worn leather jacket",
-    "wide-leg tailored trousers with a cropped fitted knit",
-    "a soft cotton shirt dress, sleeves rolled up",
+    "a charcoal crew-neck t-shirt under a navy structured overshirt, clean white sneakers, gold hoop earrings",
+    "an olive green henley with rolled sleeves, dark denim jeans, minimal leather sneakers, gold hoop earrings",
+    "a white t-shirt under a charcoal blazer-style overshirt, navy trousers, white sneakers",
+    "a navy crew-neck sweater over a white t-shirt, dark chinos, clean sneakers, gold hoop earrings",
+    "a black t-shirt under a grey cardigan, dark jeans, minimal sneakers",
+    "a cream turtleneck under a black overshirt, charcoal trousers, white sneakers, gold hoop earrings",
+    "a grey crew-neck t-shirt under an olive overshirt, dark denim, neutral sneakers",
+    "a navy polo shirt, dark chinos, white sneakers, a simple watch",
+    "a white henley, charcoal trousers, a black technical jacket slung over",
+    "a dark green t-shirt under a cream overshirt, dark jeans, brown leather sneakers, gold hoop earrings",
+    "a black t-shirt, grey trousers, a navy overshirt open at the front, gold hoop earrings",
+    "a charcoal hoodie under a black bomber jacket, dark jeans, white sneakers",
+    "a white t-shirt under a beige overshirt, olive chinos, white sneakers",
+    "a navy t-shirt, dark denim, a grey overshirt, minimal accessories, gold hoop earrings",
 ]
 
 _FILMS = ["Kodak Portra 400", "Kodak Portra 800", "Cinestill 800T", "Fujifilm Pro 400H", "Kodak Gold 200"]
@@ -111,11 +112,11 @@ _AVOID = (
 
 # Mood tones — PURE MOOD, no scene description. Overridden entirely by mood_override.
 _PILLAR_MOOD = {
-    "fitness":    "energetic, candid mid-motion, real exertion and breath",
-    "yoga":       "serene, quiet focus and stillness",
-    "self_healing":"reflective, unhurried calm",
-    "travel":      "curious, spontaneous, exploratory",
-    "slow_living":"relaxed, unhurried, present",
+    "ai_workflows":      "focused, absorbed in building, quiet determination",
+    "ai_tools":          "curious, evaluating, slightly excited",
+    "case_studies":      "confident, satisfied, proud of the result",
+    "founder_lifestyle": "relaxed, approachable, naturally confident",
+    "future_of_business":"contemplative, forward-thinking, engaged",
 }
 
 # ── Style: film_editorial ─────────────────────────────────────────────────────
@@ -280,10 +281,10 @@ def _choose_style(h: int, pillar: str, style_hint: str | None = None) -> str:
     if style_hint in _STYLE_FOR_HINT:
         return _STYLE_FOR_HINT[style_hint]
     r = h % 6
-    if pillar == "travel":
+    if pillar == "case_studies" or pillar == "founder_lifestyle":
         return ["film_editorial", "flash_candid", "paparazzi_night",
                 "flash_candid", "paparazzi_night", "film_editorial"][r]
-    if pillar == "fitness":
+    if pillar == "future_of_business":
         return "flash_candid" if r < 3 else "film_editorial"
     return "flash_candid" if r == 0 else "film_editorial"
 
@@ -384,7 +385,7 @@ def build_prompt(persona: Persona, brief: dict) -> str:
         f"Signature gesture: {mannerism}. "
         f"Preserve aeloria's exact identity — same face, auburn hair and the same recognizable person in every image. "
         f"{_SKIN} — no smoothing, no beauty filter. "
-        f"Outfit: {outfit}, styled fashion-forward and on-trend, finished with tasteful contemporary accessories and delicate gold jewelry. "
+        f"Outfit: {outfit}, styled smart-casual and modern, finished with minimal accessories and gold hoop earrings. "
         f"Shot on {camera}, {film}. {grade}. {texture}.{_aesthetic_variant(h)} "
         f"{_AVOID}."
     )

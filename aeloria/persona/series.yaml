@@ -1,31 +1,31 @@
 # Named episodic series — recurring formats that drive return viewers.
 # Each: slug, content_format, cadence_per_week, title_template ({n} = episode).
 series:
-  - slug: forest-mornings
+  - slug: workflow-wednesdays
     content_format: reel
     cadence_per_week: 2
-    title_template: "Forest Mornings · ep.{n}"
-  - slug: cozy-guide
+    title_template: "Workflow Wednesday · ep.{n}"
+  - slug: tool-test-tuesdays
     content_format: carousel
     cadence_per_week: 2
-    title_template: "Cozy Guide · ep.{n}"
-  - slug: trail-notes
-    content_format: static
+    title_template: "Tool Test Tuesday · ep.{n}"
+  - slug: business-redesign
+    content_format: reel
     cadence_per_week: 1
-    title_template: "Trail Notes · ep.{n}"
-  - slug: postcards-from-tokyo
+    title_template: "Business Redesign · ep.{n}"
+  - slug: conference-notes
     content_format: reel
     cadence_per_week: 3
-    title_template: "Postcards from Tokyo · ep.{n}"
-  - slug: postcards-from-paris
+    title_template: "Conference Notes · ep.{n}"
+  - slug: remote-build-diaries
     content_format: reel
-    cadence_per_week: 3
-    title_template: "Postcards from Paris · ep.{n}"
-  - slug: postcards-from-new_york
+    cadence_per_week: 2
+    title_template: "Remote Build Diaries · ep.{n}"
+  - slug: future-of-work
+    content_format: carousel
+    cadence_per_week: 1
+    title_template: "Future of Work · ep.{n}"
+  - slug: year-in-ai
     content_format: reel
-    cadence_per_week: 3
-    title_template: "Postcards from New York · ep.{n}"
-  - slug: postcards-from-london
-    content_format: reel
-    cadence_per_week: 3
-    title_template: "Postcards from London · ep.{n}"
+    cadence_per_week: 2
+    title_template: "Year in AI · ep.{n}"

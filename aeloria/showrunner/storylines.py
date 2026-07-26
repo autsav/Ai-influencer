@@ -19,7 +19,7 @@ def load_storylines(path=None) -> list[dict]:
 def active_storyline(storylines, chapter, day_index) -> dict | None:
     """Pick the active thread+beat for this chapter deterministically. Threads whose
     `location` is neither the chapter location nor "any" are excluded."""
-    location = chapter.get("location", "forest_house")
+    location = chapter.get("location", "london_home")
     seq = [(t["id"], i, b)
            for t in storylines if t.get("location") in (location, "any")
            for i, b in enumerate(t.get("beats") or [])]

@@ -11,26 +11,21 @@ DEFAULT_CAST = Path(__file__).parent.parent / "persona" / "cast.yaml"
 
 # category -> existing pillar value, so briefs.pillar is never null (optimizer untouched).
 CATEGORY_PILLAR = {
-    "get_ready": "self_healing", "style": "self_healing", "home": "slow_living",
-    "wellness": "self_healing", "hobby": "slow_living", "fitness": "fitness",
-    "food": "slow_living", "work": "slow_living", "errands": "travel",
-    "social": "travel", "travel": "travel", "pet": "slow_living",
+    "founder_lifestyle": "founder_lifestyle", "style": "founder_lifestyle",
+    "work": "ai_workflows", "social": "founder_lifestyle",
+    "food": "founder_lifestyle", "fitness": "founder_lifestyle",
+    "personal_growth": "founder_lifestyle",
 }
 
 _ALL_TIMES = ["dawn", "morning_indoor", "midday", "golden", "dusk", "night", "artificial"]
 _ALLOWED_TIMES = {
-    "social": ["night", "dusk"],
-    "get_ready": ["morning_indoor", "artificial"],
+    "social": ["night", "dusk", "golden"],
     "style": ["morning_indoor", "artificial", "midday"],
-    "fitness": ["midday", "morning_indoor"],
+    "fitness": ["midday", "morning_indoor", "dawn"],
     "food": ["morning_indoor", "golden", "midday"],
-    "home": ["morning_indoor", "golden", "midday", "artificial"],
-    "wellness": ["morning_indoor", "golden", "artificial"],
-    "errands": ["midday", "golden", "morning_indoor"],
-    "travel": ["golden", "midday", "dusk"],
-    "hobby": ["morning_indoor", "golden", "midday"],
-    "pet": ["morning_indoor", "golden", "midday"],
+    "founder_lifestyle": ["morning_indoor", "golden", "midday", "artificial"],
     "work": ["morning_indoor", "artificial", "midday"],
+    "personal_growth": ["morning_indoor", "golden", "midday", "artificial"],
 }
 _TIME_PHRASE = {
     "dawn": "in soft dawn light", "morning_indoor": "in bright soft morning light indoors",
@@ -62,7 +57,9 @@ def load_cast(path=None) -> list[dict]:
 
 def _fits(act, location, is_travel, season) -> bool:
     fl = act.get("fits_locations", "anywhere")
-    if fl == "home_only" and location != "forest_house":
+    if fl == "home_office" and location != "london_home":
+        return False
+    if fl == "coworking" and location != "london_coworking":
         return False
     if fl in ("city_only", "travel_only") and not is_travel:
         return False
@@ -71,8 +68,8 @@ def _fits(act, location, is_travel, season) -> bool:
 
 
 def eligible(activities, chapter, recent) -> list[dict]:
-    location = chapter.get("location", "forest_house")
-    is_travel = location != "forest_house"
+    location = chapter.get("location", "london_home")
+    is_travel = location not in ("london_home", "london_coworking")
     season = chapter.get("season", "")
     base = [a for a in activities if _fits(a, location, is_travel, season)]
     if not base:
@@ -101,8 +98,8 @@ def _signal_gate(elig, activities, recent, window=10):
     return elig
 
 
-# Cast types tied to the Forest House world — never travel with her.
-_HOME_BOUND_CAST = {"pet", "vehicle", "home", "place"}
+# Cast types tied to the home/coworking world — travel with her as needed.
+_HOME_BOUND_CAST = {"home", "place"}
 
 
 def _pick_cast(act_id, cast, h, is_travel=False):
@@ -117,7 +114,7 @@ def _pick_cast(act_id, cast, h, is_travel=False):
 
 
 def choose_activity(activities, cast, chapter, recent, content_format, h) -> dict:
-    is_travel = chapter.get("location", "forest_house") != "forest_house"
+    is_travel = chapter.get("location", "london_home") not in ("london_home", "london_coworking")
     elig = eligible(activities, chapter, recent)
     elig = _signal_gate(elig, activities, recent)
     # soft format affinity
@@ -139,7 +136,7 @@ def choose_activity(activities, cast, chapter, recent, content_format, h) -> dic
         "activity": act["id"], "category": act.get("category"),
         "subject": subject, "setting": act.get("setting", ""),
         "mood": act.get("mood", ""), "style_hint": act.get("style_hint", "any"),
-        "time_of_day": tod, "pillar": CATEGORY_PILLAR.get(act.get("category"), "slow_living"),
+        "time_of_day": tod, "pillar": CATEGORY_PILLAR.get(act.get("category"), "ai_workflows"),
         "indoor": bool(act.get("indoor")),
         "cast_element": _pick_cast(act["id"], cast, h // 7, is_travel),
     }
