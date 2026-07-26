@@ -18,6 +18,11 @@ dry_run_output/
 
 # Training data & reference images
 data/
+
+# Web frontend
+web/node_modules/
+web/.next/
+web/*.tsbuildinfo
 reference_images/
 
 # Node / TS router subtree

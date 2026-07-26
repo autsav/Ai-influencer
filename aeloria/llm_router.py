@@ -3,8 +3,7 @@ Model fallback wrapper — automatic LLM switching when rate limits hit.
 
 Priority ladder:
 1. MiniMax API (primary)
-2. Ollama GLM (fallback 1)
-3. Claude Code CLI (fallback 2)
+2. Claude Code CLI (fallback 1)
 
 Usage:
     from aeloria.llm_router import llm_generate
@@ -54,29 +53,8 @@ def _try_minimax(prompt: str, timeout: int = 60) -> Optional[str]:
         return None
 
 
-def _try_ollama(prompt: str, model: str = "glm-5.2:cloud", timeout: int = 60) -> Optional[str]:
-    """Fallback 1: Ollama GLM."""
-    try:
-        resp = httpx.post(
-            "http://localhost:11434/v1/chat/completions",
-            json={
-                "model": model,
-                "messages": [{"role": "user", "content": prompt}],
-                "temperature": 0.7,
-                "max_tokens": 2000,
-            },
-            timeout=timeout,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        return data["choices"][0]["message"]["content"]
-    except Exception as e:
-        print(f"[llm_router] Ollama failed: {e}")
-        return None
-
-
 def _try_claude_code(prompt: str, timeout: int = 60) -> Optional[str]:
-    """Fallback 2: Claude Code CLI."""
+    """Fallback 1: Claude Code CLI."""
     try:
         result = subprocess.run(
             ["claude", "-p", prompt, "--output-format", "text"],
@@ -96,8 +74,8 @@ def llm_generate(prompt: str, timeout: int = 60) -> str:
     Generate text using the model fallback ladder.
     Returns the first successful response, or raises RuntimeError if all fail.
     """
-    # Try each in order — MiniMax first
-    for name, fn in [("MiniMax", _try_minimax), ("Ollama", _try_ollama), ("Claude Code", _try_claude_code)]:
+    # Try each in order — MiniMax first, Claude Code fallback
+    for name, fn in [("MiniMax", _try_minimax), ("Claude Code", _try_claude_code)]:
         result = fn(prompt, timeout=timeout)
         if result:
             print(f"[llm_router] ✅ {name} responded")
