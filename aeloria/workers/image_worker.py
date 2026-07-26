@@ -1,7 +1,9 @@
-"""Celery worker: image generation via fal.ai FLUX.1 + LoRA.
+"""Celery worker: image generation with two-pass character consistency.
 
-This runs in a separate process from the FastAPI app — never blocks HTTP requests.
-Exponential backoff retries on transient failures.
+Pass 1: FLUX.1 + LoRA + PuLID face identity → full image
+Pass 2: Face detailer inpainting → fix facial artifacts (conditional)
+
+Uses the consistency pipeline orchestrator for zero-drift identity preservation.
 """
 from __future__ import annotations
 
@@ -9,12 +11,8 @@ import logging
 from typing import Any
 
 from celery import shared_task
-from celery.exceptions import Retry
 
 from aeloria.config import get_settings
-from aeloria.generation.fal_images import generate_image, ImageResult
-from aeloria.generation.prompt_builder import build_prompt
-from aeloria.persona.loader import load_persona
 from aeloria.storage.r2 import R2
 
 log = logging.getLogger(__name__)
@@ -31,21 +29,50 @@ log = logging.getLogger(__name__)
 )
 def generate_image_task(self, brief: dict[str, Any]) -> dict:
     """
-    Build prompt from brief → generate image via fal.ai → upload to S3.
+    Run the full two-pass consistency pipeline:
+    1. Build prompt from brief + persona
+    2. Pass 1: Generate with PuLID + LoRA (or LoRA fallback)
+    3. Pass 2: Face detailer refinement (conditional on face size)
+    4. Upload to S3/R2
+    5. Return result with identity scores
 
     Args:
         brief: Generation brief dict with prompt_seed, pillar, wardrobe, etc.
 
     Returns:
-        Dict with s3_url, cost_usd, prompt (for DB record).
+        Dict with s3_url, cost_usd, prompt, identity_score, passes_gate.
     """
     try:
         settings = get_settings()
-        persona = load_persona()
-        prompt = build_prompt(persona, brief)
 
-        log.info("Image task %s: generating (seed=%s)", self.request.id, brief.get("seed"))
-        result: ImageResult = generate_image(prompt, settings)
+        # Load reference face image for PuLID + face gate
+        reference_bytes = None
+        import os
+        ref_image_path = "aeloria/persona/reference_face.jpg"
+        if os.path.exists(ref_image_path):
+            with open(ref_image_path, "rb") as f:
+                reference_bytes = f.read()
+            log.info("Loaded reference face: %s (%d bytes)", ref_image_path, len(reference_bytes))
+        else:
+            log.warning("No reference face image at %s — PuLID disabled, LoRA-only", ref_image_path)
+
+        # Run the two-pass consistency pipeline
+        from aeloria.generation.consistency_pipeline import generate_consistent
+        from aeloria.persona.loader import load_persona
+
+        persona = load_persona()
+        use_pulid = getattr(settings, "pulid_enabled", True) and reference_bytes is not None
+
+        result = generate_consistent(
+            brief=brief,
+            persona=persona,
+            settings=settings,
+            reference_bytes=reference_bytes,
+            use_pulid=use_pulid,
+            pulid_weight=getattr(settings, "pulid_weight", 0.85),
+            face_denoise=getattr(settings, "face_detailer_denoise", 0.28),
+            seed=brief.get("seed"),
+        )
 
         # Upload to R2/S3
         r2 = R2(settings)
@@ -53,15 +80,21 @@ def generate_image_task(self, brief: dict[str, Any]) -> dict:
         r2.put_bytes(object_key, result.image_bytes, content_type="image/png")
         s3_url = r2.public_url(object_key)
 
-        log.info("Image task %s: uploaded to %s, cost=$%.4f", self.request.id, s3_url, result.cost_usd)
+        log.info(
+            "Image task %s: uploaded to %s, cost=$%.4f, identity=%.4f, passes_gate=%s",
+            self.request.id, s3_url, result.cost_usd,
+            result.identity_score, result.passes_gate,
+        )
 
         return {
             "s3_url": s3_url,
             "cost_usd": result.cost_usd,
-            "prompt": prompt,
+            "identity_score": result.identity_score,
+            "passes_gate": result.passes_gate,
+            "detail_pass_applied": result.detail_pass_applied,
             "object_key": object_key,
         }
 
     except Exception as exc:
         log.error("Image task %s failed: %s", self.request.id, exc)
-        raise Retry(exc=exc) if self.request.retries < self.max_retries else exc
+        raise exc

@@ -60,6 +60,9 @@ class JobResponse(BaseModel):
     cost_usd: Optional[float] = None
     error: Optional[str] = None
     progress: Optional[int] = Field(None, ge=0, le=100, description="Progress percentage")
+    identity_score: Optional[float] = Field(None, description="Face identity cosine similarity")
+    passes_gate: Optional[bool] = Field(None, description="Whether face gate passed")
+    detail_pass_applied: Optional[bool] = Field(None, description="Whether Pass 2 face detailer ran")
 
 
 class HealthResponse(BaseModel):
