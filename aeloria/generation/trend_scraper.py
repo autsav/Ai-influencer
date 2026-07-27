@@ -2,7 +2,7 @@
 Trend scraping & hook generation — Stage 2 of the AI Influencer Pipeline.
 
 Scrapes trending content ideas from public sources and generates viral hooks
-using the LLM router (Claude → Ollama → MiniMax fallback).
+using the LLM router (MiniMax → Claude Code fallback).
 """
 from __future__ import annotations
 

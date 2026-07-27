@@ -134,7 +134,7 @@ class DMOrchestrator:
 
     def _generate_response(self, fan: FanProfile, inbound_message: str) -> str:
         """
-        Call the LLM router (MiniMax → Ollama → Claude Code) to produce a context-aware DM response.
+        Call the LLM router (MiniMax → Claude Code) to produce a context-aware DM response.
 
         The prompt is carefully engineered to:
         - Remember prior conversation

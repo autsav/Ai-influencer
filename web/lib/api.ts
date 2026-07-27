@@ -2,6 +2,14 @@
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
+export interface ConsistencyMetrics {
+  identity_score: number;
+  passes_gate: boolean;
+  detail_pass_applied: boolean;
+  pass1_score?: number;
+  pass2_score?: number;
+}
+
 export interface JobResponse {
   job_id: string;
   status: "PENDING" | "STARTED" | "COMPLETED" | "FAILED" | "RETRYING";
@@ -12,6 +20,7 @@ export interface JobResponse {
   cost_usd?: number;
   error?: string;
   progress?: number;
+  consistency?: ConsistencyMetrics;
 }
 
 export interface GenerateRequest {
