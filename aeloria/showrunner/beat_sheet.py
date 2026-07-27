@@ -133,9 +133,9 @@ def build_week(persona, db, start_date, days: int = 7, follower_count: int = 0,
             continue  # idempotent: a brief already exists for this day
 
         chapter = active_chapter(day)
-        location = chapter.get("location", "forest_house")
+        location = chapter.get("location", "london_home")
         season = chapter.get("season", "")
-        is_home = location == "forest_house"
+        is_home = location == "london_home"
 
         moment = active_moment(day, chapter)
         if moment:
@@ -191,7 +191,7 @@ def build_week(persona, db, start_date, days: int = 7, follower_count: int = 0,
             activity_id, activity_cat = plan["activity"], plan["category"]
             style_hint, mood, time_of_day = plan["style_hint"], plan["mood"], plan["time_of_day"]
             # Indoor activities already describe their interior via `setting`; the
-            # outdoor LOCATION_SCENE (streets/porch/pines) would contradict them.
+            # outdoor LOCATION_SCENE (streets/café/conference) would contradict them.
             loc_scene = "" if plan["indoor"] else beats.LOCATION_SCENE.get(location, "")
             lead = f"{plan['subject']} {loc_scene}".rstrip() if loc_scene else plan["subject"]
             scene = f"{lead} in {plan['setting']}, {time_phrase(time_of_day)}"

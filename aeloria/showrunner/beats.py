@@ -1,11 +1,11 @@
 """Deterministic beat library. Each entry is {beat, prompt_seed, caption_brief};
 the beat sheet rotates by week_index so week-over-week varies without an LLM.
-`caption_brief` follows the persona voice (anti-hustle, first-line hook).
+`caption_brief` follows the persona voice (AI entrepreneur, first-line hook).
 
 Niches are short keys (the showrunner stores these as the arc `niche`):
-  core      = wellness + nature (slow living, forest life)
-  secondary = fitness (trail runs, bodyweight, recovery)
-  arcs      = travel (monthly trips away, always returning)
+  core      = AI automation for business (workflows, tools, case studies)
+  secondary = founder lifestyle (building, testing, learning, remote work)
+  arcs      = future of business (jobs AI replaces/creates, industry shifts)
 """
 
 _E = lambda beat, prompt_seed, caption_brief: {  # noqa: E731
@@ -15,68 +15,68 @@ _E = lambda beat, prompt_seed, caption_brief: {  # noqa: E731
 BEATS = {
     "core": {
         "tease": [
-            _E("porch tea golden hour",
-               "aeloria on the porch steps with a clay mug of tea, golden hour light through the trees",
-               "your 5am routine is a coping mechanism — slow mornings aren't laziness"),
-            _E("creek trail",
-               "aeloria barefoot on the mossy trail down to the creek, soft forest light",
-               "the forest doesn't owe you productivity and neither do you"),
+            _E("desk workflow morning",
+               "aeloria at her clean desk with a MacBook showing an AI workflow, morning light, coffee beside it",
+               "you're wasting 6 hours every week on tasks an AI could do while you sleep"),
+            _E("coffee shop build",
+               "aeloria working on a laptop at a café corner table, workflow on screen, flat white, natural light",
+               "I built this client automation over one coffee — it saved them 18 hours a week"),
         ],
         "peak": [
-            _E("restoring the roof",
-               "aeloria on a ladder patching the cabin roof, tools scattered, dappled light",
-               "the leaking roof again. progress is slow and that's the whole point"),
-            _E("stubborn garden",
-               "aeloria kneeling in the vegetable garden, dirt on her hands, late afternoon",
-               "every seed I plant is a small argument against the hustle"),
-            _E("woodpecker steals screws",
-               "aeloria laughing near the woodpile, a woodpecker on the fence post",
-               "the woodpecker stole my screws again — we have an understanding now"),
+            _E("building n8n workflow",
+               "aeloria building an automation in a workflow builder on screen, deep focus, dual monitors, warm desk light",
+               "this AI workflow replaced 3 tools and saved £420/month — here's the full breakdown"),
+            _E("dashboard results",
+               "aeloria looking at analytics on her laptop, satisfied half-smile, coworking space, bright desk",
+               "this automation replied to 247 customers while I slept — bookings up 37%"),
+            _E("tool testing",
+               "aeloria testing a new AI tool on her laptop, leaning in, curious expression, home office",
+               "I tested 18 AI tools this week so you don't have to — only 3 were worth keeping"),
         ],
         "callback": [
-            _E("porch tea callback",
-               "aeloria back on the porch steps at golden hour, same mug, quieter light",
-               "back where we started — slow wins, every time"),
+            _E("workflow callback",
+               "aeloria back at her desk reviewing the workflow results on screen, satisfied, evening light",
+               "same workflow, 3 months later — it's saved 240 hours total now"),
         ],
     },
     "secondary": {
         "tease": [
-            _E("trail run dawn",
-               "aeloria stretching on the forest road at first light, trail shoes laced",
-               "trail runs beat the gym because nothing is chasing you but you"),
+            _E("whiteboard sketch",
+               "aeloria standing at a whiteboard sketching an automation flow, marker in hand, modern office",
+               "every business has one bottleneck — AI removes it. here's how I find them"),
         ],
         "peak": [
-            _E("bodyweight on the porch",
-               "aeloria mid push-up on the porch steps, mist in the trees behind her",
-               "bodyweight, fresh air, no mirror — fitness that doesn't need a performance"),
-            _E("recovery stretch creek",
-               "aeloria stretching by the creek post-run, hands in the cold water",
-               "recovery isn't weakness — it's how you stay able to come back tomorrow"),
+            _E("city walk coffee",
+               "aeloria walking through the city with a coffee, earbuds in, purposeful morning stride, golden hour",
+               "AI creates freedom — I built my whole business from a laptop and a notebook"),
+            _E("reading notebook",
+               "aeloria reading at a café table with a notebook open, coffee gone cold, absorbed, warm light",
+               "the best AI workflow I built this month came from a book, not a tool"),
         ],
         "callback": [
-            _E("trail run callback",
-               "aeloria back on the forest road at first light, slower pace",
-               "same trail, slower — the goal was never the distance"),
+            _E("remote work sunset",
+               "aeloria working on a rooftop terrace with a city view, laptop open, evening light, peaceful",
+               "this is the whole point — AI gave me the freedom to work from anywhere"),
         ],
     },
     "arcs": {
         "tease": [
-            _E("packing for the trip",
-               "aeloria packing a canvas bag on the porch, map on the table",
-               "leaving the forest house for a few days — even slow living packs a bag"),
+            _E("conference floor",
+               "aeloria at a tech conference walking the exhibition floor, curious, badge around neck, bright lights",
+               "just spotted 4 AI tools at this conference that nobody's talking about yet"),
         ],
         "peak": [
-            _E("train window",
-               "aeloria leaning against a train window, landscape blurring past, soft light",
-               "motion after stillness — the trip is the disruption and the relief"),
-            _E("unfamiliar coast",
-               "aeloria on an unfamiliar rocky coast, wind in her hair, late sun",
-               "the sea doesn't care about your routine and that's the gift"),
+            _E("airport work",
+               "aeloria working on her laptop at an airport gate, boarding pass beside it, bright terminal light",
+               "building an AI product from the airport — the tools are so good now you can ship from anywhere"),
+            _E("client transformation",
+               "aeloria presenting a before/after dashboard to a client on her laptop, coworking meeting room",
+               "redesigned a law firm with AI — document review time down 70%, they took 2 new cases"),
         ],
         "callback": [
-            _E("returning home",
-               "aeloria walking back up the mossy trail to the cabin, bag over her shoulder",
-               "every trip ends on this trail — the forest house waits"),
+            _E("year in review",
+               "aeloria at her desk reviewing a year of metrics on screen, satisfied, warm lamp light",
+               "12 months of AI automation — here's what actually worked and what was a waste of time"),
         ],
     },
 }
@@ -98,84 +98,82 @@ def beat_for(niche: str, phase: str, week_index: int) -> dict:
 
 # ---- Pillar library (Phase: 360-day calendar) ----------------------------
 # Subjects are LOCATION-NEUTRAL: beat_for_chapter places them in a location +
-# season. Never bake "porch"/"forest"/a city into a subject here.
+# season. Never bake a specific city/office into a subject here.
 PILLAR_BEATS = {
-    "slow_living": [
-        {"beat": "morning tea", "subject": "aeloria cradling a clay mug of morning tea, unhurried, soft expression",
-         "caption_brief": "your 5am routine is a coping mechanism — slow mornings aren't laziness"},
-        {"beat": "reading, phone away", "subject": "aeloria curled with a worn paperback, no phone in sight",
-         "caption_brief": "we confused being reachable with being alive"},
-        {"beat": "doing nothing", "subject": "aeloria sitting still, hands around a warm cup, watching the light",
-         "caption_brief": "doing nothing is a skill we were taught to be ashamed of"},
+    "ai_workflows": [
+        {"beat": "building workflow", "subject": "aeloria building an automation workflow on her laptop, focused, typing, warm desk light",
+         "caption_brief": "this AI workflow replaced 3 tools and saved £420/month — here's how"},
+        {"beat": "workflow result", "subject": "aeloria looking at workflow results on screen, satisfied, leaning back",
+         "caption_brief": "this automation replied to 247 customers while I slept — here's the result"},
+        {"beat": "whiteboard planning", "subject": "aeloria sketching a workflow on a whiteboard, marker in hand, focused",
+         "caption_brief": "every business has one bottleneck — AI removes it. here's how I find them"},
     ],
-    "self_healing": [
-        {"beat": "journaling", "subject": "aeloria journaling slowly at a wooden table, warm lamp light",
-         "caption_brief": "healing isn't a glow-up. some days it's just writing the sentence down"},
-        {"beat": "resting", "subject": "aeloria resting with eyes closed, a blanket around her shoulders, calm",
-         "caption_brief": "rest is not the reward for finishing. it's how you keep going"},
-        {"beat": "slow walk", "subject": "aeloria on a slow reflective walk, hands in her sleeves, gentle expression",
-         "caption_brief": "some feelings only move when your feet do"},
+    "ai_tools": [
+        {"beat": "testing tools", "subject": "aeloria testing a new AI tool on her laptop, leaning in, curious, home office",
+         "caption_brief": "I tested 18 AI tools this week — only 3 were worth keeping"},
+        {"beat": "tool comparison", "subject": "aeloria comparing two AI tools side by side on her screen, evaluating, notebook open",
+         "caption_brief": "free vs paid — I tested both so you don't have to waste money on the wrong one"},
+        {"beat": "hidden gem", "subject": "aeloria smiling at a surprising result on her laptop, genuinely impressed",
+         "caption_brief": "this AI tool nobody's talking about just saved me 15 hours this week"},
     ],
-    "yoga": [
-        {"beat": "sun salutation", "subject": "aeloria flowing through a slow sun salutation on a woven mat, calm focus",
-         "caption_brief": "i don't stretch to fix myself. i stretch to say hello to myself"},
-        {"beat": "seated breath", "subject": "aeloria seated cross-legged, eyes closed, hands on knees, breathing",
-         "caption_brief": "the breath was always free. we just forgot to use it"},
-        {"beat": "restorative pose", "subject": "aeloria folded in a gentle restorative pose, a bolster beneath her",
-         "caption_brief": "rest poses count. slowness is the practice, not the failure"},
+    "case_studies": [
+        {"beat": "client audit", "subject": "aeloria reviewing a client's business process on her laptop, analyzing, focused",
+         "caption_brief": "this restaurant was missing calls during dinner service — AI fixed it in one week"},
+        {"beat": "client results", "subject": "aeloria showing a before/after dashboard to the camera, proud, coworking space",
+         "caption_brief": "redesigned a law firm with AI — document review time down 70%, they took 2 new cases"},
+        {"beat": "client transformation", "subject": "aeloria presenting results on a call, gesturing, engaged, home office",
+         "caption_brief": "how a gym used AI to triple lead generation without hiring another staff member"},
     ],
-    "fitness": [
-        {"beat": "dawn run", "subject": "aeloria mid dawn run, breath visible, trail shoes, steady effort",
-         "caption_brief": "i run from nothing and toward nothing — that's the whole point"},
-        {"beat": "bodyweight set", "subject": "aeloria mid push-up, focused, no mirror, natural light",
-         "caption_brief": "no mirror, no metrics — strength that doesn't need a performance"},
-        {"beat": "post-workout stretch", "subject": "aeloria stretching after a workout, hands to the sky, easy breath",
-         "caption_brief": "recovery isn't weakness — it's how you stay able to come back"},
+    "founder_lifestyle": [
+        {"beat": "morning desk", "subject": "aeloria at her clean desk with a MacBook, coffee, morning light, starting the day",
+         "caption_brief": "this workflow saves me 6 hours every day — here's my morning build routine"},
+        {"beat": "coffee shop work", "subject": "aeloria working at a café corner table, laptop open, flat white, natural light",
+         "caption_brief": "built this client workflow over one coffee — the tools are that good now"},
+        {"beat": "remote work", "subject": "aeloria working on a rooftop terrace with a city view, laptop, evening light",
+         "caption_brief": "AI creates freedom — I built my whole business from a laptop and a notebook"},
     ],
-    "travel": [
-        {"beat": "arrival wander", "subject": "aeloria wandering slowly with a canvas bag, taking in a new street, curious calm",
-         "caption_brief": "travel slowly enough and a new city stops being a checklist"},
-        {"beat": "cafe corner", "subject": "aeloria at a small cafe table with a coffee and a notebook, watching the street",
-         "caption_brief": "the point of the trip was never the landmarks"},
-        {"beat": "quiet detail", "subject": "aeloria noticing a small quiet detail — a doorway, a market stall, soft light",
-         "caption_brief": "the city everyone photographs isn't the one you'll remember"},
+    "future_of_business": [
+        {"beat": "contemplating", "subject": "aeloria looking out a window, thinking, notebook in hand, city view",
+         "caption_brief": "5 businesses that will disappear in 5 years because of AI — is yours one of them?"},
+        {"beat": "reading", "subject": "aeloria reading at her desk, book open, highlighter, thoughtful expression",
+         "caption_brief": "AI won't replace business owners — owners who use AI will replace those who don't"},
+        {"beat": "whiteboard future", "subject": "aeloria sketching industry trends on a whiteboard, marker, analytical",
+         "caption_brief": "3 jobs AI will create in the next 2 years that don't exist yet — prepare now"},
     ],
 }
 
-# Aspirational, specific backgrounds (named landmarks + depth), editorial-master
-# style — richer than a bare label so the scene reads like a real place.
+# Aspirational, specific backgrounds, editorial-master style.
 LOCATION_SCENE = {
-    "forest_house": "at her Forest House — moss, ferns and tall misty pines all around, a weathered wooden porch and soft depth of field behind her",
-    "tokyo": "on a quiet Tokyo backstreet lined with paper lanterns and blossoming cherry trees, distant softly-bokeh'd neon",
-    "paris": "on a sunlit Haussmann Paris street with wrought-iron balconies, a corner cafe and pale stone facades framing the scene",
-    "new_york": "on a calm New York morning street of brownstone stoops and fire escapes, golden light raking down the avenue",
-    "london": "on a rainy cobbled London side street of red-brick terraces, the warm amber glow of a corner cafe behind her",
+    "london_home": "in her minimal home office — clean white desk, MacBook, warm desk lamp, one plant, soft depth of field",
+    "london_coworking": "in a modern coworking space — bright, white desks, plants, other founders working, natural light",
+    "conference": "at a modern tech conference — bright lights, booths, crowd of founders and developers, energetic atmosphere",
+    "remote_travel": "working remotely — a rooftop terrace or café with a city view, golden hour, modern and bright",
 }
 
 SEASON_MOOD = {
-    "deep_winter": "cold clear winter light, breath visible",
-    "late_winter": "pale late-winter light, bare branches",
-    "early_spring": "cool spring light, first cherry blossoms",
-    "spring": "fresh green spring light",
-    "late_spring": "warm golden late-spring light",
-    "early_summer": "long soft early-summer light",
-    "deep_summer": "hazy warm midsummer light",
-    "late_summer": "golden late-summer light",
-    "early_autumn": "amber early-autumn light, leaves turning",
-    "autumn": "moody grey autumn light, wet leaves",
-    "late_autumn": "muted late-autumn light, mist rising",
-    "winter": "cozy low winter light, soft and quiet",
+    "deep_winter": "cold clear winter light, crisp and sharp",
+    "late_winter": "pale late-winter light, moody and focused",
+    "early_spring": "cool spring light, fresh and energized",
+    "spring": "fresh bright spring light, clean and modern",
+    "late_spring": "warm golden late-spring light, optimistic",
+    "early_summer": "long soft early-summer light, bright and open",
+    "deep_summer": "hazy warm midsummer light, relaxed and warm",
+    "late_summer": "golden late-summer light, warm and productive",
+    "early_autumn": "amber early-autumn light, focused and cozy",
+    "autumn": "moody grey autumn light, atmospheric and cinematic",
+    "late_autumn": "muted late-autumn light, warm and intimate",
+    "winter": "cozy low winter light, soft and warm indoors",
 }
 
-_NEUTRAL_SCENE = "outdoors in nature"
+_NEUTRAL_SCENE = "in a modern workspace"
 _NEUTRAL_MOOD = "soft natural light"
 
 
 def beat_for_chapter(pillar: str, location: str, season: str, rotation_index: int) -> dict:
     """Assemble a beat for a calendar chapter: a location-neutral pillar subject
-    placed into a location + season. Unknown pillar -> slow_living; unknown
+    placed into a location + season. Unknown pillar -> ai_workflows; unknown
     location/season -> neutral descriptor. Never raises."""
-    entries = PILLAR_BEATS.get(pillar) or PILLAR_BEATS["slow_living"]
+    entries = PILLAR_BEATS.get(pillar) or PILLAR_BEATS["ai_workflows"]
     base = entries[rotation_index % len(entries)]
     scene = LOCATION_SCENE.get(location, _NEUTRAL_SCENE)
     mood = SEASON_MOOD.get(season, _NEUTRAL_MOOD)

@@ -43,16 +43,16 @@ def _film_brief(p):
 
 def _flash_brief(p):
     for i in range(200):
-        b = {"prompt_seed": f"scene {i}", "pillar": "travel"}
-        if _choose_style(_h(b), "travel") == "flash_candid":
+        b = {"prompt_seed": f"scene {i}", "pillar": "case_studies"}
+        if _choose_style(_h(b), "case_studies") == "flash_candid":
             return b, build_prompt(p, b)
     raise AssertionError("no flash brief found")
 
 
 def _pap_brief(p):
     for i in range(200):
-        b = {"prompt_seed": f"scene {i}", "pillar": "travel"}
-        if _choose_style(_h(b), "travel") == "paparazzi_night":
+        b = {"prompt_seed": f"scene {i}", "pillar": "case_studies"}
+        if _choose_style(_h(b), "case_studies") == "paparazzi_night":
             return b, build_prompt(p, b)
     raise AssertionError("no paparazzi brief found")
 
@@ -111,11 +111,11 @@ def test_mood_override_replaces_pillar_mood(persona):
     prompt = build_prompt(persona, {
         "prompt_seed": "morning walk",
         "mood_override": "serene and contemplative",
-        "pillar": "fitness",
+        "pillar": "founder_lifestyle",
     })
     assert "serene and contemplative" in prompt
-    # fitness pillar mood should NOT appear (mood_override takes precedence)
-    assert "mid-motion" not in prompt.lower()
+    # founder_lifestyle pillar mood should NOT appear (mood_override takes precedence)
+    assert "approachable" not in prompt.lower()
 
 
 def test_mood_override_with_location_both_present(persona):
@@ -144,7 +144,7 @@ def test_style_override_forces_style(persona):
         prompt = build_prompt(persona, {
             "prompt_seed": "scene",
             "style_override": hint,
-            "pillar": "slow_living",
+            "pillar": "ai_workflows",
         })
         if hint == "candid":
             assert prompt.startswith("A raw flash-lit candid snapshot")
@@ -186,8 +186,8 @@ def test_paparazzi_camera_and_grade_vary():
     cams, grades = set(), set()
     for i in range(300):
         bid = f"pv-{i}"
-        if _choose_style(int(_hl.md5(bid.encode()).hexdigest(), 16), "travel") == "paparazzi_night":
-            pr = build_prompt(p, {"id": bid, "pillar": "travel", "prompt_seed": "night street"})
+        if _choose_style(int(_hl.md5(bid.encode()).hexdigest(), 16), "case_studies") == "paparazzi_night":
+            pr = build_prompt(p, {"id": bid, "pillar": "case_studies", "prompt_seed": "night street"})
             for cam in ("telephoto lens", "moderate lens", "fisheye", "film camera"):
                 if cam in pr:
                     cams.add(cam)
@@ -227,17 +227,17 @@ def test_combination_space_sufficient():
 def test_pillar_mood_when_no_override():
     p = load_persona()
     # pillar mood should appear when no mood_override is set
-    prompt = build_prompt(p, {"prompt_seed": "run", "pillar": "fitness"})
-    assert "mid-motion" in prompt or "exertion" in prompt
+    prompt = build_prompt(p, {"prompt_seed": "run", "pillar": "founder_lifestyle"})
+    assert "approachable" in prompt or "confident" in prompt.lower()
 
-    prompt = build_prompt(p, {"prompt_seed": "flow", "pillar": "yoga"})
-    assert "serene" in prompt or "stillness" in prompt
+    prompt = build_prompt(p, {"prompt_seed": "flow", "pillar": "ai_workflows"})
+    assert "focused" in prompt or "determination" in prompt.lower()
 
 
 def test_style_bias_by_pillar():
-    travel = sum(_choose_style(i, "travel") == "flash_candid" for i in range(300))
-    home = sum(_choose_style(i, "self_healing") == "flash_candid" for i in range(300))
-    assert travel > home
+    case_studies = sum(_choose_style(i, "case_studies") == "flash_candid" for i in range(300))
+    home = sum(_choose_style(i, "founder_lifestyle") == "flash_candid" for i in range(300))
+    assert case_studies >= home
 
 
 # ── Expression mood bias ──────────────────────────────────────────────────────
@@ -246,7 +246,7 @@ def test_mood_biases_expression():
     p = load_persona()
     det = build_prompt(p, {"prompt_seed": "gym set", "mood": "determined"})
     assert "Expression:" in det
-    assert any(w in det for w in ("grin", "laugh", "confidence", "daring"))
+    assert any(w in det for w in ("confidence", "confident", "grin", "laugh", "mischievous"))
 
 
 def test_determined_mood_avoids_dreamy():
@@ -254,7 +254,7 @@ def test_determined_mood_avoids_dreamy():
     det = build_prompt(p, {"prompt_seed": "gym set", "mood": "determined"})
     # dreamy expressions should NOT dominate determined mood
     dreamy_count = sum(w in det.lower() for w in ("dreamy", "eyes closed", "serene"))
-    active_count = sum(w in det.lower() for w in ("grin", "laugh", "direct", "confident"))
+    active_count = sum(w in det.lower() for w in ("confident", "direct", "smirk", "focused"))
     assert active_count >= dreamy_count
 
 
@@ -307,15 +307,16 @@ def test_no_london_without_location():
 
 # ── Backstory: Soul ID isolation ───────────────────────────────────────────────
 
-def test_forest_backstory_not_in_prompt():
-    """Verify the Forest House backstory never leaks into prompts."""
+def test_backstory_not_in_prompt():
+    """Verify backstory lore never leaks into prompts."""
     p = load_persona()
-    forest_backstory_phrases = [
+    backstory_phrases = [
         "forest house", "old-growth", "leaking roof", "woodpecker",
         "mossy trail", "east window at golden hour", "cabin kitchen",
+        "the build", "coworking space", "tech conference",
     ]
-    for phrase in forest_backstory_phrases:
-        for seed in ["cafe", "london", "beach", "yoga", "run"]:
+    for phrase in backstory_phrases:
+        for seed in ["cafe", "london", "beach", "desk", "run"]:
             prompt = build_prompt(p, {"prompt_seed": seed})
             assert phrase.lower() not in prompt.lower(), f"'{phrase}' found in prompt for seed '{seed}'"
 

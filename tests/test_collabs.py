@@ -4,23 +4,25 @@ from aeloria.distribution.collabs import load, match
 import aeloria.distribution.collabs as collabs_mod
 
 ENTRIES = [
-    {"handle": "@forestmeditations", "platform": "instagram", "niches": ["wellness"], "kind": "comment"},
-    {"handle": "@trailrunnerdaily", "platform": "instagram", "niches": ["fitness"], "kind": "duet"},
-    {"handle": "@cabindiaries", "platform": "instagram", "niches": ["wellness", "travel"], "kind": "stitch"},
+    {"handle": "@aitechdaily", "platform": "instagram", "niches": ["ai automation"], "kind": "comment"},
+    {"handle": "@workflowbuilder", "platform": "instagram", "niches": ["ai automation", "ai tools"], "kind": "stitch"},
+    {"handle": "@founderlife", "platform": "instagram", "niches": ["founder lifestyle"], "kind": "mention"},
 ]
+MATCH_NICHE = "AI automation for business (workflows, tools, case studies)"
 
 
-def test_match_filters_by_wellness():
-    res = match(ENTRIES, "wellness + nature (slow living, forest life)")
+def test_match_filters_by_ai_niche():
+    res = match(ENTRIES, MATCH_NICHE)
+    handles = {e["handle"] for e in res}
+    assert "@aitechdaily" in handles
+    assert "@workflowbuilder" in handles
+    assert "@founderlife" not in handles
+
+
+def test_match_founder_lifestyle_only():
+    res = match(ENTRIES, "founder lifestyle (building, testing, learning, remote work)")
     handles = [e["handle"] for e in res]
-    assert "@forestmeditations" in handles
-    assert "@cabindiaries" in handles
-    assert "@trailrunnerdaily" not in handles
-
-
-def test_match_fitness_only():
-    res = match(ENTRIES, "fitness (trail runs, bodyweight, recovery)")
-    assert [e["handle"] for e in res] == ["@trailrunnerdaily"]
+    assert handles == ["@founderlife"]
 
 
 def test_match_unknown_niche_returns_empty():
@@ -38,8 +40,8 @@ def test_load_reads_yaml(tmp_path):
         "collabs:\n"
         "  - handle: '@x'\n"
         "    platform: instagram\n"
-        "    niches: ['wellness']\n"
+        "    niches: ['ai automation']\n"
         "    kind: comment\n"
     )
     res = load(str(p))
-    assert res == [{"handle": "@x", "platform": "instagram", "niches": ["wellness"], "kind": "comment"}]
+    assert res == [{"handle": "@x", "platform": "instagram", "niches": ["ai automation"], "kind": "comment"}]

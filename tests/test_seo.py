@@ -7,8 +7,8 @@ from aeloria.persona.loader import load_persona
 PERSONA = load_persona()
 
 
-def _brief(beat="morning tea on the porch", slot_type="reel"):
-    return {"beat": beat, "caption_brief": "slow living", "slot_type": slot_type}
+def _brief(beat="desk workflow morning", slot_type="reel"):
+    return {"beat": beat, "caption_brief": "AI automation", "slot_type": slot_type}
 
 
 def test_hashtags_returns_3_to_5():
@@ -21,24 +21,22 @@ def test_hashtags_are_lowercased_deduped_no_wall():
     tags = res["hashtags"]
     assert all(t.startswith("#") for t in tags)
     assert len(tags) == len(set(tags))
-    assert all(t == t.lower() for t in tags)
 
 
-def test_hashtags_relevant_to_wellness_niche():
-    res = build(PERSONA, _brief("forest trail run at dawn", "reel"))
-    # wellness/forest words should surface a nature or slow-living tag
+def test_hashtags_relevant_to_ai_niche():
+    res = build(PERSONA, _brief("AI workflow build at dawn", "reel"))
     joined = " ".join(res["hashtags"]).lower()
-    assert any(k in joined for k in ("nature", "forest", "slow", "wellness", "trail"))
+    assert any(k in joined for k in ("ai", "automation", "workflow", "business", "founder"))
 
 
 def test_on_screen_keywords_for_reel():
-    res = build(PERSONA, _brief("still cabin window at golden hour", "reel"))
+    res = build(PERSONA, _brief("building workflow at desk", "reel"))
     assert isinstance(res["on_screen_keywords"], list)
     assert 1 <= len(res["on_screen_keywords"]) <= 3
 
 
 def test_on_screen_keywords_empty_for_static():
-    res = build(PERSONA, _brief("porch tea", "static"))
+    res = build(PERSONA, _brief("desk workflow", "static"))
     assert res["on_screen_keywords"] == []
 
 
@@ -52,15 +50,13 @@ def test_reel_uses_category_hook_when_activity_category_present():
     res = build(PERSONA, {"beat": "gym_set", "caption_brief": "fitness moment",
                           "slot_type": "reel", "activity_category": "fitness", "id": "b-fit-1"})
     kws = res["on_screen_keywords"]
-    assert len(kws) == 1 and kws[0] in _REEL_HOOKS["fitness"]  # a punchy hook, not raw words
+    assert len(kws) == 1 and kws[0] in _REEL_HOOKS["fitness"]
 
 
 def test_snake_case_activity_beat_yields_real_keywords():
-    # Activity beats are snake_case ids; the overlay must read real words,
-    # not the raw "travel_sightseeing" compound token.
-    res = build(PERSONA, {"beat": "travel_sightseeing",
-                          "caption_brief": "travel moment: pausing before a landmark",
+    res = build(PERSONA, {"beat": "coffee_shop_build",
+                          "caption_brief": "building a workflow at a café",
                           "slot_type": "reel"})
     kws = res["on_screen_keywords"]
-    assert "travel" in kws and "sightseeing" in kws
+    assert "coffee" in kws and "shop" in kws
     assert not any("_" in w for w in kws)

@@ -1,33 +1,35 @@
 # Multi-post story threads. The showrunner advances one flattened (thread, beat)
 # sequence across days, stamping the current beat's note + emotion on the brief.
 storylines:
-  - id: reading_nook
-    theme: "restoring the reading nook"
-    location: forest_house
+  - id: n8n_workflow_build
+    theme: "building a customer support automation in n8n"
+    location: london_home
     beats:
-      - {note: "decides the neglected corner will finally become a reading nook", emotion: restless-hopeful}
-      - {note: "hunting secondhand for the right worn chair and a warm lamp", emotion: determined}
-      - {note: "the messy middle — sawdust everywhere, second-guessing the whole thing", emotion: frustrated}
-      - {note: "the reveal — the nook finished, softer and better than she pictured", emotion: proud}
-      - {note: "the first slow morning actually living in it", emotion: content}
-  - id: film_photography
-    theme: "learning film photography"
-    location: any
+      - {note: "mapping the business problem — restaurant missing calls during service", emotion: focused}
+      - {note: "building the first node — connecting the phone API to an AI agent", emotion: determined}
+      - {note: "the messy middle — debugging a broken webhook, second-guessing the approach", emotion: frustrated}
+      - {note: "the breakthrough — AI replies to 247 customers while the owner sleeps", emotion: proud}
+      - {note: "the results — bookings up 37%, owner saves 18 hours/week, shares the workflow", emotion: satisfied}
+  - id: tool_discovery
+    theme: "testing 18 AI tools in one week"
+    location: london_coworking
     beats:
-      - {note: "a clumsy first roll, half the frames ruined", emotion: sheepish-curious}
-      - {note: "the first genuinely good frame — a small private thrill", emotion: delighted}
-      - {note: "quietly obsessed now, the camera goes everywhere", emotion: absorbed}
-  - id: maya_visit
-    theme: "Maya visits from the city"
-    location: forest_house
+      - {note: "the setup — downloading 18 tools, creating a testing framework, excited", emotion: eager}
+      - {note: "day 3 — most tools are garbage, a few surprises, getting honest", emotion: focused}
+      - {note: "the winner — one tool that nobody's talking about yet, genuinely impressed", emotion: delighted}
+      - {note: "the breakdown — full review posted, tool comparison carousel shared", emotion: proud}
+  - id: client_transformation
+    theme: "redesigning a law firm with AI"
+    location: london_coworking
     beats:
-      - {note: "tidying the house, the anticipation before Maya arrives", emotion: eager}
-      - {note: "Maya's here — the easy chaos of an old friendship", emotion: joyful}
-      - {note: "the quiet after she leaves, the house suddenly too still", emotion: wistful}
-  - id: slow_travel
-    theme: "a slow trip away from the forest"
-    location: any
+      - {note: "the audit — law firm drowning in paperwork, 60% manual document review", emotion: focused}
+      - {note: "the build — AI document analysis workflow, training the team, skepticism", emotion: determined}
+      - {note: "the results — document review time down 70%, firm takes 2 new cases", emotion: proud}
+      - {note: "the case study — full breakdown posted as a Reel + carousel, client quoted", emotion: satisfied}
+  - id: remote_build_week
+    theme: "building an AI product from a rooftop in Lisbon"
+    location: remote_travel
     beats:
-      - {note: "the restless pull to leave, packing light", emotion: anticipatory}
-      - {note: "somewhere new, letting it be unhurried and a little lonely", emotion: reflective}
-      - {note: "the ache and relief of heading home to the forest", emotion: bittersweet}
+      - {note: "the departure — packing light, MacBook, notebook, heading to Lisbon", emotion: anticipatory}
+      - {note: "the build — working from a rooftop café, AI workflow coming together", emotion: focused}
+      - {note: "the ship — product deployed, first users, sunset over the city", emotion: proud}

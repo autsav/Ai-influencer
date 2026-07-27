@@ -14,7 +14,6 @@ def _persona():
 
 def _settings():
     s = MagicMock()
-    s.anthropic_api_key = "key"
     return s
 
 
@@ -27,21 +26,17 @@ def test_claims_human_detects_assertions():
     assert not claims_human("I'm so glad this resonated 🌲")
 
 
-@patch("aeloria.engagement.drafter.anthropic.Anthropic")
-def test_draft_reply_returns_text(mock_anthropic):
-    msg = MagicMock()
-    msg.content = [MagicMock(text="so glad you felt that 🌲")]
-    mock_anthropic.return_value.messages.create.return_value = msg
+@patch("aeloria.engagement.drafter.llm_generate")
+def test_draft_reply_returns_text(mock_llm):
+    mock_llm.return_value = "so glad you felt that 🌲"
     out = draft_reply(_persona(), "reply", "love this so calm", settings=_settings())
     assert out == "so glad you felt that 🌲"
-    system = mock_anthropic.return_value.messages.create.call_args.kwargs["system"]
-    assert "never" in system.lower()  # human-claim rule present in prompt
+    prompt = mock_llm.call_args.args[0]
+    assert "never" in prompt.lower()
 
 
-@patch("aeloria.engagement.drafter.anthropic.Anthropic")
-def test_draft_reply_blocks_human_claim(mock_anthropic):
-    msg = MagicMock()
-    msg.content = [MagicMock(text="haha yes I am a real human person")]
-    mock_anthropic.return_value.messages.create.return_value = msg
+@patch("aeloria.engagement.drafter.llm_generate")
+def test_draft_reply_blocks_human_claim(mock_llm):
+    mock_llm.return_value = "haha yes I am a real human person"
     with pytest.raises(DrafterError):
         draft_reply(_persona(), "dm", "are you real?", settings=_settings())

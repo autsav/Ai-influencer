@@ -1,18 +1,18 @@
 """Strategic calendar: date -> chapter lookups. Pure, yaml-backed. Degrades to
-DEFAULT_CHAPTER (a forest home month) when the calendar is missing/malformed."""
+DEFAULT_CHAPTER (a London home office month) when the calendar is missing/malformed."""
 from pathlib import Path
 
 import yaml
 
 DEFAULT_YAML = Path(__file__).parent.parent / "persona" / "calendar.yaml"
 
-_PILLARS = ("slow_living", "self_healing", "yoga", "fitness", "travel")
+_PILLARS = ("ai_workflows", "ai_tools", "case_studies", "founder_lifestyle", "future_of_business")
 
 DEFAULT_CHAPTER = {
-    "month": 0, "location": "forest_house", "season": "autumn",
-    "theme": "Forest days",
-    "pillar_weights": {"slow_living": 4, "self_healing": 2, "yoga": 2, "fitness": 2, "travel": 0},
-    "series": "forest-mornings", "moments": [],
+    "month": 0, "location": "london_home", "season": "autumn",
+    "theme": "The build",
+    "pillar_weights": {"ai_workflows": 4, "ai_tools": 2, "case_studies": 2, "founder_lifestyle": 2, "future_of_business": 0},
+    "series": "workflow-wednesdays", "moments": [],
 }
 
 
@@ -42,7 +42,7 @@ def pillar_cycle(chapter: dict) -> list[str]:
         for p in _PILLARS:
             if buckets[p]:
                 cycle.append(buckets[p].pop())
-    return cycle or ["slow_living"]
+    return cycle or ["ai_workflows"]
 
 
 def active_moment(d, chapter: dict) -> dict | None:

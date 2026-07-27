@@ -35,11 +35,11 @@ soul_id:
 
   # ── Training context ─────────────────────────────────────
   training_note: >-
-    Reference images showed Aeloria in the Forest House context (cabin porch,
+    Reference images showed Aeloria in a Forest House context (cabin porch,
     forest clearing, creek trail). That context is a TRAINING ARTIFACT, NOT a
     Soul ID component. The model must generate Aeloria's identity correctly in
-    ANY location — city street, beach, mountain, studio — regardless of what
-    was in the training images.
+    ANY location — home office, coffee shop, coworking space, city street,
+    conference — regardless of what was in the training images.
 
   training_location: "The Forest House, West Sussex countryside (summer 2024)"
   training_image_count: "~30 curated reference images"

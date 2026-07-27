@@ -26,6 +26,10 @@ class CharacterConfig:
     skin_realism: str = ""
     identity_lock: str = ""
     negative_prompt: str = ""
+    # Extended niche fields
+    aesthetic_tiers: dict[str, str] = field(default_factory=dict)
+    wardrobe_archetypes: list[dict] = field(default_factory=list)
+    niche: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -80,26 +84,35 @@ def load_character_config(path: str) -> CharacterConfig:
         skin_realism=data.get("skin_realism", ""),
         identity_lock=data.get("identity_lock", ""),
         negative_prompt=data.get("negative_prompt", ""),
+        aesthetic_tiers=data.get("aesthetic_tiers", {}),
+        wardrobe_archetypes=data.get("wardrobe_archetypes", []),
+        niche=data.get("niche", {}),
     )
 
 
 def load_pipeline_config(path: str) -> PipelineConfig:
     with open(path) as f:
         data = json.load(f)
-    char = CharacterConfig()
+    # ── Load character config ────────────────────────────────────────────────────
+    # Pipeline.json has its own character section; fall back to character.json
+    # for extended fields (aesthetic_tiers, wardrobe_archetypes, niche) if missing.
+    char_path = Path(path).parent / "character.json"
+    if char_path.exists():
+        char = load_character_config(str(char_path))
+    else:
+        char = CharacterConfig()
+    # Override with whatever pipeline.json explicitly provides
+    if "character" in data:
+        char_cfg = data["character"]
+        for field in ("name", "lora_url", "lora_scale", "guidance_scale",
+                      "num_inference_steps", "image_model", "aspect_ratio",
+                      "visual_dna", "skin_realism", "identity_lock",
+                      "negative_prompt", "aesthetic_tiers",
+                      "wardrobe_archetypes", "niche"):
+            if field in char_cfg:
+                setattr(char, field, char_cfg[field])
     voice = VoiceConfig()
     qc = QCConfig()
-    if "character" in data:
-        char = CharacterConfig(
-            name=data["character"].get("name", "Aeloria"),
-            lora_url=data["character"].get("lora_url", ""),
-            lora_scale=data["character"].get("lora_scale", 0.7),
-            guidance_scale=data["character"].get("guidance_scale", 3.5),
-            num_inference_steps=data["character"].get("num_inference_steps", 40),
-            image_model=data["character"].get("image_model", "rundiffusion-fal/juggernaut-flux-lora"),
-            aspect_ratio=data["character"].get("aspect_ratio", "4:5"),
-            visual_dna=data["character"].get("visual_dna", {}),
-        )
     if "voice" in data:
         v = data["voice"]
         voice = VoiceConfig(

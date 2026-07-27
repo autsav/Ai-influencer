@@ -101,6 +101,10 @@ async def lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     app = FastAPI(lifespan=lifespan)
 
+    # Mount the new v1 API router
+    from aeloria.api.v1.router import api_router
+    app.include_router(api_router)
+
     @app.get("/health")
     async def health():
         sched = getattr(app.state, "scheduler", None)

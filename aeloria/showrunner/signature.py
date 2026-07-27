@@ -1,16 +1,16 @@
 """Signature scheduler: an ownable signature beat fires every
-SIGNATURE_EVERY_DAYS, rotating through fixed Forest-House anchors. The caller
+SIGNATURE_EVERY_DAYS, rotating through fixed AI-entrepreneur anchors. The caller
 tracks how many signatures have already been emitted (rotation index)."""
 
 SIGNATURE_EVERY_DAYS = 7
 
-# Recurring ownable beats — recognizable Aeloria signatures (the Forest House
+# Recurring ownable beats — recognizable Aeloria signatures (the AI entrepreneur
 # anchors from the persona wedge). Rotated, never LLM-generated.
 SIGNATURE_BEATS = [
-    "forest house exterior at golden hour",
-    "east window morning stillness",
-    "mossy trail down to the creek",
-    "porch steps with morning tea",
+    "minimal home office at golden hour, MacBook glow on her face",
+    "clean desk morning stillness, coffee steam, laptop closed",
+    "walking to a coworking space in morning light, backpack on",
+    "café corner table with a workflow on screen, flat white beside it",
 ]
 
 

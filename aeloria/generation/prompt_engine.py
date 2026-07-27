@@ -129,12 +129,12 @@ MODULE_E_LOCATION = [
         "description": "Dimly lit luxury dark interior with glossy black lacquered walls and warm gold oriental patterns",
     },
     {
-        "setting": "Forest House",
-        "description": "A weathered forest house in misty pines, warm light spilling from windows, mossy wooden porch with ferns",
+        "setting": "Home Office",
+        "description": "A minimal home office with clean white desk, MacBook, warm desk lamp, one plant, morning light",
     },
     {
         "setting": "Mountain Retreat",
-        "description": "A cozy mountain cabin with a stone fireplace, wool blankets, and snow visible through foggy windows",
+        "description": "A modern coworking space with bright white desks, plants, and other founders working",
     },
     {
         "setting": "Coastal Walk",
@@ -464,7 +464,7 @@ def _build_argparser() -> argparse.ArgumentParser:
     )
     p.add_argument(
         "--style", choices=["casual", "winter", "y2k", "high-fashion", "slow-living",
-                            "earthy-linen", "forest-cozy", "travel-chic", "athleisure",
+                            "smart-casual", "founder-mode", "tech-minimal", "city-walk",
                             "editorial-knit"], default=None,
         help="Constrain wardrobe style (default: random)"
     )
@@ -506,7 +506,7 @@ def _filter_wardrobe(constraint: str | None) -> list[dict]:
         "high-fashion": "High Fashion",
         "slow-living": "Slow Living",
         "earthy-linen": "Earthy Linen",
-        "forest-cozy": "Forest Cozy",
+        "founder-mode": "Founder Mode",
         "travel-chic": "Travel Chic",
         "athleisure": "Athleisure",
         "editorial-knit": "Editorial Knit",

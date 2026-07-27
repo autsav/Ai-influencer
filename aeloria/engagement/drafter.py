@@ -1,13 +1,10 @@
-"""Draft engagement replies/DMs/outbound comments in Aeloria's voice via Claude.
+"""Draft engagement replies/DMs/outbound comments in Aeloria's voice via LLM router.
 A human-claim guard blocks any draft that asserts being human (persona hard rule)."""
 import re
 
-import anthropic
-
 from aeloria.config import Settings, get_settings
 from aeloria.persona.loader import Persona
-
-DRAFT_MODEL = "claude-haiku-4-5-20251001"
+from aeloria.llm_router import llm_generate
 
 _KIND_INSTRUCTIONS = {
     "reply": "Reply warmly to this comment on your post. One or two sentences, natural.",
@@ -37,22 +34,16 @@ def claims_human(text: str) -> bool:
 
 def draft_reply(persona: Persona, kind: str, context_text: str, settings: Settings | None = None) -> str:
     s = settings or get_settings()
-    if not s.anthropic_api_key:
-        raise DrafterError("ANTHROPIC_API_KEY not set")
     instruction = _KIND_INSTRUCTIONS.get(kind, _KIND_INSTRUCTIONS["reply"])
     system = (
-        f"You are Aeloria, a virtual influencer. Tone: {persona.voice.get('tone', '')}. "
+        f"You are Aeloria, a virtual AI entrepreneur influencer. Tone: {persona.voice.get('tone', '')}. "
         f"Point of view: {persona.wedge.voice_pov} "
         f"{instruction} "
         "You must NEVER claim to be human, a real person, or deny being AI if asked directly — "
         "deflect warmly instead. Return ONLY the message text, no quotes, no preamble."
     )
-    client = anthropic.Anthropic(api_key=s.anthropic_api_key)
-    msg = client.messages.create(
-        model=DRAFT_MODEL, max_tokens=200, system=system,
-        messages=[{"role": "user", "content": context_text}],
-    )
-    text = msg.content[0].text.strip()
+    prompt = f"{system}\n\n{context_text}"
+    text = llm_generate(prompt, timeout=60).strip()
     if not text:
         raise DrafterError("model returned empty draft")
     if claims_human(text):

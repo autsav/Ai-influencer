@@ -2,7 +2,7 @@
 Trend scraping & hook generation — Stage 2 of the AI Influencer Pipeline.
 
 Scrapes trending content ideas from public sources and generates viral hooks
-using the LLM router (Claude → Ollama → MiniMax fallback).
+using the LLM router (MiniMax → Claude Code fallback).
 """
 from __future__ import annotations
 
@@ -42,7 +42,7 @@ def get_reddit_trends(subreddit: str = "InstagramBusiness", limit: int = 10) -> 
         return []
 
 
-def get_pinterest_trends(query: str = "wellness influencer") -> list[str]:
+def get_pinterest_trends(query: str = "AI entrepreneur") -> list[str]:
     """Get trend ideas via LLM (simulated scraping — uses model knowledge)."""
     prompt = f"""List 10 trending content ideas for an Instagram influencer in the '{query}' niche.
 Focus on what's trending in 2026 — viral formats, hooks, and content types.
@@ -103,7 +103,7 @@ def scrape_and_generate(niches: list[str] | None = None) -> dict:
     """
     Full trend pipeline: scrape trends → generate hooks → return content plan.
     """
-    niches = niches or ["wellness", "slow living", "nature", "forest life"]
+    niches = niches or ["AI automation", "AI tools", "founder lifestyle", "business workflows"]
     
     print("[trends] Scraping trends...")
     all_ideas = []

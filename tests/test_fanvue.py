@@ -74,8 +74,7 @@ class TestFanvueClient:
         mock_resp.json.return_value = {"id": "post_123", "status": "published"}
 
         mock_client = MagicMock()
-        mock_client.__enter__.return_value.post.return_value = mock_resp
-        mock_client.__enter__.return_value.put.return_value = mock_resp
+        mock_client.__enter__.return_value.request.return_value = mock_resp
 
         with patch("aeloria.publishing.fanvue.httpx.Client", return_value=mock_client):
             post = FanvuePost(

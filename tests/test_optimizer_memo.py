@@ -20,22 +20,19 @@ def test_reject_reasons_collects_nonempty_from_queue():
     ]
     out = reject_reasons(db)
     assert "off-brand" in out
-    assert "too salesy" in out       # trimmed
-    assert "" not in out             # empty/None excluded
+    assert "too salesy" in out
+    assert "" not in out
     db.select_all.assert_called_once_with("queue")
 
 
 def _settings():
     s = MagicMock()
-    s.anthropic_api_key = "key"
     return s
 
 
-@patch("aeloria.optimizer.memo.anthropic.Anthropic")
-def test_write_memo_returns_text_and_sends(mock_anthropic):
-    msg = MagicMock()
-    msg.content = [MagicMock(text="This week: carousels won on saves. Double down.")]
-    mock_anthropic.return_value.messages.create.return_value = msg
+@patch("aeloria.optimizer.memo.llm_generate")
+def test_write_memo_returns_text_and_sends(mock_llm):
+    mock_llm.return_value = "This week: carousels won on saves. Double down."
     db = MagicMock()
     db.current_follower_count.return_value = 2500
     db.select_all.return_value = []

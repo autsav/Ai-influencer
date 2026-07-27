@@ -17,10 +17,10 @@ def test_load_default_bible():
     assert p.visual_dna["eyes"] == "green"
     assert "freckles" in p.visual_dna["skin"]
     assert "visible pores" in p.visual_dna["skin"]
-    assert p.niches.core.startswith("wellness")
+    assert p.niches.core.startswith("AI automation")
     assert len(p.hard_rules) >= 4
     # Mannerisms are now top-level (moved from character block)
-    assert len(p.mannerisms) == 5
+    assert len(p.mannerisms) == 6
     assert "pushing hair back from her face" in p.mannerisms[0]
 
 
@@ -47,7 +47,7 @@ def test_persona_exposes_mannerisms_and_expression():
     assert all(isinstance(m, str) and m for m in p.mannerisms)
     assert len(p.expression_repertoire) >= 8
     joined = " ".join(p.expression_repertoire).lower()
-    assert any(cue in joined for cue in ("smile", "grin", "laugh", "bothered"))
+    assert any(cue in joined for cue in ("smile", "smirk", "laugh", "confident"))
 
 
 def test_backstory_yaml_not_loaded_in_persona():

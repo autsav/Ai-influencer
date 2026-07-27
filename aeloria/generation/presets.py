@@ -6,7 +6,7 @@ Compose with explicit user brief — user brief always wins on conflict.
 Usage:
     brief = apply_preset(user_brief, "golden_hour_portrait")
     brief = apply_preset(user_brief, "candid_street")
-    brief = apply_preset(user_brief, "slow_living")
+    brief = apply_preset(user_brief, "founder_lifestyle")
 
 All overrides are lowercase dict keys matching brief field names.
 """
@@ -73,8 +73,8 @@ PRESETS: dict[str, dict] = {
     },
 
     # ── Lifestyle / Slow Living ──────────────────────────────────────────────
-    "slow_living": {
-        "pillar": "slow_living",
+    "founder_lifestyle": {
+        "pillar": "founder_lifestyle",
         "mood_override": "unhurried and present",
         "style_override": "film_editorial",
         "camera_override": "shot on Leica M6, Kodak Portra 400",

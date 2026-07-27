@@ -1,11 +1,8 @@
 import hashlib
 
-import anthropic
-
 from aeloria.config import Settings, get_settings
 from aeloria.persona.loader import Persona
-
-CAPTION_MODEL = "claude-haiku-4-5-20251001"
+from aeloria.llm_router import llm_generate
 
 # Tasteful AI-transparency line — appended after the hashtags (disclosure #63 +
 # Meta's AI-content labeling policy). Toggle via settings.caption_ai_disclosure.
@@ -58,10 +55,7 @@ def write_caption(
     cta_kind: str = "none",
 ) -> str:
     s = settings or get_settings()
-    if not s.anthropic_api_key:
-        raise CaptionError("ANTHROPIC_API_KEY not set")
 
-    client = anthropic.Anthropic(api_key=s.anthropic_api_key)
     rules = "; ".join(persona.voice.get("caption_rules", []))
     cta = CTA_INSTRUCTIONS.get(cta_kind, "")
     catchphrases = persona.voice.get("catchphrases") or ([persona.voice["catchphrase"]]
@@ -69,7 +63,7 @@ def write_caption(
     catchphrase = _pick_by_brief(catchphrases, brief, 7) if catchphrases else ""
     framework = _pick_by_brief(_CAPTION_FRAMEWORKS, brief, 3)
     system = (
-        f"You write scroll-stopping Instagram captions for Aeloria, a virtual influencer. "
+        f"You write scroll-stopping Instagram captions for Aeloria, a virtual AI entrepreneur influencer. "
         f"Tone: {persona.voice.get('tone', '')}. "
         f"Point of view: {persona.wedge.voice_pov} "
         f"Rules: {rules}. "
@@ -81,6 +75,7 @@ def write_caption(
     )
     active_trend = (distribution_plan or {}).get("active_trend")
     user = (
+        f"{system}\n\n"
         f"Scene: {brief['beat']}\n"
         f"Caption brief: {brief.get('caption_angle') or brief['caption_brief']}\n"
         + (f"Emotion to carry (just one): {brief['emotional_beat']}\n" if brief.get("emotional_beat") else "")
@@ -88,13 +83,8 @@ def write_caption(
         + (f"Location: {brief['location']} — localize with one specific real detail\n" if brief.get("location") else "")
         + (f"Active trend, nod to it ONLY if it fits naturally: {active_trend}\n" if active_trend else "")
     )
-    msg = client.messages.create(
-        model=CAPTION_MODEL,
-        max_tokens=300,
-        system=system,
-        messages=[{"role": "user", "content": user}],
-    )
-    text = msg.content[0].text.strip()
+    text = llm_generate(user, timeout=60)
+    text = text.strip()
     if not text:
         raise CaptionError("model returned empty caption")
     tags = (distribution_plan or {}).get("hashtags") or []

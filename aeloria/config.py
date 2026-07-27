@@ -74,6 +74,19 @@ class Settings(BaseSettings):
     face_gate_threshold: float = 0.35
     face_ref_path: str = "aeloria/persona/face_ref.json"
 
+    # ── Character Consistency Engine ───────────────────────────
+    # PuLID: zero-shot face identity conditioning (Pass 1)
+    pulid_enabled: bool = True
+    pulid_model: str = "fal-ai/flux-pulid"
+    pulid_weight: float = 0.85  # clamped to [0.6, 1.1] at runtime
+    pulid_cost_usd: float = 0.06
+    # Face Detailer: Pass 2 inpainting refinement for facial artifacts
+    face_detailer_enabled: bool = True
+    face_detailer_model: str = "fal-ai/flux-dev/inpainting"
+    face_detailer_denoise: float = 0.28  # clamped to [0.15, 0.40] at runtime
+    face_detailer_min_face_size: int = 256  # skip detail pass if face is larger
+    face_detailer_cost_usd: float = 0.04
+
     # ── Video engines ─────────────────────────────────────────
     kling_api_key: str = ""
     wan_api_key: str = ""

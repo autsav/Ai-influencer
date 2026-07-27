@@ -1,106 +1,104 @@
-# 360-day strategic calendar. Northern-hemisphere seasons. Keyed by calendar
-# month (1-12); repeats annually. The showrunner reads active_chapter(date).
-# location: forest_house | tokyo | paris | new_york | london
+# 360-day strategic calendar. Keyed by calendar month (1-12); repeats annually.
+# The showrunner reads active_chapter(date).
+# location: london_home | london_coworking | conference | remote_travel
 chapters:
   - month: 1
-    location: forest_house
+    location: london_home
     season: deep_winter
-    theme: "The slow reset"
-    pillar_weights: {self_healing: 3, yoga: 3, slow_living: 2, fitness: 2, travel: 0}
-    category_weights: {home: 3, wellness: 3, food: 2, hobby: 2, get_ready: 1, fitness: 1, work: 1}
-    series: forest-mornings
+    theme: "The January rebuild"
+    pillar_weights: {ai_workflows: 3, ai_tools: 3, founder_lifestyle: 2, case_studies: 2, future_of_business: 0}
+    category_weights: {founder_lifestyle: 3, work: 3, personal_growth: 2, style: 1, social: 1, fitness: 1}
+    series: workflow-wednesdays
     moments:
-      - {day: 1, tag: new_year, note: "anti-resolution slow take, hero reel"}
+      - {day: 1, tag: new_year, note: "AI resolutions — what I'm automating this year, hero reel"}
   - month: 2
-    location: forest_house
+    location: london_coworking
     season: late_winter
-    theme: "Hibernation & healing"
-    pillar_weights: {self_healing: 4, yoga: 3, slow_living: 2, fitness: 1, travel: 0}
-    category_weights: {wellness: 4, home: 3, food: 2, hobby: 1, get_ready: 1, fitness: 1}
-    series: forest-mornings
+    theme: "Tool deep-dives"
+    pillar_weights: {ai_tools: 4, ai_workflows: 3, case_studies: 2, founder_lifestyle: 1, future_of_business: 0}
+    category_weights: {work: 4, founder_lifestyle: 3, social: 2, personal_growth: 2, style: 1}
+    series: tool-test-tuesdays
     moments: []
   - month: 3
-    location: tokyo
+    location: conference
     season: early_spring
-    theme: "Blossom season"
-    pillar_weights: {travel: 3, slow_living: 2, fitness: 2, self_healing: 2, yoga: 1}
-    category_weights: {travel: 3, social: 2, food: 2, errands: 2, style: 1, get_ready: 1, work: 1, fitness: 1}
-    series: postcards-from-tokyo
+    theme: "Conference season"
+    pillar_weights: {ai_tools: 3, founder_lifestyle: 3, ai_workflows: 2, future_of_business: 2, case_studies: 0}
+    category_weights: {work: 3, social: 3, founder_lifestyle: 2, personal_growth: 2, style: 1}
+    series: conference-notes
     moments:
-      - {day: 25, tag: cherry_blossom, note: "peak-bloom hero reel"}
+      - {day: 15, tag: spring_conference, note: "conference highlights reel — best tools spotted"}
   - month: 4
-    location: forest_house
+    location: london_home
     season: spring
-    theme: "The forest wakes"
-    pillar_weights: {fitness: 3, slow_living: 3, yoga: 2, self_healing: 2, travel: 0}
-    category_weights: {home: 3, fitness: 3, wellness: 2, food: 2, hobby: 1, get_ready: 1}
-    series: forest-mornings
-    moments:
-      - {day: 20, tag: spring_equinox, note: "renewal hero reel"}
+    theme: "Spring automations"
+    pillar_weights: {ai_workflows: 3, ai_tools: 3, case_studies: 2, founder_lifestyle: 2, future_of_business: 0}
+    category_weights: {work: 3, founder_lifestyle: 3, personal_growth: 2, social: 2, fitness: 1}
+    series: workflow-wednesdays
+    moments: []
   - month: 5
-    location: paris
+    location: london_coworking
     season: late_spring
-    theme: "Slow Paris"
-    pillar_weights: {travel: 3, self_healing: 3, slow_living: 2, fitness: 1, yoga: 1}
-    category_weights: {travel: 3, style: 2, food: 2, social: 2, errands: 1, get_ready: 1, work: 1}
-    series: postcards-from-paris
+    theme: "Client case studies"
+    pillar_weights: {case_studies: 4, ai_workflows: 3, founder_lifestyle: 2, ai_tools: 1, future_of_business: 0}
+    category_weights: {work: 4, founder_lifestyle: 3, social: 2, personal_growth: 1}
+    series: business-redesign
     moments: []
   - month: 6
-    location: forest_house
+    location: remote_travel
     season: early_summer
-    theme: "Long light"
-    pillar_weights: {yoga: 3, slow_living: 3, fitness: 2, self_healing: 2, travel: 0}
-    category_weights: {wellness: 3, home: 3, fitness: 2, food: 2, hobby: 1, get_ready: 1}
-    series: forest-mornings
+    theme: "Remote build"
+    pillar_weights: {founder_lifestyle: 3, ai_workflows: 3, ai_tools: 2, case_studies: 2, future_of_business: 0}
+    category_weights: {founder_lifestyle: 3, work: 3, personal_growth: 3, social: 1, style: 1}
+    series: remote-build-diaries
     moments:
-      - {day: 21, tag: summer_solstice, note: "longest-day hero reel"}
+      - {day: 21, tag: summer_solstice, note: "working from a rooftop at golden hour, freedom reel"}
   - month: 7
-    location: forest_house
+    location: london_home
     season: deep_summer
-    theme: "Creek days"
-    pillar_weights: {slow_living: 4, fitness: 2, self_healing: 2, yoga: 2, travel: 0}
-    category_weights: {home: 3, food: 2, wellness: 2, pet: 2, hobby: 1, fitness: 1, get_ready: 1, work: 1, errands: 1}
-    series: forest-mornings
+    theme: "AI for small business"
+    pillar_weights: {case_studies: 4, ai_workflows: 3, ai_tools: 2, future_of_business: 1, founder_lifestyle: 0}
+    category_weights: {work: 3, founder_lifestyle: 2, social: 2, personal_growth: 2, fitness: 1}
+    series: business-redesign
     moments: []
   - month: 8
-    location: new_york
+    location: remote_travel
     season: late_summer
-    theme: "City pulse"
-    pillar_weights: {travel: 3, fitness: 3, self_healing: 2, slow_living: 2, yoga: 0}
-    category_weights: {travel: 3, social: 3, fitness: 2, food: 2, style: 2, errands: 1, work: 1}
-    series: postcards-from-new_york
+    theme: "Future of work"
+    pillar_weights: {future_of_business: 3, ai_workflows: 3, ai_tools: 2, case_studies: 2, founder_lifestyle: 0}
+    category_weights: {work: 3, founder_lifestyle: 3, personal_growth: 3, social: 1}
+    series: future-of-work
     moments: []
   - month: 9
-    location: forest_house
+    location: london_coworking
     season: early_autumn
-    theme: "The turning"
-    pillar_weights: {slow_living: 3, self_healing: 3, yoga: 2, fitness: 2, travel: 0}
-    category_weights: {home: 3, wellness: 3, food: 2, hobby: 2, fitness: 1, get_ready: 1}
-    series: forest-mornings
-    moments:
-      - {day: 22, tag: autumn_equinox, note: "cozy-season-begins hero reel"}
+    theme: "Back to building"
+    pillar_weights: {ai_workflows: 3, ai_tools: 3, case_studies: 2, founder_lifestyle: 2, future_of_business: 0}
+    category_weights: {work: 3, founder_lifestyle: 3, social: 2, personal_growth: 2, fitness: 1}
+    series: workflow-wednesdays
+    moments: []
   - month: 10
-    location: london
+    location: london_home
     season: autumn
-    theme: "Moody London"
-    pillar_weights: {travel: 3, self_healing: 3, slow_living: 2, yoga: 1, fitness: 1}
-    category_weights: {travel: 3, style: 2, food: 2, social: 2, errands: 2, get_ready: 1, work: 1}
-    series: postcards-from-london
+    theme: "Tool comparison season"
+    pillar_weights: {ai_tools: 4, ai_workflows: 2, case_studies: 2, future_of_business: 2, founder_lifestyle: 0}
+    category_weights: {work: 4, founder_lifestyle: 2, personal_growth: 2, social: 2}
+    series: tool-test-tuesdays
     moments: []
   - month: 11
-    location: forest_house
+    location: london_coworking
     season: late_autumn
-    theme: "Gratitude & cocoon"
-    pillar_weights: {self_healing: 3, yoga: 3, slow_living: 3, fitness: 1, travel: 0}
-    category_weights: {home: 3, wellness: 3, hobby: 2, food: 2, pet: 1, get_ready: 1, fitness: 1}
-    series: forest-mornings
+    theme: "Year in AI"
+    pillar_weights: {future_of_business: 3, ai_tools: 3, ai_workflows: 2, case_studies: 2, founder_lifestyle: 0}
+    category_weights: {work: 3, founder_lifestyle: 3, personal_growth: 2, social: 2}
+    series: year-in-ai
     moments: []
   - month: 12
-    location: forest_house
+    location: london_home
     season: winter
-    theme: "A forest holiday"
-    pillar_weights: {slow_living: 4, self_healing: 3, yoga: 2, fitness: 1, travel: 0}
-    category_weights: {home: 3, wellness: 2, hobby: 2, food: 2, pet: 2, get_ready: 1, fitness: 1}
-    series: forest-mornings
+    theme: "AI year-end review"
+    pillar_weights: {future_of_business: 4, ai_tools: 3, founder_lifestyle: 2, ai_workflows: 1, case_studies: 0}
+    category_weights: {founder_lifestyle: 3, personal_growth: 3, work: 2, social: 2, style: 1}
+    series: year-in-ai
     moments:
-      - {day: 21, tag: winter_solstice, note: "stillness hero reel"}
+      - {day: 21, tag: winter_solstice, note: "year-end recap — best AI tools of the year, hero reel"}

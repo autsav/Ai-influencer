@@ -95,7 +95,7 @@ Expected metrics format (CSV or JSON array):
 ]
 ```
 
-The LLM (via `aeloria.llm_router`: Claude → Ollama → MiniMax) analyzes patterns and outputs
+The LLM (via `aeloria.llm_router`: MiniMax → Claude Code) analyzes patterns and outputs
 content ideas with predicted engagement levels and rationale, added directly to the queue.
 
 ## CLI Usage

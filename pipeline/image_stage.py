@@ -39,62 +39,114 @@ class ImageResult:
     params: dict
 
 
-def _build_prompt(char: CharacterConfig, scene: str, wardrobe: str = "",
-                  pose: str = "", camera_angle: str = "",
-                  tech_profile: str = "") -> str:
+def _build_prompt(
+    char: CharacterConfig,
+    scene: str,
+    wardrobe: str = "",
+    pose: str = "",
+    camera_angle: str = "",
+    tech_profile: str = "",
+    aesthetic_tier: str = "",
+) -> str:
     """Build a Flux-optimized prompt using natural-language description.
 
-    Research-backed structure (Flux prompt engineering best practices 2025):
+    The 10-layer Aeloria prompt structure:
     1. Opening shot type + aesthetic (natural language, not tags)
     2. Subject identity with physical details (LoRA trigger + visual DNA)
     3. Wardrobe with fabric, fit, neckline, texture, how it catches light
     4. Pose with explicit hand positioning (prevent extra hands)
     5. Environment with atmosphere, time, weather, mood
     6. Camera gear (lens, aperture, body, film stock)
-    7. Skin realism (pores, freckles, peach fuzz, oil — anti-plastic)
-    8. Identity lock (preserve LoRA face)
+    7. Aesthetic tier modifiers (moody / intimate / editorial)
+    8. Skin realism (pores, freckles, peach fuzz, oil — anti-plastic)
+    9. Identity lock (preserve LoRA face)
+    10. Final quality + hand anatomy guard
 
     NOTE: Flux has no native negative prompt. Do NOT put "Avoid: ..." in the
     positive prompt — it pollutes generation. Use positive-only framing.
+
+    Args:
+        char: CharacterConfig with visual_dna, skin_realism, identity_lock,
+              aesthetic_tiers (dict), wardrobe_archetypes (list)
+        scene: Environment + atmosphere description
+        wardrobe: Clothing detail. If empty and wardrobe_archetypes exist,
+                  auto-selects a random archetype from character.json
+        pose: Body positioning. If empty, auto-selects from creative database
+        camera_angle: Lens + composition. If empty, auto-selects
+        tech_profile: Film stock / lighting modifiers. Overrides aesthetic_tier default
+        aesthetic_tier: Which look to apply — "editorial", "moody", "intimate_stories",
+                        "fanvue_raw". If empty, defaults to "editorial"
     """
     v = char.visual_dna
+    tiers = char.aesthetic_tiers or {}
 
-    # ── 1. Opening: shot type + aesthetic ──
-    parts = ["A candid fashion photograph"]
+    # ── 0. Resolve aesthetic tier ──────────────────────────────────────────
+    tier_key = aesthetic_tier if aesthetic_tier in tiers else "editorial"
+    tier_desc = tiers.get(tier_key, tiers.get("editorial", ""))
 
-    # ── 2. Subject identity ──
-    subject = f"aeloria woman, {v.get('hair', 'auburn hair in a loose messy bun')}, {v.get('eyes', 'green eyes')}, {v.get('skin', 'fair skin with freckles across nose and cheeks')}"
+    # ── 1. Opening: shot type + aesthetic ───────────────────────────────────
+    # Intimate stories tier uses different framing
+    if tier_key == "intimate_stories":
+        parts = ["An accidentally captured raw smartphone photograph"]
+    elif tier_key == "fanvue_raw":
+        parts = ["An unprocessed film scan, raw and unretouched"]
+    else:
+        parts = ["A candid fashion photograph"]
+
+    # ── 2. Subject identity ──────────────────────────────────────────────────
+    subject = (
+        f"aeloria woman, {v.get('hair', 'auburn hair in a loose messy bun')}, "
+        f"{v.get('eyes', 'warm green eyes')}, "
+        f"{v.get('skin', 'fair skin with freckles across nose and cheeks, visible pores, peach fuzz')}"
+    )
     parts.append(subject)
 
-    # ── 3. Wardrobe with fabric/fit/texture detail ──
+    # ── 3. Wardrobe ─────────────────────────────────────────────────────────
+    if not wardrobe and char.wardrobe_archetypes:
+        archetype = random.choice(char.wardrobe_archetypes)
+        wardrobe = archetype.get("description", "")
+        scene = archetype.get("scene", scene)  # blend archetype scene into prompt
     if wardrobe:
-        # Ensure neckline is specified (prevents Flux drift)
-        if "neck" not in wardrobe.lower() and "collar" not in wardrobe.lower() and "crop" not in wardrobe.lower():
+        # Ensure neckline is specified (prevents Flux wardrobe drift)
+        if (
+            "neck" not in wardrobe.lower()
+            and "collar" not in wardrobe.lower()
+            and "crop" not in wardrobe.lower()
+            and "silhouette" not in wardrobe.lower()
+        ):
             wardrobe = f"{wardrobe}, fitted silhouette following her body shape"
         parts.append(f"wearing {wardrobe}")
 
-    # ── 4. Pose with explicit hand positioning ──
+    # ── 4. Pose with explicit hand positioning ───────────────────────────────
     if pose:
         # Ensure hands are explicitly described to prevent extra hands
         hand_hint = ""
-        if "hand" not in pose.lower() and "arms" not in pose.lower() and "fingers" not in pose.lower():
+        if (
+            "hand" not in pose.lower()
+            and "arms" not in pose.lower()
+            and "fingers" not in pose.lower()
+        ):
             hand_hint = ", both hands visible and naturally positioned"
         parts.append(f"{pose}{hand_hint}")
 
-    # ── 5. Environment + atmosphere ──
+    # ── 5. Environment + atmosphere ──────────────────────────────────────────
     parts.append(scene)
 
-    # ── 6. Camera angle/composition ──
+    # ── 6. Camera angle/composition ───────────────────────────────────────────
     if camera_angle:
         parts.append(camera_angle)
 
-    # ── 7. Technical profile (film stock, shutter, aperture) ──
+    # ── 7. Technical profile / aesthetic tier ────────────────────────────────
     if tech_profile:
         parts.append(tech_profile)
+    elif tier_desc:
+        parts.append(tier_desc)
     else:
-        parts.append("Shot on Kodak Portra 400, 50mm lens at f/2.0, natural depth of field")
+        parts.append(
+            "Shot on Kodak Portra 400, 50mm lens at f/2.0, natural depth of field"
+        )
 
-    # ── 8. Skin realism (anti-plastic) ──
+    # ── 8. Skin realism (anti-plastic) ──────────────────────────────────────
     if char.skin_realism:
         parts.append(char.skin_realism)
     else:
@@ -105,7 +157,7 @@ def _build_prompt(char: CharacterConfig, scene: str, wardrobe: str = "",
             "and forehead — no smoothing, no beauty filter"
         )
 
-    # ── 9. Identity lock ──
+    # ── 9. Identity lock ─────────────────────────────────────────────────────
     if char.identity_lock:
         parts.append(char.identity_lock)
     else:
@@ -114,14 +166,21 @@ def _build_prompt(char: CharacterConfig, scene: str, wardrobe: str = "",
             "same recognizable person. Do NOT change facial features or body shape"
         )
 
-    # ── 10. Final quality + hand anatomy guard ──
-    parts.append(
-        "subtle film grain, raw unretouched editorial look, "
-        "natural lighting. Two hands only, correct anatomy, five fingers on each hand"
-    )
+    # ── 10. Final quality + hand anatomy guard ────────────────────────────────
+    if tier_key == "intimate_stories":
+        parts.append(
+            "Two hands only, correct anatomy, five fingers on each hand"
+        )
+    else:
+        parts.append(
+            "subtle film grain, raw unretouched editorial look, "
+            "natural lighting. Two hands only, correct anatomy, five fingers on each hand"
+        )
 
-    # Join as natural-language paragraph (Flux prefers this over tag lists)
-    return ". ".join(parts)
+    # Join as natural-language paragraph (Flux prefers prose over tag lists)
+    # Strip trailing periods to prevent double-periods on join
+    cleaned = [p.rstrip(".") for p in parts]
+    return ". ".join(cleaned)
 
 
 def _post_process(img: Image.Image) -> Image.Image:
@@ -150,6 +209,7 @@ async def generate_image(
     tech_profile: str = "",
     seed: int | None = None,
     dry_run: bool = False,
+    aesthetic_tier: str = "",
 ) -> ImageResult:
     """Generate a single image asynchronously via FAL.
 
@@ -166,7 +226,7 @@ async def generate_image(
     if seed is None:
         seed = random.randint(0, 2**31)
 
-    prompt = _build_prompt(char, scene, wardrobe, pose, camera_angle, tech_profile)
+    prompt = _build_prompt(char, scene, wardrobe, pose, camera_angle, tech_profile, aesthetic_tier=aesthetic_tier)
     image_size = _ASPECT_TO_SIZE.get(char.aspect_ratio, "portrait_4_3")
 
     logger.info("Image stage: seed=%d scene=%s", seed, scene[:60])

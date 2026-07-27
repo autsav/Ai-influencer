@@ -15,9 +15,18 @@ models/
 # Generated outputs
 output/
 dry_run_output/
+queue/
+logs/
 
 # Training data & reference images
 data/
+reference_images/
+aeloria/persona/reference_face.jpg
+
+# Web frontend
+web/node_modules/
+web/.next/
+web/*.tsbuildinfo
 reference_images/
 
 # Node / TS router subtree
