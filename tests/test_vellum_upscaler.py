@@ -23,17 +23,25 @@ class TestVellumUpscaler:
         assert vellum._api_key == "vellum-test-key"
 
     def test_upscale_returns_bytes_mocked(self, monkeypatch):
-        """When key is set, mocked HTTP returns upscaled bytes."""
+        """When key is set, mocked HTTP returns upscaled bytes.
+
+        The upscaler does a 2-call flow: POST the image → read `output_url`
+        from the JSON response → GET that URL → return the downloaded bytes.
+        """
         monkeypatch.setenv("VELLUM_API_KEY", "fake-key")
         from aeloria.config import get_settings
         get_settings.cache_clear()
         vellum = VellumUpscaler(get_settings())
 
-        mock_resp = MagicMock()
-        mock_resp.content = b"upscaled-image-bytes"
+        post_resp = MagicMock()
+        post_resp.json.return_value = {"output_url": "https://cdn.example.com/up.png"}
+
+        get_resp = MagicMock()
+        get_resp.content = b"upscaled-image-bytes"
 
         mock_client = MagicMock()
-        mock_client.__enter__.return_value.post.return_value = mock_resp
+        mock_client.__enter__.return_value.post.return_value = post_resp
+        mock_client.__enter__.return_value.get.return_value = get_resp
 
         with patch("aeloria.generation.vellum_upscaler.httpx.Client", return_value=mock_client):
             result = vellum.upscale(b"original-image-bytes")

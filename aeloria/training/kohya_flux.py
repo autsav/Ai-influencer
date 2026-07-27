@@ -225,7 +225,7 @@ class KohyaFluxTrainer:
         Returns:
             TrainingRun object with a run_id you can poll with get_status().
         """
-        cfg = (config or TrainingConfig()).from_settings(None)
+        cfg = config if config is not None else TrainingConfig.from_settings(None)
         cfg.dataset_config = dataset_config
         cfg.output_name = output_name
 

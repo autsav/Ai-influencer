@@ -49,6 +49,15 @@ class JobQuery(BaseModel):
 
 # ── Response schemas ─────────────────────────────────────────────────────────
 
+class ConsistencyMetrics(BaseModel):
+    """Two-pass character-consistency metrics for a generated asset."""
+    identity_score: Optional[float] = Field(None, description="Face identity cosine similarity (final)")
+    passes_gate: Optional[bool] = Field(None, description="Whether face gate passed")
+    detail_pass_applied: Optional[bool] = Field(None, description="Whether Pass 2 face detailer ran")
+    pass1_score: Optional[float] = Field(None, description="Identity score after Pass 1 (PuLID/LoRA)")
+    pass2_score: Optional[float] = Field(None, description="Identity score after Pass 2 (face detailer)")
+
+
 class JobResponse(BaseModel):
     """Returned when a job is created or queried."""
     job_id: str
@@ -60,9 +69,7 @@ class JobResponse(BaseModel):
     cost_usd: Optional[float] = None
     error: Optional[str] = None
     progress: Optional[int] = Field(None, ge=0, le=100, description="Progress percentage")
-    identity_score: Optional[float] = Field(None, description="Face identity cosine similarity")
-    passes_gate: Optional[bool] = Field(None, description="Whether face gate passed")
-    detail_pass_applied: Optional[bool] = Field(None, description="Whether Pass 2 face detailer ran")
+    consistency: Optional[ConsistencyMetrics] = Field(None, description="Face consistency metrics")
 
 
 class HealthResponse(BaseModel):

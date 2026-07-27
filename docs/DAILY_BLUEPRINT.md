@@ -161,29 +161,31 @@
 
 ## Generation Commands Reference
 
+These scenes are dispatched via the v1 API (or Celery workers directly). The legacy `pipeline.runner` CLI has been removed.
+
 ```bash
 # Founder lifestyle: home office, editorial tier
-python -m pipeline.runner -c config/pipeline.json \
-  -s "minimal home office, clean white desk, MacBook showing AI workflow, warm desk lamp, morning light" \
-  -w "smart casual overshirt" --seed 301
+curl -X POST http://localhost:8000/api/v1/generations \
+  -H "Authorization: Bearer $API_SECRET_KEY" -H "Content-Type: application/json" \
+  -d '{"prompt_seed":"minimal home office, clean white desk, MacBook showing AI workflow, warm desk lamp, morning light","wardrobe":"smart casual overshirt","pillar":"founder_lifestyle","aspect_ratio":"4:5"}'
 
 # Coffee shop build: café, editorial tier
-python -m pipeline.runner -c config/pipeline.json \
-  -s "modern indie café, working on laptop at corner table, flat white, natural light through window" \
-  -w "charcoal tee navy overshirt" --seed 302
+curl -X POST http://localhost:8000/api/v1/generations \
+  -H "Authorization: Bearer $API_SECRET_KEY" -H "Content-Type: application/json" \
+  -d '{"prompt_seed":"modern indie café, working on laptop at corner table, flat white, natural light through window","wardrobe":"charcoal tee navy overshirt","pillar":"ai_workflows","aspect_ratio":"4:5"}'
 
 # Dashboard check: coworking, editorial tier
-python -m pipeline.runner -c config/pipeline.json \
-  -s "modern coworking space, bright desk, laptop showing analytics dashboard, other founders in background" \
-  -w "olive henley" --seed 303
+curl -X POST http://localhost:8000/api/v1/generations \
+  -H "Authorization: Bearer $API_SECRET_KEY" -H "Content-Type: application/json" \
+  -d '{"prompt_seed":"modern coworking space, bright desk, laptop showing analytics dashboard, other founders in background","wardrobe":"olive henley","pillar":"business_case_studies","aspect_ratio":"4:5"}'
 
 # Whiteboard thinking: office, editorial tier
-python -m pipeline.runner -c config/pipeline.json \
-  -s "modern office whiteboard with workflow diagrams, marker in hand, sticky notes, clean aesthetic" \
-  -w "navy crew-neck" --seed 304
+curl -X POST http://localhost:8000/api/v1/generations \
+  -H "Authorization: Bearer $API_SECRET_KEY" -H "Content-Type: application/json" \
+  -d '{"prompt_seed":"modern office whiteboard with workflow diagrams, marker in hand, sticky notes, clean aesthetic","wardrobe":"navy crew-neck","pillar":"ai_workflows","aspect_ratio":"4:5"}'
 
 # City walk: founder lifestyle, golden hour
-python -m pipeline.runner -c config/pipeline.json \
-  -s "city street at golden hour, walking with coffee, earbuds in, modern architecture, warm light" \
-  -w "minimal black jacket" --seed 305
+curl -X POST http://localhost:8000/api/v1/generations \
+  -H "Authorization: Bearer $API_SECRET_KEY" -H "Content-Type: application/json" \
+  -d '{"prompt_seed":"city street at golden hour, walking with coffee, earbuds in, modern architecture, warm light","wardrobe":"minimal black jacket","pillar":"founder_lifestyle","aspect_ratio":"4:5"}'
 ```

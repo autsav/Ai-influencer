@@ -8,7 +8,7 @@ from celery.result import AsyncResult
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 
-from aeloria.schemas.v1 import JobResponse, JobStatus
+from aeloria.schemas.v1 import ConsistencyMetrics, JobResponse, JobStatus
 from aeloria.core.celery_app import celery_app
 
 router = APIRouter()
@@ -33,11 +33,21 @@ def _celery_result_to_response(job_id: str) -> JobResponse:
     caption = None
     cost_usd = None
     error = None
+    consistency = None
 
     if state == "SUCCESS" and result.result:
         data = result.result
         result_url = data.get("s3_url")
         cost_usd = data.get("cost_usd")
+        # Two-pass consistency metrics (only present for image/video jobs that ran the pipeline)
+        if data.get("identity_score") is not None or data.get("passes_gate") is not None:
+            consistency = ConsistencyMetrics(
+                identity_score=data.get("identity_score"),
+                passes_gate=data.get("passes_gate"),
+                detail_pass_applied=data.get("detail_pass_applied"),
+                pass1_score=data.get("pass1_score"),
+                pass2_score=data.get("pass2_score"),
+            )
 
     if state == "FAILURE" and result.result:
         error = str(result.result)
@@ -54,6 +64,7 @@ def _celery_result_to_response(job_id: str) -> JobResponse:
         caption=caption,
         cost_usd=cost_usd,
         error=error,
+        consistency=consistency,
     )
 
 

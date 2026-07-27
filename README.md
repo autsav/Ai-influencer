@@ -1,7 +1,8 @@
 # Aeloria — AI Influencer Pipeline
 
-Automated end-to-end content generation pipeline for AI influencer accounts.
-Image generation → voice/lip-sync → QC validation → publish queue → analytics feedback loop.
+Automated end-to-end content generation platform for Aeloria, a 24-year-old AI entrepreneur character. Same LoRA, same face, new niche: AI automation for business owners.
+
+Generation → QC + face consistency → C2PA compliance → R2 storage → publish (Instagram/Fanvue) → engagement → analytics feedback loop.
 
 ## Quick Start
 
@@ -13,181 +14,105 @@ pip install -r requirements.txt
 # 2. Configure environment
 cp .env.example .env  # Add your API keys
 
-# 3. Run a single generation
-python -m pipeline.runner --config config/pipeline.json --scene "sitting at a London café, morning light"
+# 3. Start backend (FastAPI + Celery workers + scheduler)
+uvicorn aeloria.app:app --reload
 
-# 4. Dry run (no API calls, logs only)
-python -m pipeline.runner --config config/pipeline.json --scene "walking through Covent Garden" --dry-run
+# 4. Start frontend
+cd web && npm install && npm run dev
 ```
 
-## Pipeline Stages
+## Architecture
+
+Single live codebase in `aeloria/`. Legacy `pipeline/`, `src/`, root `config/`, `queue/` have been removed.
 
 ```
-JSON Config → Image Generation (FAL Flux LoRA) → Post-Processing (PIL)
-            → QC Validation (dimensions + artifacts + face gate)
-            → Publish Queue (queue/scheduled_prompts.json)
-            → [Optional: Voice (ElevenLabs) + Lip-Sync (SyncLabs/Hedra)]
+aeloria/
+├── app.py                  # FastAPI entry: scheduler, bearer auth, runtime
+├── pipeline_orchestrator.py # End-to-end orchestration
+├── config.py / budget.py / stats.py / redact.py / llm_router.py
+├── scheduler.py            # APScheduler jobs
+├── api/v1/                 # REST API v1 (influencers, generations, jobs, uploads, health)
+├── schemas/v1.py           # Pydantic v2 request/response models
+├── generation/             # Image/video gen, prompt builder, face gate, upscaler, PuLID, carousel
+├── workers/                # Celery tasks (image, video, caption, upscale)
+├── core/                   # Celery + Redis config
+├── persona/                # Character YAML (soul_id, cast, storylines, backstory, face_ref)
+├── showrunner/             # Content calendar, arcs, beats, activities, briefing
+├── publishing/             # Instagram Graph API + Fanvue
+├── engagement/             # DM orchestrator, inbound/outbound, re-engagement cron
+├── optimizer/              # Nightly scoring, strategy weights, memo, analyst
+├── distribution/           # Planner, SEO, slots, collabs, trends, hooks
+├── compliance/             # C2PA + IPTC 2025.1 injector
+├── approval/               # Telegram review bot
+├── training/               # Kohya/OneTrainer LoRA training
+├── storage/r2.py           # Cloudflare R2 upload
+├── db/client.py            # Supabase PostgreSQL
+└── auth/                   # Token store + refresh
+
+web/                        # Next.js + Tailwind + React Query frontend
+scripts/                    # auto_tagger, smoke_generate, single_pose, kontext_pipeline
+docs/                       # MASTER_SYSTEM_PROMPT, DAILY_BLUEPRINT, prompt architecture
+tests/                      # 60+ pytest files
 ```
 
-### Stage 1: Image Generation (`pipeline/image_stage.py`)
-- FAL Flux LoRA with character identity (scale 0.7, guidance 3.5, 40 steps)
-- PIL post-processing: WB correction + sharpen + vignette (zero API cost)
-- Async execution via `asyncio` + `run_in_executor`
+## Key Pipeline Flow
 
-### Stage 2: QC Validation (`pipeline/qc_stage.py`)
-Automated quality checks before publishing:
-- **Dimensions**: minimum 512×512
-- **File size**: max 20MB
-- **Aspect ratio**: matches expected (4:5 default)
-- **Artifact detection**: Laplacian variance (blur), solid color regions, dead pixel ratio
-- **Face gate**: InsightFace cosine similarity to character reference (threshold 0.35)
+1. `showrunner/runner.py` reads `persona/*.yaml` → picks active chapter + activity
+2. `generation/prompt_builder.py` builds FLUX prompt (Anchor = Aeloria identity + LoRA trigger, Variable = scene/wardrobe/props)
+3. `generation/fal_images.py` generates via fal.ai FLUX.1 + LoRA; `generation/pulid.py` + `face_detailer.py` enforce face consistency
+4. `generation/vellum_upscaler.py` adds natural skin micro-texture
+5. `generation/face_gate.py` verifies identity (InsightFace cosine ≥ 0.35)
+6. `compliance/c2pa_injector.py` embeds AI disclosure (EU AI Act + FTC)
+7. `storage/r2.py` uploads media
+8. `approval/bot.py` sends to Telegram for human review
+9. `publishing/meta.py` posts to Instagram; `publishing/fanvue.py` to Fanvue
+10. `optimizer/runner.py` runs nightly: scores posts, updates strategy weights
 
-### Stage 3: Voice & Lip-Sync (`pipeline/voice_stage.py`)
-- ElevenLabs TTS (primary) with configurable voice ID, stability, similarity
-- SyncLabs lip-sync (image + audio → talking video)
-- Hedra lip-sync (placeholder — implement when API key available)
+## API v1
 
-### Stage 4: Publish Queue (`pipeline/publish_stage.py`)
-- All generated content goes to `queue/scheduled_prompts.json`
-- Status tracking: `pending → generating → qc_passed → qc_failed → published`
-- Queue can be processed in batch: `python -m pipeline.runner --queue`
+Bearer-authenticated REST under `/api/v1`:
+- `POST /generations` — create image/video/carousel job (Celery dispatched)
+- `GET /jobs/{id}` — job status (PENDING → STARTED → COMPLETED/FAILED)
+- `GET /influencers` — list characters
+- `POST /uploads` — upload asset
+- `GET /health` — service health
 
 ## Scripts
 
 ### Auto-Tagger (`scripts/auto_tagger.py`)
-Generates detailed .txt captions for LoRA training dataset images.
+LoRA-ready captions for training dataset images.
 
 ```bash
-# Tag all images in a directory using Moondream2 (FAL, $0.005/image)
 python scripts/auto_tagger.py --input /path/to/dataset --trigger "aeloria woman"
-
-# Use local Qwen2.5-VL via Ollama (free, ~12GB RAM)
 python scripts/auto_tagger.py --input /path/to/dataset --trigger "aeloria woman" --backend ollama
-
-# Dry run (list files only)
 python scripts/auto_tagger.py --input /path/to/dataset --dry-run
 ```
 
-Each image gets a `<filename>.txt` with a LoRA-ready caption containing:
-- Trigger token at the start
-- Physical appearance, pose, expression, wardrobe, setting, lighting, camera
-- Training suffix: "photorealistic, detailed skin texture, natural lighting"
+### Smoke Generate (`scripts/smoke_generate.py`)
+End-to-end single-image generation test.
 
-### Analytics Feedback Loop (`scripts/analytics_loop.py`)
-Reads performance metrics, LLM analyzes top posts, generates new content ideas → queue.
+## Environment Variables (`.env`)
 
-```bash
-# Analyze JSON metrics and add 5 new ideas to queue
-python scripts/analytics_loop.py --metrics data/performance.json --top-n 10 --ideas 5
-
-# CSV input
-python scripts/analytics_loop.py --metrics data/performance.csv --top-n 5
-
-# Dry run (analyze without adding to queue)
-python scripts/analytics_loop.py --metrics data/performance.json --dry-run
 ```
-
-Expected metrics format (CSV or JSON array):
-```json
-[
-  {"scene": "café morning", "wardrobe": "knit sweater", "pose": "sitting", 
-   "views": 12000, "likes": 850, "comments": 45, "saves": 120, "shares": 30}
-]
-```
-
-The LLM (via `aeloria.llm_router`: MiniMax → Claude Code) analyzes patterns and outputs
-content ideas with predicted engagement levels and rationale, added directly to the queue.
-
-## CLI Usage
-
-### Single Generation
-```bash
-python -m pipeline.runner \
-  --config config/pipeline.json \
-  --scene "sitting at a London café, morning light" \
-  --wardrobe "cream knit sweater and jeans" \
-  --pose "hands around a coffee cup, warm half-smile" \
-  --camera "eye-level 50mm, shallow DOF"
-```
-
-### With Voice
-```bash
-python -m pipeline.runner \
-  --config config/pipeline.json \
-  --scene "walking through Hyde Park" \
-  --voice "A beautiful morning in the park..."
-```
-
-### Process Queue
-```bash
-# Process all pending entries
-python -m pipeline.runner --config config/pipeline.json --queue
-```
-
-### Dry Run
-```bash
-python -m pipeline.runner --config config/pipeline.json --scene "test scene" --dry-run
-```
-
-## Configuration
-
-### `config/pipeline.json`
-Full pipeline config — character identity, voice settings, QC thresholds, stages.
-
-### `config/character.json`
-Character-only config — can be loaded separately for prompt generation.
-
-### Environment Variables (`.env`)
-```
-FAL_KEY=your-fal-key
-ELEVENLABS_API_KEY=your-elevenlabs-key
-SYNCLABS_API_KEY=your-synclabs-key
+FAL_KEY=...
+MINIMAX_API_KEY=...
+ELEVENLABS_API_KEY=...
+SYNCLABS_API_KEY=...
 SUPABASE_URL=...
 SUPABASE_SERVICE_KEY=...
 R2_ACCOUNT_ID=...
 R2_ACCESS_KEY_ID=...
 R2_SECRET_ACCESS_KEY=...
 R2_PUBLIC_BASE_URL=...
+API_SECRET_KEY=...
 ```
 
 ## Logging
 
-All pipeline operations log to `logs/pipeline.log` (rotating, 5MB × 3 files).
-Dry-run mode logs to console only.
+Pipeline ops log to `logs/pipeline.log` (rotating, 5MB × 3).
 
-## Project Structure
+## Tests
 
-```
-pipeline/
-├── __init__.py          # Package exports
-├── config_loader.py     # JSON config loading + validation
-├── image_stage.py       # Async FAL Flux LoRA generation + post-processing
-├── voice_stage.py       # Async ElevenLabs TTS + SyncLabs/Hedra lip-sync
-├── qc_stage.py          # Automated QC: dimensions, artifacts, face gate
-├── publish_stage.py     # Queue management (queue/scheduled_prompts.json)
-└── runner.py            # Async orchestrator with error handling + dry-run
-
-scripts/
-├── auto_tagger.py       # Auto-caption dataset images for LoRA training
-├── analytics_loop.py    # LLM feedback loop: metrics → ideas → queue
-└── train_character_lora/  # LoRA training scripts
-
-config/
-├── character.json       # Character identity config
-└── pipeline.json        # Full pipeline config
-
-queue/
-└── scheduled_prompts.json   # Content queue with status tracking
-
-logs/
-└── pipeline.log         # Rotating pipeline log
-
-aeloria/                 # Core influencer platform (FastAPI app, publishing, engagement)
-├── generation/          # Image/video generation, prompt engines, post-processing
-├── persona/             # Character YAML configs
-├── publishing/          # Instagram + Fanvue publishing
-├── engagement/          # DM orchestration, re-engagement
-├── showrunner/          # Content calendar, beat sheets, storylines
-├── optimizer/           # Nightly scoring + strategy weights
-└── compliance/          # C2PA legal compliance
+```bash
+pytest -q
 ```

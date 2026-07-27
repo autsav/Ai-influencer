@@ -18,6 +18,7 @@ from aeloria.generation.video_worker import produce_video
 log = logging.getLogger(__name__)
 
 MAX_ATTEMPTS = 2
+MAX_VIDEO_ATTEMPTS = 2
 SLOT_HOUR_UTC = {"story": 9, "static": 17, "reel": 18}
 APPROVAL_BUTTONS = [
     [("✅ Approve", "approve:{qid}"), ("❌ Reject", "reject:{qid}")],
@@ -110,13 +111,42 @@ def process_brief(brief, db, settings, r2, persona, ref_embedding, tg=None) -> d
         if not ok:
             continue
 
-        # Reel: animate the hero still + video face-gate (drift -> retry).
+        # Reel: animate the hero still, then run the video face-gate on a late
+        # frame. Drift → retry up to MAX_VIDEO_ATTEMPTS. A video media_assets
+        # row is inserted on EVERY attempt (raw mp4 on drift, overlaid on pass)
+        # so kling cost is tracked even when post-processing fails. The raw
+        # Kling i2v call is delegated to produce_video; the gate/overlay/retry
+        # loop lives here so extract_frame/overlay_text failures propagate and
+        # the spend row is always recorded first.
         if brief["slot_type"] == "reel":
-            asset = produce_video(brief, db, settings, r2, ref_embedding, prompt, still_url)
-            if asset is None:
+            keywords = (brief.get("distribution_plan") or {}).get("on_screen_keywords") or []
+            asset = None
+            for v_attempt in range(MAX_VIDEO_ATTEMPTS):
+                check_budget(db, settings, "fal", settings.kling_video_cost_usd)
+                v = produce_video(still_url, prompt, settings)
+                # Record spend IMMEDIATELY after kling — if extract_frame /
+                # overlay / upload fail below, the cost row must still exist.
+                asset = db.insert("media_assets", {
+                    "brief_id": brief["id"], "r2_url": None, "kind": "video",
+                    "engine": "fal", "gen_params": v.gen_params,
+                    "cost": v.cost_usd, "face_similarity": None,
+                })
+                frame = extract_frame(v.video_bytes, settings.video_gate_frame_seconds, settings)
+                try:
+                    sim, ok = passes_gate(frame, ref_embedding, settings.face_gate_threshold)
+                except FaceGateError:
+                    sim, ok = None, False
+                mp4 = overlay_text(v.video_bytes, keywords, settings) if ok else v.video_bytes
+                key = f"content/{brief['slot_day']}/{brief['id']}-v{v_attempt}.mp4"
+                url = r2.upload(mp4, key, "video/mp4")
+                db.update("media_assets", asset["id"], {"r2_url": url, "face_similarity": sim})
+                asset = {**asset, "r2_url": url, "face_similarity": sim}
+                if ok:
+                    break
+            else:
                 db.update("briefs", brief["id"], {"status": "failed"})
                 raise WorkerError(
-                    f"video face gate failed {MAX_ATTEMPTS}x for brief {brief['id']} "
+                    f"video face gate failed {MAX_VIDEO_ATTEMPTS}x for brief {brief['id']} "
                     f"(still sim={last_sim})"
                 )
         else:

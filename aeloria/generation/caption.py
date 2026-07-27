@@ -76,8 +76,8 @@ def write_caption(
     active_trend = (distribution_plan or {}).get("active_trend")
     user = (
         f"{system}\n\n"
-        f"Scene: {brief['beat']}\n"
-        f"Caption brief: {brief.get('caption_angle') or brief['caption_brief']}\n"
+        f"Scene: {brief.get('beat') or brief.get('prompt_seed', '')}\n"
+        f"Caption brief: {brief.get('caption_angle') or brief.get('caption_brief') or brief.get('prompt_seed', '')}\n"
         + (f"Emotion to carry (just one): {brief['emotional_beat']}\n" if brief.get("emotional_beat") else "")
         + (f"Storyline this post advances: {brief['narrative_note']}\n" if brief.get("narrative_note") else "")
         + (f"Location: {brief['location']} — localize with one specific real detail\n" if brief.get("location") else "")

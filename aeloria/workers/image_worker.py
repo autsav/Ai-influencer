@@ -92,6 +92,8 @@ def generate_image_task(self, brief: dict[str, Any]) -> dict:
             "identity_score": result.identity_score,
             "passes_gate": result.passes_gate,
             "detail_pass_applied": result.detail_pass_applied,
+            "pass1_score": result.pass1_score,
+            "pass2_score": result.pass2_score,
             "object_key": object_key,
         }
 

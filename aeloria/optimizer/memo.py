@@ -46,7 +46,7 @@ def write_memo(db, settings: Settings | None, scores: dict, tg=None) -> str:
     )
     user = (
         f"{system}\n\n"
-        f"Follower count: {followers} (milestone: {milestone or 'none yet'}).\\n"
+        f"Follower count: {followers} (milestone: {milestone or 'none yet'}).\n"
         f"Per-dimension lift scores (lift>1 = above account median):\n{json.dumps(scores.get('dimensions', {}), indent=2)}\n"
         f"Posts scored: {scores.get('n_posts', 0)}.\n"
         f"Recent operator reject-reasons (negative signal): {rejects or 'none'}."
