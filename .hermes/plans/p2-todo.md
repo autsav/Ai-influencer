@@ -1,17 +1,13 @@
-# P2 Pipeline Upgrades — Implementation Plan
+# P2 Pipeline Upgrades — TODO Tracker
 
-> **Execution:** Subagent-driven development fallback (direct terminal, TDD per task)
+## Completed
+- [x] Task 1: Adaptive Face Gate Threshold (17 tests)
+- [x] Task 2: Viral Spike Detection (10 tests)
+- [x] Task 3: Audience Sentiment Analysis (21 tests)
+- [x] Task 4: A/B Testing Framework (13 tests)
+- [x] Task 5: Background Removal + Compositing (7 tests)
 
-**Goal:** Implement 7 P2 upgrades: adaptive face gate, multi-persona, background removal, viral spike detection, sentiment analysis, A/B testing, email newsletter.
-
-**Task ordering (quick wins first):**
-
-| Order | Task | Effort |
-|---|---|---|
-| 1 | Adaptive face gate threshold | 3h |
-| 2 | Real-time viral spike detection | 2d |
-| 3 | Audience sentiment analysis | 2d |
-| 4 | A/B testing framework | 2d |
-| 5 | Background removal + compositing | 3d |
-| 6 | Email newsletter + capture | 3d |
-| 7 | Multi-persona support | 1wk |
+## Remaining
+- [ ] Task 6: Email Newsletter + Capture — code written, tests written, NEEDS TEST RUN
+- [ ] Task 7: Multi-Persona Support — not started (1wk effort)
+- [ ] Final: Run full P2 test suite + git commit Tasks 5-7

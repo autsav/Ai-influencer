@@ -1,0 +1,29 @@
+# Multi-Persona Registry
+# Defines all AI influencer characters in the content factory.
+# Each persona has its own LoRA, reference faces, and generation settings.
+
+personas:
+  aeloria:
+    lora_url: "https://v3b.fal.media/files/b/0aa395a4/NmA-BW5lft984mV-yD4K9_pytorch_lora_weights.safetensors"
+    lora_scale: 0.7
+    reference_face_dir: "aeloria/persona/reference_faces"
+    persona_yaml: "aeloria/persona/aeloria.yaml"
+    description: "Aeloria — 24yo female AI entrepreneur. AI automation for business."
+    active: true
+    guidance_scale: 1.9
+    inference_steps: 30
+    pulid_weight: 0.85
+    face_gate_threshold: 0.35
+
+  # Template for adding new personas:
+  # socrates:
+  #   lora_url: "https://example.com/socrates.safetensors"
+  #   lora_scale: 0.65
+  #   reference_face_dir: "aeloria/persona/socrates_faces"
+  #   persona_yaml: "aeloria/persona/socrates.yaml"
+  #   description: "Socrates — Stoic philosopher AI influencer"
+  #   active: false
+  #   guidance_scale: 3.5
+  #   inference_steps: 40
+  #   pulid_weight: 0.85
+  #   face_gate_threshold: 0.35
