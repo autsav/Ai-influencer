@@ -1,0 +1,21 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Railway
+        run: |
+          echo "Railway deploy — set RAILWAY_TOKEN secret to enable"
+          # npm install -g @railway/cli
+          # railway up --service aeloria
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

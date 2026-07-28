@@ -64,6 +64,17 @@ def generate_consistent(
     prompt = build_prompt(persona, brief)
     log.info("Consistency pipeline: prompt built (%d chars)", len(prompt))
 
+    # ── Step 1b: Multi-reference face selection ──────────────────────────────
+    # If no explicit reference_bytes passed, load from the reference_faces
+    # directory and rotate by seed for stronger identity lock on extreme angles.
+    if reference_bytes is None:
+        from aeloria.generation.face_refs import load_reference_faces, select_reference_face
+        ref_dir = getattr(settings, "face_ref_dir", "aeloria/persona/reference_faces")
+        faces = load_reference_faces(ref_dir)
+        reference_bytes = select_reference_face(faces, seed=seed)
+        if reference_bytes:
+            log.info("Using reference face from %s (rotated by seed=%s)", ref_dir, seed)
+
     # ── Step 2: Pass 1 — Base generation ─────────────────────────────────────
     pass1_bytes: Optional[bytes] = None
     pass1_cost: float = 0.0

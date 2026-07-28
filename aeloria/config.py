@@ -65,14 +65,26 @@ class Settings(BaseSettings):
     # 30s idle connection (proxies/sandboxes) so each poll returns before the reset.
     telegram_poll_timeout: int = 25
 
-    fal_daily_usd_cap: float = 2.50
+    fal_daily_spend_limit: float = 2.50
+    fal_weekly_usd_cap: float = 50.0
+    fal_alert_threshold: float = 0.80
     higgsfield_daily_credits_cap: float = 15.0
     higgsfield_soul_id: str = "d94858ae-ea6e-48c7-89e0-7fc8083f2d0f"
+
+    # TikTok Content Posting API
+    tiktok_client_key: str = ""
+    tiktok_client_secret: str = ""
+    tiktok_access_token: str = ""
+    tiktok_open_id: str = ""
 
     telegram_bot_token: str = ""
     telegram_chat_id: str = ""
     face_gate_threshold: float = 0.35
     face_ref_path: str = "aeloria/persona/face_ref.json"
+    # Multi-reference face set: directory of reference faces (different angles,
+    # distances, lighting). PuLID rotates through them by seed for stronger
+    # identity lock on extreme angles. Falls back to single reference_face.jpg.
+    face_ref_dir: str = "aeloria/persona/reference_faces"
 
     # ── Character Consistency Engine ───────────────────────────
     # PuLID: zero-shot face identity conditioning (Pass 1)
