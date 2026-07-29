@@ -1,0 +1,215 @@
+# Aeloria Fashion Look Library — 100 Looks
+# Researched 2026 trends: jewelry (Gabriel NY, Vogue), makeup (Allure), hair (Vogue)
+# Each look = wardrobe + jewelry + makeup + hairstyle, mapped to activity/context
+# Designed by AI Fashion Director (10yr experience)
+
+# ── JEWELRY POOLS (2026 Trends) ──────────────────────────────
+jewelry:
+  minimal_gold:
+    - "delicate gold pendant necklace"
+    - "thin gold chain bracelet"
+    - "small gold stud earrings"
+    - "gold hoop earrings"
+  layered:
+    - "layered gold necklaces at varying lengths"
+    - "gold chain choker with longer pendant chain"
+    - "stacked thin gold rings"
+    - "layered delicate gold chains with a pearl drop"
+  statement:
+    - "bold gold sculptural earrings"
+    - "chunky gold cuff bracelet"
+    - "large gold hoop earrings with texture"
+    - "gold ear cuff with no piercing needed"
+    - "oversized gold pendant necklace"
+  pearl:
+    - "freshwater pearl drop earrings"
+    - "pearl and gold chain necklace"
+    - "pearl studs with gold border"
+  mixed_metals:
+    - "gold and silver mixed stack rings"
+    - "gold necklace with silver ear cuff"
+    - "rose gold hoops with gold pendant"
+
+# ── MAKEUP POOLS (2026 Trends from Allure) ────────────────────
+makeup:
+  natural_glow:
+    description: "golden hour bronzy skin, dewy finish, minimal makeup, sheer lip balm, feathered brows"
+    details: "lit-from-within bronzy glow, sheer dewy skin, natural feathered brows, clear lip balm with a hint of tint"
+  golden_glow:
+    description: "golden hour radiant skin, lit-from-within warmth across cheekbones, glossy nude-pink lip, feathered brows"
+    details: "lit-from-within golden hour radiance across cheekbones and bridge of nose, sheer dewy skin with visible peach fuzz, glossy nude-pink lips, feathered brows, soft warmth that catches the sun"
+  watercolor_blush:
+    description: "watercolor blush diffused on apples of cheeks, ballet slipper pink lips, micro liner"
+    details: "soft watercolor blush in lily pink diffused across cheekbones, ballet slipper pink satin lips, micro eyeliner flick at outer corners"
+  soft_glam:
+    description: "soft glam with golden hour skin, smudged berry lips, defined brows"
+    details: "golden hour bronzy skin with luminous finish, smudged berry lip stain blurred at edges, softly defined brows, sheer cream blush"
+  glossy_lips:
+    description: "glossy lip oil in pink cloud, watercolor blush, glass skin"
+    details: "glossy lip oil in baby pink, watercolor cream blush on cheeks, Korean glass skin dewy finish, micro liner"
+  color_wash_lids:
+    description: "color-washed lids in soft pastel pink, ballet slipper lips, natural skin"
+    details: "soft pastel pink color-washed eyelids diffused at edges, ballet slipper pink satin lips, natural skin with light concealer, fluttery lashes"
+  no_makeup:
+    description: "minimal no-makeup look, freckles visible, lip oil only"
+    details: "bare skin with freckles visible, no foundation, clear lip oil, natural brow shape, no eyeliner"
+  evening_smoky:
+    description: "soft smoky eye in warm brown, glossy nude lips, bronzy skin"
+    details: "soft smoky brown eyeshadow diffused at outer corners, glossy nude-pink lips, bronzy sculpted skin, defined brows"
+  fresh_faced:
+    description: "fresh-faced natural makeup, cream blush, lip tint, mascara only"
+    details: "fresh-faced cream blush in peach, sheer lip tint in coral, single coat of mascara, natural brows, dewy setting spray finish"
+
+# ── HAIRSTYLE POOLS (2026 Trends) ────────────────────────────
+hairstyles:
+  loose:
+    - "auburn hair loose and wavy, center-parted, face-framing pieces"
+    - "auburn hair loose with curtain bangs, soft waves"
+    - "auburn hair loose and straight, sleek and glossy"
+    - "auburn hair wind-tousled and loose with flyaways"
+    - "auburn hair loose with a deep side part, voluminous"
+  updo:
+    - "auburn hair in a messy low bun with loose strands framing face"
+    - "auburn hair in a sleek slicked-back bun"
+    - "auburn hair in a claw clip French twist"
+    - "auburn hair in a high messy bun with face-framing pieces"
+    - "auburn hair in a low chignon at the nape"
+    - "auburn hair in a milkmaid braid crown"
+    - "auburn hair in a half-up half-down style with a small bun"
+  braided:
+    - "auburn hair in a loose side braid"
+    - "auburn hair in two loose braids"
+    - "auburn hair in a fishtail braid over one shoulder"
+    - "auburn hair in a crown braid"
+    - "auburn hair in a half-up braid with loose waves below"
+  accessorized:
+    - "auburn hair in a loose bun with a silk scrunchie"
+    - "auburn hair half-up with a bow clip"
+    - "auburn hair with a thin gold headband"
+    - "auburn hair in a ponytail with a ribbon"
+    - "auburn hair with pearl hair pins scattered through a low bun"
+    - "auburn hair with a silk scarf tied as a headband"
+  short_styled:
+    - "auburn hair in a modern soft bob with inward-curved ends"
+    - "auburn hair in a textured lob with curtain bangs"
+    - "auburn hair in a sleek bob with a center part"
+
+# ── 100 LOOKS ────────────────────────────────────────────────
+looks:
+  # ── FOUNDER LIFESTYLE (1-15) ── Home office, desk, laptop, coffee
+  1: {context: "home office desk work", wardrobe: "oversized cream knit sweater, charcoal joggers, white sneakers", jewelry: "minimal_gold", makeup: "natural_glow", hair: "loose[0]", scene: "sitting at her home office desk, MacBook open, morning light through window, coffee mug beside laptop"}
+  2: {context: "home office desk work", wardrobe: "white tee tucked into high-waisted olive trousers, barefoot", jewelry: "layered", makeup: "no_makeup", hair: "updo[0]", scene: "leaning back in her office chair, stretching, afternoon light"}
+  3: {context: "home office deep work", wardrobe: "charcoal hoodie and black leggings, hair pulled up", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[2]", scene: "deep work session at her desk, multiple monitors, focused expression, evening"}
+  4: {context: "home office morning routine", wardrobe: "soft cream robe over a white tank, fluffy socks", jewelry: "minimal_gold", makeup: "no_makeup", hair: "loose[1]", scene: "morning routine at her kitchen counter, pouring coffee, soft window light"}
+  5: {context: "home office video call", wardrobe: "navy blouse, gold pendant, neat hair", jewelry: "layered", makeup: "soft_glam", hair: "updo[4]", scene: "on a Zoom call at her desk, smiling at camera, professional but cozy background"}
+  6: {context: "home office planning", wardrobe: "beige oversized button-down over a white tee, denim shorts", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[0]", scene: "sitting on the floor with a notebook and planner, surrounded by sticky notes"}
+  7: {context: "home office evening wind-down", wardrobe: "soft grey sweatshirt and joggers", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[0]", scene: "closing her laptop at sunset, warm orange light across the desk"}
+  8: {context: "home office creative session", wardrobe: "cream turtleneck, olive wide-leg trousers", jewelry: "statement[0]", makeup: "soft_glam", hair: "loose[2]", scene: "standing at a whiteboard sketching workflow diagrams, marker in hand"}
+  9: {context: "home office lunch break", wardrobe: "olive henley rolled at sleeves, light wash jeans", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "braided[0]", scene: "eating a salad at her desk, browsing her phone, relaxed"}
+  10: {context: "home office product testing", wardrobe: "white tee, navy blazer-style overshirt, jeans", jewelry: "layered", makeup: "natural_glow", hair: "loose[0]", scene: "testing a new AI tool on her laptop, excited expression, screen glowing"}
+  11: {context: "home office filing", wardrobe: "cream ribbed tank, beige linen trousers", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[0]", scene: "organizing papers and notebooks at her desk, focused"}
+  12: {context: "home office podcast recording", wardrobe: "navy sweater, gold hoops, clean jeans", jewelry: "statement[2]", makeup: "soft_glam", hair: "loose[4]", scene: "recording a podcast at her desk with a mic, headphones on, animated expression"}
+  13: {context: "home office reading", wardrobe: "oversized grey cardigan over a black tee, leggings", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[1]", scene: "curled up in an armchair reading a book, tea on side table, warm lamp light"}
+  14: {context: "home office brainstorm", wardrobe: "white oversized shirt over a cream tank, denim shorts", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[3]", scene: "standing at a window with a notebook, looking out thoughtfully, morning light"}
+  15: {context: "home office late night", wardrobe: "black hoodie and joggers, glasses pushed up", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[3]", scene: "late night coding session, screen glow on her face, dark room, focused"}
+
+  # ── CAFE / COWORKING (16-30) ── Coffee shops, coworking spaces
+  16: {context: "cafe working session", wardrobe: "cream crew-neck tee, beige oversized blazer, dark jeans, white sneakers", jewelry: "layered", makeup: "watercolor_blush", hair: "loose[0]", scene: "working at a cafe table, MacBook open, latte beside it, warm afternoon light"}
+  17: {context: "cafe meeting", wardrobe: "navy silk blouse, charcoal trousers, loafers", jewelry: "statement[0]", makeup: "soft_glam", hair: "updo[4]", scene: "sitting across from someone at a cafe, laptop between them, gesturing while talking"}
+  18: {context: "coworking space desk", wardrobe: "olive green henley, black jeans, white sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[1]", scene: "at a shared coworking desk, plants in background, clean modern space"}
+  19: {context: "cafe morning coffee", wardrobe: "oversized cream sweater, plaid scarf, jeans, ankle boots", jewelry: "minimal_gold", makeup: "natural_glow", hair: "loose[3]", scene: "holding a coffee cup walking into a cafe, morning light, candid moment"}
+  20: {context: "coworking whiteboard session", wardrobe: "white tee, navy overshirt, dark jeans, sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "updo[0]", scene: "standing at a coworking whiteboard, drawing diagrams, marker in hand, animated"}
+  21: {context: "cafe laptop deep work", wardrobe: "black turtleneck, charcoal trousers, minimal sneakers", jewelry: "layered", makeup: "no_makeup", hair: "updo[1]", scene: "deep in work at a quiet cafe corner, screen reflecting in her glasses, intense focus"}
+  22: {context: "cafe lunch with laptop", wardrobe: "cream blouse, olive wide-leg pants, white sneakers", jewelry: "pearl", makeup: "glossy_lips", hair: "loose[2]", scene: "lunch at a cafe with laptop, salad bowl and sparkling water, relaxed"}
+  23: {context: "coworking lounge", wardrobe: "soft pink knit sweater, grey jeans, white sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[0]", scene: "lounging on a coworking sofa with laptop on lap, plants around, casual"}
+  24: {context: "cafe window seat", wardrobe: "beige trench over a white tee, dark jeans, loafers", jewelry: "layered", makeup: "natural_glow", hair: "loose[0]", scene: "sitting at a cafe window seat, golden hour light streaming in, laptop open"}
+  25: {context: "coworking standing desk", wardrobe: "navy polo, grey trousers, clean sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "updo[2]", scene: "standing at a standing desk in a coworking space, modern industrial decor"}
+  26: {context: "cafe afternoon break", wardrobe: "cream cardigan over a black tank, olive chinos, sneakers", jewelry: "minimal_gold", makeup: "no_makeup", hair: "braided[0]", scene: "sipping tea at a cafe, looking out the window, reflective mood"}
+  27: {context: "coworking phone call", wardrobe: "white blouse, navy blazer, dark jeans, loafers", jewelry: "statement[1]", makeup: "soft_glam", hair: "loose[4]", scene: "on a phone call pacing in a coworking hallway, gesturing with one hand"}
+  28: {context: "cafe evening work", wardrobe: "charcoal knit sweater, dark jeans, white sneakers", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[0]", scene: "working at a cafe as the sun sets, warm amber light, laptop glow"}
+  29: {context: "cafe collaboration", wardrobe: "olive overshirt over a white tee, charcoal jogers, sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[1]", scene: "sitting next to someone at a cafe, both looking at a laptop, laughing"}
+  30: {context: "coworking event", wardrobe: "navy jumpsuit, gold belt, white sneakers", jewelry: "statement[3]", makeup: "evening_smoky", hair: "updo[4]", scene: "at a coworking networking event, holding a drink, animated conversation"}
+
+  # ── CITY / OUTDOORS (31-45) ─ Walking, commuting, city life
+  31: {context: "city walking commute", wardrobe: "white tee under a beige trench, dark jeans, white sneakers", jewelry: "layered", makeup: "natural_glow", hair: "loose[3]", scene: "walking down a city street with purpose, phone in hand, earbuds in, morning light"}
+  32: {context: "city rooftop sunset", wardrobe: "cream silk blouse, olive trousers, heeled sandals", jewelry: "statement[0]", makeup: "evening_smoky", hair: "loose[4]", scene: "on a rooftop bar terrace at golden hour, city skyline behind her, holding a drink"}
+  33: {context: "city market browsing", wardrobe: "olive green t-shirt, denim shorts, canvas sneakers, tote bag", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "braided[1]", scene: "browsing a farmer's market stall, holding fruit, casual weekend vibe"}
+  34: {context: "city park lunch break", wardrobe: "navy crew-neck sweater over white tee, chinos, sneakers", jewelry: "minimal_gold", makeup: "no_makeup", hair: "loose[0]", scene: "sitting on a park bench eating lunch, laptop bag beside her, dappled light"}
+  35: {context: "city evening walk", wardrobe: "black leather jacket over a white tee, dark jeans, ankle boots", jewelry: "statement[2]", makeup: "evening_smoky", hair: "loose[0]", scene: "walking through a city at dusk, streetlights coming on, reflections in puddles"}
+  36: {context: "city subway commute", wardrobe: "grey coat over a black turtleneck, dark jeans, sneakers", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[1]", scene: "on a subway train reading her phone, earbuds in, city blur through window"}
+  37: {context: "city bike ride", wardrobe: "white tee, olive overshirt, denim shorts, white sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "updo[3]", scene: "riding a city bike along a riverside path, wind in loose strands, morning"}
+  38: {context: "city shopping", wardrobe: "cream knit dress, brown leather belt, ankle boots", jewelry: "layered", makeup: "watercolor_blush", hair: "loose[1]", scene: "carrying shopping bags down a boutique street, afternoon light, smiling"}
+  39: {context: "city square waiting", wardrobe: "navy pea coat over a grey sweater, dark jeans, boots", jewelry: "minimal_gold", makeup: "natural_glow", hair: "loose[2]", scene: "waiting in a city square, checking phone, breath visible in cold air"}
+  40: {context: "city bridge golden hour", wardrobe: "cream off-shoulder sweater, olive wide-leg pants, sandals", jewelry: "pearl", makeup: "golden_glow", hair: "loose[0]", scene: "leaning on a bridge railing at sunset, river below, warm golden light on her face"}
+  41: {context: "city taxi ride", wardrobe: "navy blazer over a white tee, dark jeans, loafers", jewelry: "layered", makeup: "soft_glam", hair: "updo[0]", scene: "in the back of a taxi, looking out the window, city lights reflecting, evening"}
+  42: {context: "city crosswalk", wardrobe: "olive trench coat, black turtleneck, dark jeans, white sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[3]", scene: "crossing a street at a crosswalk, city buildings behind, motion blur of other pedestrians"}
+  43: {context: "city bookstore", wardrobe: "cream cardigan over a black tank, olive chinos, sneakers", jewelry: "minimal_gold", makeup: "no_makeup", hair: "braided[0]", scene: "browsing books in a cozy bookstore, pulling one from a shelf, warm light"}
+  44: {context: "city gallery visit", wardrobe: "black slip dress over a white tee, denim jacket, sneakers", jewelry: "statement[3]", makeup: "color_wash_lids", hair: "loose[4]", scene: "standing in front of art in a gallery, head tilted, contemplative"}
+  45: {context: "city evening out", wardrobe: "burgundy silk cami, black high-waisted trousers, heeled boots", jewelry: "statement[4]", makeup: "evening_smoky", hair: "loose[4]", scene: "stepping out of a restaurant at night, city lights behind her, confident stride"}
+
+  # ── TRAVEL / REMOTE (46-55) ─ Airport, train, hotel, new cities
+  46: {context: "airport waiting", wardrobe: "oversized grey hoodie, black leggings, white sneakers, backpack", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[3]", scene: "sitting at an airport gate, laptop on lap, earbuds in, large windows"}
+  47: {context: "airport walking", wardrobe: "navy jumpsuit, white sneakers, carry-on suitcase", jewelry: "layered", makeup: "fresh_faced", hair: "loose[0]", scene: "walking through an airport terminal pulling a suitcase, purposeful stride"}
+  48: {context: "hotel room work", wardrobe: "white hotel robe over a white tank, bare feet", jewelry: "minimal_gold", makeup: "no_makeup", hair: "loose[3]", scene: "sitting on a hotel bed with laptop, city view through floor-to-ceiling windows, morning"}
+  49: {context: "train ride countryside", wardrobe: "cream knit sweater, dark jeans, sneakers, book in lap", jewelry: "minimal_gold", makeup: "natural_glow", hair: "loose[0]", scene: "on a train looking out at countryside blurring past, book open, wistful"}
+  50: {context: "new city exploration", wardrobe: "white tee, olive utility jacket, denim shorts, sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "braided[2]", scene: "standing at a viewpoint overlooking a new city, wind in hair, amazed expression"}
+  51: {context: "hotel rooftop breakfast", wardrobe: "cream linen dress, brown leather belt, sandals", jewelry: "pearl", makeup: "glossy_lips", hair: "loose[1]", scene: "breakfast on a hotel rooftop, coffee and croissant, city view below, morning light"}
+  52: {context: "airplane window seat", wardrobe: "oversized black cardigan, grey joggers, white sneakers", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[0]", scene: "looking out an airplane window at clouds below, blanket on lap, peaceful"}
+  53: {context: "beachside workation", wardrobe: "white linen shirt open over a swimsuit top, denim shorts, sandals", jewelry: "minimal_gold", makeup: "natural_glow", hair: "loose[3]", scene: "working on a laptop at a beachside cafe, ocean visible, palm trees, warm light"}
+  54: {context: "mountain cabin work", wardrobe: "chunky cream knit, dark leggings, wool socks, fire glowing", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[0]", scene: "curled up by a fireplace in a cabin, laptop on a blanket, snow outside window"}
+  55: {context: "road trip passenger", wardrobe: "soft cream tee under a sage overshirt, jeans, white sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[0]", scene: "sitting in the passenger seat of a car, wind through open window, road stretching ahead"}
+
+  # ── EVENTS / CONFERENCES (56-65) ─ Speaking, networking, panels
+  56: {context: "conference stage speaking", wardrobe: "navy blazer over a white tee, black trousers, heeled boots", jewelry: "statement[0]", makeup: "soft_glam", hair: "updo[1]", scene: "on a conference stage presenting, slide behind her, gesturing to the screen, confident"}
+  57: {context: "conference networking", wardrobe: "charcoal jumpsuit, gold belt, heeled sandals", jewelry: "statement[3]", makeup: "evening_smoky", hair: "updo[4]", scene: "at a conference networking event, holding a drink, deep in conversation"}
+  58: {context: "panel discussion", wardrobe: "cream silk blouse, navy wide-leg trousers, loafers", jewelry: "layered", makeup: "soft_glam", hair: "loose[2]", scene: "sitting on a panel behind a table with microphones, listening intently"}
+  59: {context: "conference lobby", wardrobe: "black turtleneck, grey blazer, dark jeans, white sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[0]", scene: "checking her phone in a conference lobby, people moving in background, motion blur"}
+  60: {context: "workshop teaching", wardrobe: "white tee, olive overshirt, dark jeans, sneakers", jewelry: "minimal_gold", makeup: "natural_glow", hair: "updo[0]", scene: "leading a small workshop, standing at a whiteboard, pointing to a diagram"}
+  61: {context: "demo day presentation", wardrobe: "navy wrap dress, gold pendant, heeled boots", jewelry: "layered", makeup: "soft_glam", hair: "loose[4]", scene: "standing in front of a demo screen, presenting her product, animated expression"}
+  62: {context: "investor meeting", wardrobe: "charcoal blazer over a cream silk blouse, black trousers, heels", jewelry: "statement[1]", makeup: "soft_glam", hair: "updo[4]", scene: "across a boardroom table from investors, presenting with a laptop open"}
+  63: {context: "afterparty", wardrobe: "black slip dress, gold layered necklaces, heeled boots", jewelry: "statement[4]", makeup: "evening_smoky", hair: "loose[4]", scene: "at a conference afterparty, laughing with a drink, string lights behind her"}
+  64: {context: "podcast interview guest", wardrobe: "olive green sweater, gold hoops, dark jeans, white sneakers", jewelry: "statement[2]", makeup: "fresh_faced", hair: "loose[1]", scene: "being interviewed on a podcast, headphones on, animated expression, mic visible"}
+  65: {context: "award ceremony", wardrobe: "burgundy velvet dress, gold statement earrings, heeled sandals", jewelry: "statement[0]", makeup: "evening_smoky", hair: "updo[4]", scene: "holding an award on stage, spotlight, applauding audience, genuine surprise"}
+
+  # ── CONTENT CREATION (66-75) ─ Filming, photography, social
+  66: {context: "filming reel at desk", wardrobe: "white tee, navy overshirt, dark jeans, gold hoops", jewelry: "layered", makeup: "soft_glam", hair: "loose[0]", scene: "filming a reel with a ring light and phone on a tripod at her desk, talking to camera"}
+  67: {context: "product unboxing", wardrobe: "cream oversized sweater, black leggings, white sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[3]", scene: "unboxing a new tech product on her desk, excited expression, camera on tripod"}
+  68: {context: "selfie mirror photo", wardrobe: "navy crop top and high-waisted jeans, white sneakers", jewelry: "statement[2]", makeup: "watercolor_blush", hair: "loose[1]", scene: "taking a mirror selfie in a modern bathroom, phone visible in mirror"}
+  69: {context: "outdoor photo shoot", wardrobe: "cream flowy midi dress, brown leather belt, sandals", jewelry: "pearl", makeup: "glossy_lips", hair: "loose[0]", scene: "posing in a park with cherry blossoms, looking over shoulder, dappled light"}
+  70: {context: "lifestyle flat lay", wardrobe: "white tee, olive trousers, white sneakers, manicured hands", jewelry: "layered", makeup: "natural_glow", hair: "updo[0]", scene: "arranging a flat lay on her desk — notebook, pen, coffee, phone — from above"}
+  71: {context: "bts content creation", wardrobe: "black tee, grey cardigan, dark jeans, bare feet", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[0]", scene: "behind the scenes of a content shoot, camera and lights visible, reviewing shots on laptop"}
+  72: {context: "story recording", wardrobe: "cream ribbed tank, olive trousers, white sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[0]", scene: "recording an IG story holding her phone, walking through a cafe, casual"}
+  73: {context: "tutorial filming", wardrobe: "white button-down rolled at sleeves, dark jeans, sneakers", jewelry: "minimal_gold", makeup: "natural_glow", hair: "updo[2]", scene: "filming a tutorial at her desk, pointing at her screen, ring light on"}
+  74: {context: "travel content", wardrobe: "olive utility jacket over a white tee, denim shorts, sneakers", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[3]", scene: "filming a travel vlog with her phone on a gimbal, scenic viewpoint behind her"}
+  75: {context: "product review filming", wardrobe: "navy polo, grey trousers, clean sneakers", jewelry: "minimal_gold", makeup: "soft_glam", hair: "loose[2]", scene: "sitting at a desk reviewing an AI tool on screen, talking to camera, B-roll setup"}
+
+  # ── FITNESS / WELLNESS (76-80) ─ Gym, yoga, walks
+  76: {context: "morning yoga", wardrobe: "black sports bra and leggings, bare feet, hair in bun", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[3]", scene: "doing yoga on a mat in her living room, morning light streaming through curtains, peaceful"}
+  77: {context: "gym session", wardrobe: "grey crop top and black leggings, white sneakers, water bottle", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[1]", scene: "at a gym, adjusting a barbell, focused, mirror reflection, modern gym interior"}
+  78: {context: "morning run", wardrobe: "navy tank top, black running shorts, white running shoes", jewelry: "minimal_gold", makeup: "no_makeup", hair: "braided[1]", scene: "jogging through a park at sunrise, earbuds in, sweat on brow, determined"}
+  79: {context: "wellness journaling", wardrobe: "soft cream oversized tee, grey leggings, fluffy socks", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[0]", scene: "journaling on her couch with a notebook, tea beside her, cozy evening, warm lamp"}
+  80: {context: "meditation break", wardrobe: "loose grey sweater, black leggings, bare feet", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[0]", scene: "sitting cross-legged on a cushion with eyes closed, candle burning, calm expression"}
+
+  # ── SOCIAL / DINING (81-90) ─ Restaurants, dinners, friends
+  81: {context: "dinner with friends", wardrobe: "burgundy silk cami, black high-waisted trousers, heeled boots", jewelry: "statement[4]", makeup: "evening_smoky", hair: "loose[4]", scene: "at a restaurant table with friends, laughing, holding a wine glass, warm ambiance"}
+  82: {context: "brunch with laptop", wardrobe: "cream knit sweater, plaid skirt, ankle boots", jewelry: "layered", makeup: "watercolor_blush", hair: "loose[1]", scene: "brunch at a sunny cafe, pancakes and coffee, laptop open, weekend casual"}
+  83: {context: "cocktail bar", wardrobe: "black slip dress, gold layered necklaces, heeled boots", jewelry: "statement[0]", makeup: "evening_smoky", hair: "loose[4]", scene: "at a cocktail bar with a drink, moody lighting, laughing with a friend"}
+  84: {context: "cooking at home", wardrobe: "white tee under a denim apron, bare feet, hair tied up", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[0]", scene: "cooking in her kitchen, chopping vegetables, steam rising, warm kitchen light"}
+  85: {context: "dinner party hosting", wardrobe: "olive wrap dress, gold pendant, heeled sandals", jewelry: "pearl", makeup: "soft_glam", hair: "loose[4]", scene: "setting a dinner table with candles, wine glasses, arranging flowers, evening"}
+  86: {context: "ice cream walk", wardrobe: "white tee, denim shorts, white sneakers, sunglasses on head", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[3]", scene: "walking with an ice cream cone on a sunny street, casual summer vibe, laughing"}
+  87: {context: "wine and work", wardrobe: "charcoal knit sweater, dark jeans, bare feet, glasses of wine", jewelry: "minimal_gold", makeup: "no_makeup", hair: "loose[0]", scene: "on her couch with a glass of wine and laptop, evening, cozy blanket, relaxed"}
+  88: {context: "rooftop dinner", wardrobe: "cream off-shoulder top, olive wide-leg pants, heeled sandals", jewelry: "statement[3]", makeup: "golden_glow", hair: "loose[0]", scene: "dinner on a rooftop, string lights, city skyline at dusk, warm conversation"}
+  89: {context: "food market browsing", wardrobe: "olive henley, denim shorts, canvas sneakers, tote bag", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "braided[0]", scene: "browsing a food market, tasting something from a stall, animated expression"}
+  90: {context: "cozy movie night", wardrobe: "oversized grey hoodie and leggings, fluffy socks, popcorn bowl", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[3]", scene: "curled on a sofa with popcorn, screen glow on her face, cozy evening"}
+
+  # ── SPECIAL / CREATIVE (91-100) ─ Unique moments, artistic, seasonal
+  91: {context: "studio photoshoot", wardrobe: "cream silk slip dress, bare feet, soft draped fabric", jewelry: "pearl", makeup: "glossy_lips", hair: "loose[0]", scene: "in a studio with a seamless backdrop, soft light, posing naturally, editorial"}
+  92: {context: "gallery opening", wardrobe: "black tailored jumpsuit, gold statement earrings, heeled boots", jewelry: "statement[0]", makeup: "color_wash_lids", hair: "updo[4]", scene: "at an art gallery opening, holding a champagne flute, studying a painting"}
+  93: {context: "rainy day window", wardrobe: "chunky cream turtleneck, grey wool trousers, wool socks", jewelry: "minimal_gold", makeup: "no_makeup", hair: "loose[0]", scene: "looking out a rain-streaked window with a mug of tea, cozy, reflective mood"}
+  94: {context: "christmas market", wardrobe: "red knit scarf, cream coat, dark jeans, boots, gloves", jewelry: "minimal_gold", makeup: "fresh_faced", hair: "loose[1]", scene: "at a Christmas market holding a mulled wine, lights and stalls behind her, breath visible"}
+  95: {context: "autumn park walk", wardrobe: "olive green coat over a cream sweater, dark jeans, boots", jewelry: "layered", makeup: "natural_glow", hair: "loose[3]", scene: "walking through a park with falling leaves, golden autumn light, scarf around neck"}
+  96: {context: "spring blossom", wardrobe: "soft pink cardigan over a white tank, light wash denim skirt, white sneakers, bow detail", jewelry: "pearl", makeup: "watercolor_blush", hair: "accessorized[1]", scene: "standing under cherry blossoms, petals falling, looking up, soft smile"}
+  97: {context: "summer rooftop pool", wardrobe: "white linen shirt over a swimsuit, denim shorts, sandals, sunglasses", jewelry: "minimal_gold", makeup: "glossy_lips", hair: "loose[3]", scene: "by a rooftop pool, feet in water, laptop on a lounger, city skyline, summer"}
+  98: {context: "winter morning coffee", wardrobe: "chunky grey turtleneck, black trousers, wool socks, fireplace", jewelry: "minimal_gold", makeup: "no_makeup", hair: "updo[0]", scene: "holding a mug by a frosty window, snow outside, warm inside, steam rising"}
+  99: {context: "bookstore reading", wardrobe: "cream cardigan over a black tank, olive chinos, canvas sneakers", jewelry: "minimal_gold", makeup: "no_makeup", hair: "braided[0]", scene: "standing in a bookstore aisle reading a book, warm light, shelves behind her"}
+  100: {context: "golden hour portrait", wardrobe: "cream flowy maxi dress, gold layered necklaces, bare feet in grass", jewelry: "statement[0]", makeup: "golden_glow", hair: "loose[0]", scene: "standing in an open field at golden hour, wind catching her hair and dress, serene"}

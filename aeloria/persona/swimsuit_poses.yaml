@@ -1,0 +1,421 @@
+# 100 Swimsuit Model Poses for Aeloria
+# Reference library for beach/bikini content generation
+# Each pose includes: name, description, body angle, arm placement, leg placement, expression
+
+poses:
+  # ─── STANDING FRONT / ¾ ──────────────────────────────────────────────────
+  - id: 1
+    name: "Classic Front Stand"
+    description: "Full body front-facing, arms relaxed at sides, slight weight shift to one hip, soft smile"
+
+  - id: 2
+    name: "Three-Quarter Turn"
+    description: "Body turned 45° from camera, shoulder closest to lens dropped, chin slightly lifted, hands clasped in front"
+
+  - id: 3
+    name: "High Hip Stand"
+    description: "Standing with weight on back leg, front hip pushed up, one hand on hip, other hand touching hair"
+
+  - id: 4
+    name: "Hands on Hips Power Pose"
+    description: "Both hands firmly on hips, elbows out, chest lifted, feet shoulder-width apart, confident stare"
+
+  - id: 5
+    name: "Contrapposto"
+    description: "Classic contrapposto — weight on back leg, front knee slightly bent, hand resting on hip, S-curve spine"
+
+  - id: 6
+    name: "One Hand in Hair"
+    description: "Arm raised, hand running through auburn hair, other arm relaxed, body angled 30° from camera"
+
+  - id: 7
+    name: "Double Hand Hair Fix"
+    description: "Both hands reaching up to adjust bun, slight arch in lower back, chin up, looking sidelong"
+
+  - id: 8
+    name: "Over the Shoulder Glance"
+    description: "Body facing away at 90°, head turned over right shoulder looking back at camera, hand on hip"
+
+  - id: 9
+    name: "Wind in Hair"
+    description: "Standing in breeze, hair blowing behind, both arms slightly out for balance, eyes closed, peaceful expression"
+
+  - id: 10
+    name: "Chin Up Victory"
+    description: "Chin lifted high, eyes looking down slightly, arms crossed under chest (figure-enhancing), subtle smile"
+
+  # ─── STANDING — LEGS ──────────────────────────────────────────────────────
+  - id: 11
+    name: "Standing Leg Cross"
+    description: "Front leg straight, back leg bent at knee with toe touching ground, ankle crossed in front"
+
+  - id: 12
+    name: "Knee Bend Profile"
+    description: "Body in profile, back leg bent 90° with knee pointing sideways, arms on hips, toned legs"
+
+  - id: 13
+    name: "Standing Figure Eight"
+    description: "Body twisted at waist, arms flowing opposite direction, legs in loose stride, S-line silhouette"
+
+  - id: 14
+    name: "Calf Raise Stand"
+    description: "Standing on toes, calves flexed, arms overhead holding hair up,elongated body line"
+
+  - id: 15
+    name: "Wide Stance Power"
+    description: "Feet wide, knees slightly bent, hands behind head, elbows back, chest expanded, strong posture"
+
+  - id: 16
+    name: "Single Leg Pop"
+    description: "One leg popped with knee bent 90°, foot off ground, hip thrust slightly, hand on bent knee"
+
+  - id: 17
+    name: "Crossed Ankle Standing"
+    description: "Standing with one ankle crossed over opposite knee, arms draped over bent leg, relaxed hip-hop pose"
+
+  - id: 18
+    name: "Pyramid Pose"
+    description: "Standing with feet together, leaning back slightly, both arms raised above head in V, arched back"
+
+  - id: 19
+    name: "Banana Pose"
+    description: "Side curve to one hip, legs creating a long line from toe to extended arm, hips sq  ueezed"
+
+  - id: 20
+    name: "Standing Split"
+    description: "One leg raised as high as possible (passed vertical), arms reaching to foot, extreme flexibility showcase"
+
+  # ─── SEATED ────────────────────────────────────────────────────────────────
+  - id: 21
+    name: "Beach Sit Cross-Legged"
+    description: "Sitting on dry sand, legs crossed lotus-style, hands resting on knees, chin lifted"
+
+  - id: 22
+    name: "Seated Side Sweep"
+    description: "Sitting sideways on beach towel, one leg bent under, other leg extended, hand propping torso"
+
+  - id: 23
+    name: "Seated Knee Hug"
+    description: "Sitting with both knees bent hugging legs, chin on knees, looking through legs at camera"
+
+  - id: 24
+    name: "Seated Mermaid"
+    description: "Sitting with legs to one side (half-seated), body facing forward, one arm behind for support"
+
+  - id: 25
+    name: "Seated Back Arch"
+    description: "Sitting on sand, legs extended, hands behind on sand, chest lifted, back arched, neck craned"
+
+  - id: 26
+    name: "Seated One Leg Up"
+    description: "Sitting, one leg extended straight, other leg bent with foot by thigh, both hands on raised knee"
+
+  - id: 27
+    name: "Seated Pensive"
+    description: "Sitting cross-legged, one hand on chin as if thinking, other hand resting on ankle, soft gaze"
+
+  - id: 28
+    name: "Seated Straddle Forward"
+    description: "Sitting in wide straddle, torso folded forward between legs, arms extended, cheek resting on sand"
+
+  - id: 29
+    name: "Seated Figure on Towel"
+    description: "Kneeling on towel, butt on heels, leaning back on hands, chest up, looking over shoulder"
+
+  - id: 30
+    name: "Seated Side Leg Extension"
+    description: "Sitting with legs to one side, top leg extended and raised slightly, hand supporting torso"
+
+  # ─── LYING / PRONE ─────────────────────────────────────────────────────────
+  - id: 31
+    name: "Lying Face Down Beach"
+    description: "Lying prone on sand, towel under hips, body face-down, head turned to camera, arms outstretched"
+
+  - id: 32
+    name: "Lying Back on Sand"
+    description: "Lying supine on beach towel, arms overhead in stretch, eyes closed, bikiniline visible"
+
+  - id: 33
+    name: "Lying Side Rest"
+    description: "Lying on side on beach towel, head propped on hand, top leg bent forward, relaxed mood"
+
+  - id: 34
+    name: "Lying Crab Position"
+    description: "Lying face up on sand, palms flat under shoulders, hips raised, body arched like bridge"
+
+  - id: 35
+    name: "Lying Hip Twist"
+    description: "Lying supine, legs rolled to one side, arms stretched opposite, body twisted at waist"
+
+  # ─── ON ALL FOURS ──────────────────────────────────────────────────────────
+  - id: 36
+    name: "All Fours Beach"
+    description: "On hands and knees in shallow water, water lapping at forearms, looking back at camera"
+
+  - id: 37
+    name: "Tabletop"
+    description: "On all fours, palms on sand, knees under hips, back flat, head up, looking forward"
+
+  - id: 38
+    name: "Cat Stretch"
+    description: "All fours, spine arched up, chin tucked to chest, hands pressed forward on sand"
+
+  - id: 39
+    name: "Pike Fold"
+    description: "All fours then hips pushed up to sky, legs straight, arms reaching forward, body in inverted V"
+
+  - id: 40
+    name: "Knee to Elbow"
+    description: "All fours, right knee to right elbow, then left knee to left elbow in alternating pulses"
+
+  # ─── WALKING / MOVEMENT ────────────────────────────────────────────────────
+  - id: 41
+    name: "Beach Walk Slow-Mo"
+    description: "Mid-stride walking along shoreline, breeze catching hair, arms swinging naturally"
+
+  - id: 42
+    name: "Beach Walk One Shoe"
+    description: "Walking with one foot bare, other leg bent with knee high, carefree expression, moving through frame"
+
+  - id: 43
+    name: "Running to Camera"
+    description: "Jogging toward camera in sand, hair bouncing, both arms pumping, big genuine smile"
+
+  - id: 44
+    name: "Running Splits"
+    description: "Low running or dancing move, one leg high in air, arms in dynamic V shape, frozen mid-motion"
+
+  - id: 45
+    name: "Beach Skipping"
+    description: "Light skipping step, one leg skipping, arms out for balance, carefree joyful mood"
+
+  - id: 46
+    name: "Walking Away Sand"
+    description: "Walking away from camera down beach, only back visible, sun behind, silhouette moment"
+
+  - id: 47
+    name: "Wading Shallow Water"
+    description: "Wading knee-deep in ocean, one foot lifting out of water, hand holding hair, droplets visible"
+
+  - id: 48
+    name: "Shore Spin"
+    description: "Spinning on wet sand near waterline, arms out, bikini top spinning slightly, hair fanning out"
+
+  # ─── HAND PLACEMENTS ──────────────────────────────────────────────────────
+  - id: 49
+    name: "Both Hands Behind Head"
+    description: "Standing, hands clasped behind head, elbows wide, chest open, chin slightly down,smize"
+
+  - id: 50
+    name: "One Hand Behind Head"
+    description: "One arm raised hand behind head, other hand on hip, head tilted away from raised arm"
+
+  - id: 51
+    name: "Hands on Upper Thighs"
+    description: "Standing with hands sliding down to rest on upper thighs, shoulders back, chest lifted"
+
+  - id: 52
+    name: "Pointing at Camera"
+    description: "One arm extended pointing directly at camera, body angled, other hand on hip, playful smirk"
+
+  - id: 53
+    name: "Reaching for Sky"
+    description: "Both arms reaching straight up, biceps flexed, abs tight, standing on tiptoes, elongating"
+
+  - id: 54
+    name: "Arm Across Body"
+    description: "One arm crossed tightly across chest (covering bust), other hand on opposite shoulder"
+
+  - id: 55
+    name: "Fingers in Belt Loops"
+    description: "Both thumbs hooked into bikini bottom belt loops/waistband, elbows out, hips forward"
+
+  - id: 56
+    name: "Wrist to Forehead"
+    description: "One wrist brought to forehead in casual salute, eyes squinting against sun, cool vibe"
+
+  - id: 57
+    name: "Pinky Up Tea Cup"
+    description: "One hand raised as if holding teacup (pinkies up), other arm relaxed, prim and proper pose"
+
+  - id: 58
+    name: "Clasp Behind Back"
+    description: "Both arms clasped behind back, leaning forward slightly, chin up, exposing neck and chest"
+
+  # ─── LOOKING DIRECTIONS ────────────────────────────────────────────────────
+  - id: 59
+    name: "Eyes Closed Peace"
+    description: "Standing with eyes fully closed, peaceful expression, slight smile, face tilted to warmth"
+
+  - id: 60
+    name: "Looking Down Over Nose"
+    description: "Chin tucked, eyes looking down over top of nose at camera, slight smug expression"
+
+  - id: 61
+    name: "Profile Stare"
+    description: "Full profile, head perfectly sideways, eyes fixed on distant horizon, stoic expression"
+
+  - id: 62
+    name: "Over Shoulder Full Turn"
+    description: "Full 180° turn — back to camera then head fully twisted looking back, arms in air"
+
+  - id: 63
+    name: "Looking Up and Away"
+    description: "Eyes gazing upward at 45° angle, dreamy expression, mind somewhere else entirely"
+
+  - id: 64
+    name: "Squinting Sun Kissed"
+    description: "Face to sun, eyes squinting almost closed, wide smile showing teeth, happy warmth"
+
+  - id: 65
+    name: "Downward Glance"
+    description: "Eyes cast downward, chin lifted to compensate, shy but alluring expression"
+
+  - id: 66
+    name: "Gazing at Own Reflection"
+    description: "Looking down at hands or body, admiring, self-focused, ignoring camera completely"
+
+  - id: 67
+    name: "Profile Eyes Closed"
+    description: "Perfect side profile, eyes closed, lips slightly parted, wind tugging hair across face"
+
+  - id: 68
+    name: "Camera Stare Direct"
+    description: "Direct unbroken eye contact with lens, unsmiling, magnetic pull, confident"
+
+  # ─── ENVIRONMENTS ─────────────────────────────────────────────────────────
+  - id: 69
+    name: "Leaning Against Palm Tree"
+    description: "Right side leaning on palm tree trunk, one leg crossed over other, hand on trunk above head"
+
+  - id: 70
+    name: "Rock Lean"
+    description: "Leaning back against sun-warmed boulder, legs crossed at ankle, arms draped over rock"
+
+  - id: 71
+    name: "Beach Umbrella Grip"
+    description: "Holding beach umbrella pole with both hands, leaning into it, legs crossed, wind pressing fabric"
+
+  - id: 72
+    name: "Hammock Hang"
+    description: "Lying in beach hammock strung between palms, one arm behind head, one leg dangling out"
+
+  - id: 73
+    name: "Beach Ladder"
+    description: "Holding onto beach ladder rung at shoulder height, body angled, one foot on lower rung"
+
+  - id: 74
+    name: "Beach Chair Lean"
+    description: "Leaning over back of wooden beach lounger, arms crossed on top, chin on forearms"
+
+  - id: 75
+    name: "Towel Edge Sit"
+    description: "Sitting at edge of large beach towel, legs off the side, hands on towel for support"
+
+  - id: 76
+    name: "Jungle Edge"
+    description: "Standing at edge where beach meets jungle, palms behind, leaning back into foliage"
+
+  # ─── WATER / OCEAN ────────────────────────────────────────────────────────
+  - id: 77
+    name: "Wading Mid-Thigh"
+    description: "Wading chest-deep, water at mid-bust level, hands gripping bikini top as if preventing lift"
+
+  - id: 78
+    name: "Surfer Squat"
+    description: "Crouching on surfboard in ocean, knees wide, hands on surfboard, hair soaked, big smile"
+
+  - id: 79
+    name: "Treading Water"
+    description: "Treading water at chest height, only shoulders and head visible above waterline"
+
+  - id: 80
+    name: "Jump Splash"
+    description: "Jumping up from water with splash around torso, both arms up, explosive joyful moment"
+
+  - id: 81
+    name: "Floating Starfish"
+    description: "Lying face up in shallow water, arms and legs spread wide, water at waist level"
+
+  - id: 82
+    name: "Shoulder Deep w/ Rocks"
+    description: "Standing shoulder-deep in ocean, hands holding onto submerged rock for stability"
+
+  - id: 83
+    name: "Belly Slide"
+    description: "Sliding into water face-first from beach, belly grazing water surface, arms extended forward"
+
+  - id: 84
+    name: "Sitting on Rocks Water"
+    description: "Sitting on rocky ocean outcrop, legs dangling in tidal pool, palms behind for support"
+
+  - id: 85
+    name: "Diving Board"
+    description: "At edge of diving board/platform, toes curled over edge, about to dive, concentration face"
+
+  # ─── SAND / GROUND ─────────────────────────────────────────────────────────
+  - id: 86
+    name: "Sand Dig"
+    description: "Kneeling in sand, both hands digging, creating small trench, focused determined expression"
+
+  - id: 87
+    name: "Toe Scrunch Sit"
+    description: "Sitting with toes actively scrunching sand beneath, hands on sand behind for support"
+
+  - id: 88
+    name: "Sand Angel"
+    description: "Lying supine in dry sand, arms and legs making snow-angel motion, fully extended"
+
+  - id: 89
+    name: "Sand Heart"
+    description: "Using fingers to draw heart shape in sand beside body while lying on stomach"
+
+  - id: 90
+    name: "Crouching Low"
+    description: "Full crouch, heels to butt, knees wide, arms draped over knees, compact dynamic crouch"
+
+  # ─── SPECIAL / DYNAMIC ─────────────────────────────────────────────────────
+  - id: 91
+    name: "Hair Whip"
+    description: "Head snapped to one side causing hair to whip across face, eyes closed, motion blur effect"
+
+  - id: 92
+    name: "Spin and Freeze"
+    description: "Mid-spin on sand, body twisted, arms trailing, frozen at peak of motion for dynamic effect"
+
+  - id: 93
+    name: "One Legged Hop"
+    description: "Balancing on one foot, other leg pulled up behind, about to hop, excited expression"
+
+  - id: 94
+    name: "Jump and Tuck"
+    description: "Full jump off sand, knees pulled up to chest, arms wrapped around shins, compact mid-air"
+
+  - id: 95
+    name: "Cartwheel"
+    description: "Mid-cartwheel on beach, body sideways to camera, arms and legs in perfect line"
+
+  - id: 96
+    name: "Handstand Fun"
+    description: "Walking on hands toward camera, legs together pointed, feet at top of frame"
+
+  - id: 97
+    name: "Backward Lean Fall"
+    description: "Falling backward with control, arms reaching behind, excited/surprised expression, anti-gravity"
+
+  - id: 98
+    name: "Yoga Tree Pose"
+    description: "Standing one-leg tree pose, other foot on inner thigh, arms overhead in prayer, serene"
+
+  - id: 99
+    name: "Yoga Warrior Two"
+    description: "Wide lunge stance, arms extended parallel to ground, gaze over front fingers, powerful"
+
+  - id: 100
+    name: "Pirate Pose"
+    description: "One eye covered by eyepatch, hook hand raised, other arm on hip, tongue out, playful"
+
+# ─── IMPLEMENTATION GUIDE ──────────────────────────────────────────────────
+# To use a pose in generation, add 'pose_override' key to brief:
+#   brief['pose_override'] = poses[<id>]
+# The prompt_builder should inject: description + body angle + arm placement + leg placement

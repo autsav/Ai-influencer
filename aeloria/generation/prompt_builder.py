@@ -334,8 +334,21 @@ def build_prompt(persona: Persona, brief: dict) -> str:
     elif not is_city:
         scene = scene + (f", {mood}" if mood else "")
 
-    # Deterministic per-brief picks from physical pools
-    pose = _pick(_POSSIBLE_POSES, h, 3)
+    # Pose — pose_override from swimsuit_poses.yaml only activates when explicitly passed in brief
+    pose_override = brief.get("pose_override")
+    if pose_override and isinstance(pose_override, dict):
+        p = pose_override
+        # pose_override dict shape is owned by LookLibrary
+        # (aeloria/persona/look_library.py: LookLibrary._resolve_pose).
+        # Missing body/arm/leg keys fall through to cinematic-neutral defaults.
+        pose = (
+            f"{p.get('description', '')}, "
+            f"body turned {p.get('body_angle', 'forward')}, "
+            f"arms {p.get('arm_placement', 'relaxed')}, "
+            f"legs {p.get('leg_placement', 'standing')}"
+        )
+    else:
+        pose = _pick(_POSSIBLE_POSES, h, 3)
     expression = _expression_for(h, brief.get("mood"))
     mannerism = _pick(_POSSIBLE_MANNERISMS, h, 37)
     hair_state = _pick(_POSSIBLE_HAIR, h, 13)

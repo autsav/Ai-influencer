@@ -24,7 +24,7 @@ def _try_minimax(prompt: str, timeout: int = 60) -> Optional[str]:
     if not api_key:
         # Try .env
         from pathlib import Path
-        env_path = Path(__file__).resolve().parents[2] / ".env"
+        env_path = Path(__file__).resolve().parents[1] / ".env"
         if env_path.exists():
             for line in env_path.read_text().splitlines():
                 if line.startswith("MINIMAX_API_KEY="):
