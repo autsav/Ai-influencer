@@ -43,3 +43,4 @@ scripts/replicate_stadium_carousel.py
 scripts/single_pose.py
 scripts/kontext_pipeline.py
 scripts/image_to_image.py
+send_*.py
