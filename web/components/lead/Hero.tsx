@@ -1,19 +1,6 @@
-"use client";
-
-import { type FormEvent } from "react";
-import { Button } from "@/components/ui/Button";
-import { EmailField } from "@/components/ui/EmailField";
+import { LeadForm } from "@/components/lead/LeadForm";
 
 export function Hero() {
-  // Phase 1: console.log only. Phase 2 wires /api/lead → Resend.
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const email = data.get("email");
-    // eslint-disable-next-line no-console
-    console.log("[lead:hero] submit", { email });
-  }
-
   return (
     <section className="px-6 pt-20 pb-24 sm:pt-28 md:pt-32">
       <div className="mx-auto flex max-w-3xl flex-col items-start gap-7">
@@ -31,22 +18,10 @@ export function Hero() {
           theory.
         </p>
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex w-full max-w-xl flex-col gap-3 sm:flex-row sm:items-end"
-          aria-label="Get the AI Workflow Blueprint"
-        >
-          <div className="flex-1">
-            <EmailField
-              name="email"
-              aria-label="Email address"
-              required
-            />
-          </div>
-          <Button type="submit" variant="ink" size="lg" className="sm:shrink-0">
-            Send me the Blueprint
-          </Button>
-        </form>
+        <LeadForm
+          buttonVariant="ink"
+          ariaLabel="Get the AI Workflow Blueprint"
+        />
 
         <p className="text-sm text-ink-muted">
           No spam. Unsubscribe in one click. 2,400+ business owners already get
