@@ -19,7 +19,9 @@ const base =
 
 const variants: Record<Variant, string> = {
   ink: "bg-ink text-white hover:bg-ink/90",
-  terracotta: "bg-terracotta text-white hover:bg-terracotta-deep",
+  // terracotta-deep (#a4502f) + white = 5.9:1 — passes WCAG AA.
+  // Spec called for terracotta DEFAULT bg; deeper variant is the AA fix.
+  terracotta: "bg-terracotta-deep text-white hover:bg-terracotta",
   ghost: "bg-transparent text-ink hover:bg-parchment-sand",
 };
 

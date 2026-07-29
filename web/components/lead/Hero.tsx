@@ -4,7 +4,7 @@ export function Hero() {
   return (
     <section className="px-6 pt-20 pb-24 sm:pt-28 md:pt-32">
       <div className="mx-auto flex max-w-3xl flex-col items-start gap-7">
-        <p className="text-xs font-medium uppercase tracking-[0.18em] text-terracotta">
+        <p className="text-xs font-medium uppercase tracking-[0.18em] text-terracotta-deep">
           From Aeloria · 24-year-old AI entrepreneur
         </p>
 

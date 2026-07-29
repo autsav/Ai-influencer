@@ -8,7 +8,7 @@ export function Trust() {
   return (
     <section className="bg-parchment-sand/60 px-6 py-20">
       <div className="mx-auto flex max-w-3xl flex-col gap-8">
-        <p className="text-xs font-medium uppercase tracking-[0.18em] text-terracotta">
+        <p className="text-xs font-medium uppercase tracking-[0.18em] text-terracotta-deep">
           Trust
         </p>
 

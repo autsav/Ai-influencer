@@ -36,7 +36,8 @@ const config: Config = {
         ink: {
           DEFAULT: "#171717", // hero button bg
           soft: "#3a3a3a", // body text
-          muted: "#6b6b6b", // microcopy
+          // 6.2:1 on parchment, 5.4:1 on sand — passes WCAG AA on both.
+          muted: "#595959",
         },
       },
       fontFamily: {

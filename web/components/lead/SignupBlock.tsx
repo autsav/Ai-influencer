@@ -4,7 +4,7 @@ export function SignupBlock() {
   return (
     <section className="bg-parchment px-6 py-24">
       <div className="mx-auto flex max-w-3xl flex-col items-start gap-7">
-        <p className="text-xs font-medium uppercase tracking-[0.18em] text-terracotta">
+        <p className="text-xs font-medium uppercase tracking-[0.18em] text-terracotta-deep">
           Get the Blueprint
         </p>
 
