@@ -1,6 +1,6 @@
 const signals: string[] = [
-  "Featured in my AI Workflow Blueprint — the PDF 2,400+ business owners have downloaded.",
-  "I test every workflow in my own business before sharing. If it doesn't save me hours, it doesn't make the guide.",
+  "Featured in my AI Workflow Blueprint — the PDF thousands of business owners have downloaded.",
+  "I test the workflows I share in my own business.",
   "Disclosed AI persona — full transparency about what's human and what's automated.",
 ];
 

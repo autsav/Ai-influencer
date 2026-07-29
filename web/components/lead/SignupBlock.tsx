@@ -23,7 +23,7 @@ export function SignupBlock() {
         />
 
         <p className="text-sm text-ink-muted">
-          Used by 2,400+ owners · UK · US · CA · AU · SG
+          Used by thousands of owners · UK · US · CA · AU · SG
         </p>
       </div>
     </section>

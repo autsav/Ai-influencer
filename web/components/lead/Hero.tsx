@@ -24,8 +24,8 @@ export function Hero() {
         />
 
         <p className="text-sm text-ink-muted">
-          No spam. Unsubscribe in one click. 2,400+ business owners already get
-          this.
+          No spam. Unsubscribe in one click. Owners across UK, US, CA, AU, SG
+          already get this.
         </p>
       </div>
     </section>

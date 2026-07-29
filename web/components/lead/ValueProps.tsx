@@ -24,8 +24,8 @@ const cards: Card[] = [
   },
   {
     icon: TrendingUp,
-    title: "3× more leads, same budget",
-    body: "Automated outreach and follow-up that runs on autopilot — without sounding like a robot.",
+    title: "More leads, same budget",
+    body: "Automated outreach and follow-up that runs while you sleep.",
   },
 ];
 
