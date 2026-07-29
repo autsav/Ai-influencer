@@ -20,9 +20,34 @@ const config: Config = {
           800: "#212529",
           900: "#0d0f12",
         },
+        // Claude-style warm palette for landing/lead surfaces.
+        // Used by web/app/lead/* — dashboard brand-* untouched above.
+        parchment: {
+          DEFAULT: "#f5f4ed", // canvas
+          ivory: "#faf9f5", // cards
+          sand: "#e8e6dc", // footer band
+          border: "#f0eee6", // warm 1px hairline
+        },
+        terracotta: {
+          DEFAULT: "#c96442",
+          deep: "#a4502f",
+          soft: "#e08967",
+        },
+        ink: {
+          DEFAULT: "#171717", // hero button bg
+          soft: "#3a3a3a", // body text
+          muted: "#6b6b6b", // microcopy
+        },
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Crimson Pro", "Georgia", "serif"],
+      },
+      letterSpacing: {
+        tightish: "-0.015em",
+      },
+      maxWidth: {
+        prose: "68ch",
       },
     },
   },
