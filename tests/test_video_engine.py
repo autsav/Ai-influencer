@@ -12,7 +12,9 @@ class TestVideoEngineConfig:
         assert cfg.engine == "kling"
 
     def test_from_settings(self, monkeypatch):
-        monkeypatch.setenv("KLING_API_KEY", "kling-key")
+        # Kling is hosted on fal.ai — VideoEngineConfig.from_settings reads FAL_KEY
+        # for the kling_api_key slot (see video_engine.py:38, fixed 2026-07-29).
+        monkeypatch.setenv("FAL_KEY", "kling-key")
         monkeypatch.setenv("WAN_API_KEY", "wan-key")
         from aeloria.config import get_settings
         get_settings.cache_clear()

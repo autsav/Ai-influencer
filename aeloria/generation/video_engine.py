@@ -34,15 +34,12 @@ class VideoEngineConfig:
     image_bytes: bytes = field(default=b"", repr=False)
     cfg_strength: float = 0.5  # how closely video follows the image
 
-    @classmethod
-    def from_settings(cls, settings: Settings | None = None) -> "VideoEngineConfig":
-        s = settings or get_settings()
-        return cls(
-            kling_api_key=s.kling_api_key,
-            wan_api_key=s.wan_api_key,
-            model=s.kling_model,
-            duration=s.kling_video_duration,
-        )
+    from_settings = classmethod(lambda cls, settings=None: cls(
+        kling_api_key=(settings or get_settings()).fal_key,  # Kling is hosted on fal.ai
+        wan_api_key=(settings or get_settings()).wan_api_key,
+        model=(settings or get_settings()).kling_model,
+        duration=(settings or get_settings()).kling_video_duration,
+    ))
 
 
 def _kling_generate(cfg: VideoEngineConfig) -> bytes:
@@ -54,7 +51,8 @@ def _kling_generate(cfg: VideoEngineConfig) -> bytes:
     """
     if not cfg.kling_api_key:
         raise RuntimeError(
-            "Kling API key not configured. Set KLING_API_KEY in .env"
+            "Kling API key not configured. Set FAL_KEY (Kling is hosted on fal.ai) "
+            "or KLING_API_KEY in .env"
         )
 
     # 1 — upload image to fal so we get a URL

@@ -40,6 +40,22 @@ def test_extract_frame_seeks_to_timestamp(mock_run):
 _FFMPEG_ABSENT = shutil.which("ffmpeg") is None
 
 
+def _ffmpeg_has_drawtext() -> bool:
+    """overlay_text depends on the libfreetype-backed drawtext filter.
+    Homebrew ffmpeg ships without it unless --with-freetype is set; skip those
+    boxes rather than failing the suite on a Mac without that option."""
+    if _FFMPEG_ABSENT:
+        return False
+    try:
+        proc = subprocess.run(
+            ["ffmpeg", "-hide_banner", "-filters"],
+            capture_output=True, text=True, timeout=10,
+        )
+    except Exception:
+        return False
+    return "drawtext" in proc.stdout
+
+
 def _tiny_mp4() -> bytes:
     """0.5s lavfi color source, fragmented mp4 to stdout (pipe-safe)."""
     proc = subprocess.run(
@@ -53,6 +69,8 @@ def _tiny_mp4() -> bytes:
 
 @pytest.mark.skipif(_FFMPEG_ABSENT, reason="ffmpeg binary not installed")
 def test_overlay_text_real_ffmpeg_pipe_output():
+    if not _ffmpeg_has_drawtext():
+        pytest.skip("ffmpeg drawtext filter not available (rebuild ffmpeg with --with-freetype)")
     video = _tiny_mp4()
     out = overlay_text(video, ["smoke"], settings=MagicMock())
     assert isinstance(out, bytes) and len(out) > 0

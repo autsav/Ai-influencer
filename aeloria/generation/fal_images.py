@@ -133,3 +133,40 @@ def generate_image(
         }]
 
     return _subscribe_and_fetch(model, arguments)
+
+
+def generate_image_young_energetic(
+    prompt: str,
+    settings: Settings | None = None,
+    aspect_ratio: str = "9:16",
+    seed: int | None = None,
+) -> ImageResult:
+    """
+    Generate image for the young_energetic AI-from-scratch identity.
+
+    NO LoRA, NO face reference, NO XLabs realism LoRA — identity emerges from
+    prompt + clean warm iPhone-quality lighting descriptors only. Uses the same
+    Juggernaut-flux-lora endpoint as Aeloria (validated endpoint) but without any
+    LoRA conditioning, and with higher guidance (3.5) so the prompt is followed
+    more literally — avoiding the beauty-tuned model's tendency to add plastic
+    skin / wet hyperreal sheen.
+    """
+    s = settings or get_settings()
+    if not s.fal_key:
+        raise GenerationError("FAL_KEY not set")
+
+    os.environ["FAL_KEY"] = s.fal_key
+    arguments = {
+        "prompt": prompt,
+        "loras": [],  # No identity LoRA — AI-from-scratch
+        "guidance_scale": 3.5,  # Higher than Aeloria's 1.9 — closer to prompt
+        "num_inference_steps": 30,
+        "image_size": _ASPECT_TO_SIZE.get(aspect_ratio, "portrait_16_9"),
+        "num_images": 1,
+        # Disable any auto-enhancement that adds plastic skin
+        "prompt_algorithm": "fast",
+    }
+    if seed is not None:
+        arguments["seed"] = seed
+
+    return _subscribe_and_fetch(s.image_model or "rundiffusion-fal/juggernaut-flux-lora", arguments)

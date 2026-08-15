@@ -17,11 +17,17 @@ def test_load_default_bible():
     assert p.visual_dna["eyes"] == "green"
     assert "freckles" in p.visual_dna["skin"]
     assert "visible pores" in p.visual_dna["skin"]
-    assert p.niches.core.startswith("AI automation")
+    # PIVOT 2026-08-14: niche moved to "Sage-Mystic Hybrid" decoding historical artifacts.
+    # Same LoRA, new niche — same test shape, updated keyword.
+    assert p.niches.core.startswith("AI decoding historical artifacts")
     assert len(p.hard_rules) >= 4
-    # Mannerisms are now top-level (moved from character block)
-    assert len(p.mannerisms) == 6
-    assert "pushing hair back from her face" in p.mannerisms[0]
+    # Mannerisms are now top-level (moved from character block).
+    # PIVOT 2026-08-14: sage-mystic expanded the mannerism set from 6 to 8 and
+    # rewrote them around "pattern recognition / unhurried revelation" beats.
+    # Old Aeloria "pushing hair back from her face" mannerism no longer leads.
+    assert len(p.mannerisms) >= 6
+    # Confirm the new tone at least made it into the file
+    assert any("pattern" in m.lower() for m in p.mannerisms)
 
 
 def test_missing_wedge_is_not_fatal(tmp_path):

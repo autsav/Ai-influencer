@@ -28,6 +28,15 @@ def run_optimizer_pending(db, settings, persona, tg=None, now=None) -> int:
             write_memo(db, settings, scores, tg=tg)
         except Exception as e:
             log.error("optimizer memo failed: %s", e)
+        # NEW: Mentor rewriter hook (Phase 2, Mentor-Agent pattern).
+        # Never blocks the existing optimize path on Mentor failure.
+        try:
+            from aeloria.optimizer.mentor import run_mentor_pending
+            rewritten = run_mentor_pending(db, settings, persona, tg=tg, now=datetime.now(timezone.utc))
+            if rewritten and tg:
+                tg.send_message(f"🎓 Mentor: rewrote {rewritten} prompt(s)")
+        except Exception as e:
+            log.error("optimizer mentor failed: %s", e)
 
     try:
         from aeloria.optimizer.analyst import analyze

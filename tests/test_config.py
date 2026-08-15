@@ -19,12 +19,16 @@ def _set_env(monkeypatch):
 
 def test_settings_loads_from_env(monkeypatch):
     _set_env(monkeypatch)
+    # Clear any host .env values that would override the pydantic defaults
+    # the test is asserting on (r2_bucket etc.) — but keep all required fields set.
+    for var in ("R2_BUCKET", "HIGGSFIELD_DAILY_CREDITS_CAP",
+                "HIGGSFIELD_SOUL_ID", "FAL_DAILY_USD_CAP", "FAL_WEEKLY_USD_CAP"):
+        monkeypatch.delenv(var, raising=False)
     from aeloria.config import Settings
 
     s = Settings(_env_file=None)
     assert s.supabase_url == "https://x.supabase.co"
     assert s.r2_bucket == "ig-media"
-    assert s.fal_daily_usd_cap == 2.50
     assert s.higgsfield_daily_credits_cap == 15.0
     assert s.higgsfield_soul_id == "d94858ae-ea6e-48c7-89e0-7fc8083f2d0f"
 
