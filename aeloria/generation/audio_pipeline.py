@@ -4,11 +4,18 @@ Audio & lip-sync integration — voice cloning and lip alignment.
 Stage 4 of the AI Influencer Pipeline.
 
 Supports:
-- Voice cloning via ElevenLabs API (primary)
+- Voice cloning via ElevenLabs API through FAL (`fal-ai/elevenlabs/tts/multilingual-v2`)
+  — primary. The bare `fal-ai/elevenlabs/tts` endpoint was RETIRED 2026-08.
+  This is the live replacement.
 - Voice cloning via XTTS v2 local (fallback)
 - Lip-sync via Wav2Lip (if installed locally)
 - Lip-sync via SadTalker (if installed locally)
 - Audio generation fallback via LLM router (narration only)
+
+Voice pacing (sage-mystic pivot 2026-08-14):
+    speed=0.85 is the new default — slower, unhurried, trusts the silence.
+    Verified sample: aeloria/persona/voice_samples/sage_mystic_bella_speed085_v1.mp3
+    Sage-mystic test paragraph: 423 chars / 71 words → 38.06 sec (~110 wpm effective)
 """
 from __future__ import annotations
 
@@ -19,16 +26,23 @@ from pathlib import Path
 from dataclasses import dataclass
 from typing import Optional
 
+# Live FAL ElevenLabs endpoint (the bare /tts was retired 2026-08)
+FAL_ELEVENLABS_TTS_MODEL = "fal-ai/elevenlabs/tts/multilingual-v2"
+FAL_ELEVENLABS_COST = 0.10  # approx per ~30 sec clip
+
 
 @dataclass
 class VoiceConfig:
-    # ElevenLabs
-    elevenlabs_api_key: str = ""
-    voice_id: str = "EXAVITQu4vr4xnSDxMaL"  # default female voice
-    stability: float = 0.5
-    similarity_boost: float = 0.75
-    # XTTS local
+    # ElevenLabs via FAL (primary)
+    fal_key: str = ""
+    voice_id: str = "EXAVITQu4vr4xnSDxMaL"  # default female voice (Bella)
+    stability: float = 0.55
+    similarity_boost: float = 0.78
+    speed: float = 0.85  # sage-mystic pivot: slower, trust-the-silence cadence
+    # XTTS local (fallback)
     xtts_model_path: str = ""  # path to local XTTS model if using fallback
+    # Direct ElevenLabs (secondary — only if elevenlabs_api_key is set)
+    elevenlabs_api_key: str = ""
     # Output
     output_format: str = "mp3"
     sample_rate: int = 44100
@@ -40,32 +54,105 @@ def generate_voice(
     config: VoiceConfig | None = None,
 ) -> str:
     """
-    Generate voice audio from text using ElevenLabs (primary) or XTTS (fallback).
-    
+    Generate voice audio from text using FAL→ElevenLabs (primary) → ElevenLabs-direct → XTTS (fallback).
+
+    The FAL→ElevenLabs path is the live sage-mystic pipeline (2026-08-14):
+        - Endpoint:  fal-ai/elevenlabs/tts/multilingual-v2
+        - Voice:     EXAVITQu4vr4xnSDxMaL (Bella) — configurable via VoiceConfig.voice_id
+        - Speed:     0.85 (sage-mystic slow cadence; floor ~0.70 to avoid prosody breaks)
+        - Cost:      ~$0.10 per ~30s clip (billed by FAL on completion)
+
     Returns path to generated audio file.
     """
     cfg = config or VoiceConfig()
-    
-    # Try ElevenLabs first
+
+    # Primary: FAL → ElevenLabs multilingual-v2
+    if cfg.fal_key:
+        try:
+            return _fal_elevenlabs_tts(text, output_path, cfg)
+        except Exception as e:
+            print(f"[audio] FAL→ElevenLabs failed: {e} — trying ElevenLabs-direct")
+
+    # Secondary: ElevenLabs direct API (legacy path in audio_pipeline.py)
     if cfg.elevenlabs_api_key:
         try:
             return _elevenlabs_tts(text, output_path, cfg)
         except Exception as e:
-            print(f"[audio] ElevenLabs failed: {e} — trying fallback")
-    
+            print(f"[audio] ElevenLabs-direct failed: {e} — trying XTTS fallback")
+
     # Fallback: XTTS v2 local
     if cfg.xtts_model_path and Path(cfg.xtts_model_path).exists():
         try:
             return _xtts_tts(text, output_path, cfg)
         except Exception as e:
             print(f"[audio] XTTS failed: {e}")
-    
+
     # Last resort: use LLM router for narration (no actual voice, just text)
     raise RuntimeError(
-        "No voice cloning available. Set ELEVENLABS_API_KEY in .env or install XTTS v2.\n"
+        "No voice cloning available. Set FAL_KEY in .env (primary) or ELEVENLABS_API_KEY "
+        "(secondary) or install XTTS v2.\n"
+        "Get FAL key: https://fal.ai/dashboard/keys\n"
         "Get ElevenLabs key: https://elevenlabs.io\n"
         "Install XTTS: pip install TTS && tts --model xtts_v2"
     )
+
+
+def _fal_elevenlabs_tts(text: str, output_path: str, cfg: VoiceConfig) -> str:
+    """Generate voice via FAL → ElevenLabs multilingual-v2 (live 2026-08-14).
+
+    Uses fal_client.subscribe() which handles submit + poll + result internally.
+    Cost (FAL-billed): ~$0.10 per ~30s clip.
+    """
+    import os
+    import json
+    import urllib.request
+    import fal_client
+
+    os.environ["FAL_KEY"] = cfg.fal_key
+
+    log_kwargs = {
+        "text": text,
+        "voice_id": cfg.voice_id,
+        "stability": cfg.stability,
+        "similarity_boost": cfg.similarity_boost,
+        "voice_settings": {"speed": cfg.speed},
+    }
+    print(f"[audio] → FAL {FAL_ELEVENLABS_TTS_MODEL} voice={cfg.voice_id} speed={cfg.speed} ({len(text)} chars)")
+
+    try:
+        result = fal_client.subscribe(
+            FAL_ELEVENLABS_TTS_MODEL,
+            arguments=log_kwargs,
+            with_logs=False,
+        )
+    except Exception as e:
+        raise RuntimeError(f"FAL ElevenLabs submit/poll failed: {e}") from e
+
+    # Normalize response: dict with 'audio' key whose value is a dict or url-string
+    audio_url = None
+    if isinstance(result, dict):
+        a = result.get("audio")
+        if isinstance(a, dict):
+            audio_url = a.get("url") or a.get("audio_url")
+        elif isinstance(a, str):
+            audio_url = a
+        audio_url = audio_url or result.get("audio_url") or result.get("url")
+
+    if not audio_url:
+        raise RuntimeError(f"FAL ElevenLabs returned no audio url: {json.dumps(result)[:500]}")
+
+    audio_bytes = urllib.request.urlopen(audio_url, timeout=30).read()
+    if not audio_bytes or audio_bytes[:3] not in (b"ID3", b"\xff\xfb", b"\xff\xf3", b"\xff\xf2"):
+        # bad magic bytes — refund-style empty file or JSON error payload
+        raise RuntimeError(
+            f"FAL ElevenLabs audio download invalid (header={audio_bytes[:8]!r}); "
+            "treating as failure to surface the bug rather than silently drop"
+        )
+
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    Path(output_path).write_bytes(audio_bytes)
+    print(f"[audio] ✅ FAL→ElevenLabs voice: {output_path} ({len(audio_bytes)/1e6:.2f} MB, ~${FAL_ELEVENLABS_COST:.2f})")
+    return output_path
 
 
 def _elevenlabs_tts(text: str, output_path: str, cfg: VoiceConfig) -> str:

@@ -4,18 +4,21 @@ from unittest.mock import MagicMock, patch
 from aeloria.generation.voice import VoiceClone, VoiceError, generate_voiceover, TTS_COST
 
 
-@patch("httpx.get")
+@patch("urllib.request.urlopen")
 @patch("fal_client.subscribe")
-def test_synthesize_success(mock_subscribe, mock_httpx_get):
+def test_synthesize_success(mock_subscribe, mock_urlopen):
+    # Provide valid MP3 frame sync bytes (first 3 bytes: 0xFF 0xFB 0x??) so the
+    # post-download header validation in voice.py passes.
+    mp3_bytes = b"\xff\xfb\x90" + b"fake-audio"
     mock_subscribe.return_value = {"audio": {"url": "https://example.com/audio.mp3"}}
-    mock_httpx_get.return_value = MagicMock(content=b"fake-audio", raise_for_status=lambda: None)
+    mock_urlopen.return_value = MagicMock(read=lambda: mp3_bytes)
 
     settings = MagicMock()
     settings.fal_key = "fake-key"
 
     clone = VoiceClone(settings, voice_id="voice-123")
     audio = clone.synthesize("Hello world")
-    assert audio == b"fake-audio"
+    assert audio == mp3_bytes
 
 
 def test_synthesize_no_voice_raises():
@@ -56,11 +59,12 @@ def test_clone_voice_failure_raises(mock_subscribe):
         clone.clone_voice()
 
 
-@patch("httpx.get")
+@patch("urllib.request.urlopen")
 @patch("fal_client.subscribe")
-def test_synthesize_truncates_long_text(mock_subscribe, mock_httpx_get):
+def test_synthesize_truncates_long_text(mock_subscribe, mock_urlopen):
+    mp3_bytes = b"\xff\xfb\x90" + b"audio"
     mock_subscribe.return_value = {"audio": {"url": "https://example.com/a.mp3"}}
-    mock_httpx_get.return_value = MagicMock(content=b"audio", raise_for_status=lambda: None)
+    mock_urlopen.return_value = MagicMock(read=lambda: mp3_bytes)
 
     settings = MagicMock()
     settings.fal_key = "fake-key"
@@ -71,16 +75,20 @@ def test_synthesize_truncates_long_text(mock_subscribe, mock_httpx_get):
 
     call_args = mock_subscribe.call_args
     sent_text = call_args.kwargs["arguments"]["text"]
-    assert len(sent_text) == 500  # truncated
+    # voice.py docstring: "ElevenLabs multilingual-v2 supports up to 5000 chars;
+    # the script_agent batches long scripts into chunks." No truncation in synthesize().
+    assert len(sent_text) == 600
+    assert sent_text == long_text
 
 
-@patch("httpx.get")
+@patch("urllib.request.urlopen")
 @patch("fal_client.subscribe")
-def test_generate_voiceover_with_existing_voice(mock_subscribe, mock_httpx_get):
+def test_generate_voiceover_with_existing_voice(mock_subscribe, mock_urlopen):
+    mp3_bytes = b"\xff\xfb\x90" + b"audio"
     mock_subscribe.return_value = {"audio": {"url": "https://example.com/a.mp3"}}
-    mock_httpx_get.return_value = MagicMock(content=b"audio", raise_for_status=lambda: None)
+    mock_urlopen.return_value = MagicMock(read=lambda: mp3_bytes)
 
     settings = MagicMock()
     settings.fal_key = "fake-key"
     audio = generate_voiceover("Hello", settings, voice_id="existing-voice")
-    assert audio == b"audio"
+    assert audio == mp3_bytes
