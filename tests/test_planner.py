@@ -46,7 +46,13 @@ def test_plan_builds_full_dict_and_writes(wcols, wtrends):
     assert set(plan_out.keys()) == {"trending_audio", "hashtags", "on_screen_keywords", "collab_targets", "slot_time"}
     assert plan_out["trending_audio"] == "forest-ambient-123"
     assert 3 <= len(plan_out["hashtags"]) <= 5
-    assert plan_out["slot_time"] == "2026-07-20T18:00:00+00:00"
+    # U2: slot_time uses anti-batch minute offset grid (0/13/17/23/27/33/37/43/47);
+    # assert hour + grid membership, not the exact pre-pivot ":00" minute.
+    from datetime import datetime as _dt
+    from aeloria.distribution.slots import ANTI_BATCH_MINUTES
+    _slot_dt = _dt.fromisoformat(plan_out["slot_time"])
+    assert _slot_dt.hour == 18
+    assert _slot_dt.minute in ANTI_BATCH_MINUTES
     assert plan_out["collab_targets"][0]["handle"] == "@forestmeditations"
     db.update.assert_called_once()
     args = db.update.call_args.args
