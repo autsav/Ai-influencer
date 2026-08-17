@@ -191,3 +191,82 @@ create table if not exists dm_conversations (
   sent_at     timestamptz not null default now()
 );
 create index if not exists idx_dm_conversations_fan_sent on dm_conversations (fan_id, sent_at desc);
+
+-- ── Competitor benchmarking (Phase 5b, 2026-08-17) ───────────────────────────
+-- One row per (username, captured_date). The scraper writes a fresh row each
+-- day; the unique index makes same-day re-scrapes a clean UPSERT instead of
+-- a 500 from a duplicate-key violation. Growth_rate is computed lazily by
+-- refresh_growth_rates() against the snapshot from GROWTH_WINDOW_DAYS ago,
+-- so historical snapshots stay intact for trend analysis.
+
+create table if not exists competitor_profiles (
+  id              uuid primary key default gen_random_uuid(),
+  username        text not null,
+  display_name    text,
+  follower_count  int  not null default 0,
+  following_count int  not null default 0,
+  post_count      int  not null default 0,
+  biography       text,
+  is_verified     boolean not null default false,
+  growth_rate     numeric,            -- fraction/week; null until refreshed
+  captured_at     timestamptz not null default now(),
+  captured_on     date generated always as ((captured_at at time zone 'utc')::date) stored
+);
+create unique index if not exists uq_competitor_profiles_username_day
+  on competitor_profiles (username, captured_on);
+create index if not exists idx_competitor_profiles_username_captured
+  on competitor_profiles (username, captured_at desc);
+create index if not exists idx_competitor_profiles_captured_at
+  on competitor_profiles (captured_at desc);
+
+-- ── Newsletter (Phase 5c, 2026-08-17) ──────────────────────────────────────
+-- Subscribers: the audience. status='pending' = double-opt-in awaiting
+-- confirm click; 'active' = confirmed; 'unsubscribed' = soft-removed (kept
+-- for audit / re-permission campaigns); 'bounced' / 'complained' = hard-
+-- removed by Resend webhook (we never email them again). confirmed_at is
+-- the timestamp of the double-opt-in click (audit trail for GDPR).
+--
+-- Sends: one row per (subscriber, issue). status lifecycle: 'queued' →
+-- 'sent' (Resend accepted; HTTP 200/202) or 'failed' (HTTP 4xx, do not
+-- retry — likely policy violation / bad address). Resend's webhook can
+-- later flip 'sent' → 'delivered' / 'opened' / 'clicked' / 'bounced' via
+-- a follow-up migration, but that's out of scope for the v1 sender.
+
+create table if not exists newsletter_subscribers (
+  id              uuid primary key default gen_random_uuid(),
+  email           text not null,
+  source          text not null default 'direct'
+    check (source in ('direct','instagram_bio','fanvue','referral','import')),
+  status          text not null default 'pending'
+    check (status in ('pending','active','unsubscribed','bounced','complained')),
+  confirm_token   text unique,                       -- random opaque string in confirm link
+  referrer        text,                              -- which IG post / Fanvue DM drove the signup
+  utm_source      text,
+  utm_campaign    text,
+  subscribed_at   timestamptz not null default now(),
+  confirmed_at    timestamptz,
+  unsubscribed_at timestamptz,
+  unique (email)
+);
+create index if not exists idx_newsletter_subscribers_status
+  on newsletter_subscribers (status);
+-- Partial unique: confirm_token only meaningful when status='pending', but a
+-- global unique is fine and simpler (a re-subscribed email gets a new token).
+
+create table if not exists newsletter_sends (
+  id              uuid primary key default gen_random_uuid(),
+  subscriber_id   uuid not null references newsletter_subscribers(id) on delete cascade,
+  issue_slug      text not null,                     -- e.g. "2026-08-17-w21"
+  subject         text not null,
+  status          text not null default 'queued'
+    check (status in ('queued','sent','failed','bounced','opened','clicked')),
+  resend_id       text,                              -- Resend message id; null until accepted
+  error           text,                              -- truncated error body if status='failed'
+  queued_at       timestamptz not null default now(),
+  sent_at         timestamptz,
+  unique (subscriber_id, issue_slug)
+);
+create index if not exists idx_newsletter_sends_issue
+  on newsletter_sends (issue_slug, status);
+create index if not exists idx_newsletter_sends_subscriber
+  on newsletter_sends (subscriber_id, queued_at desc);
