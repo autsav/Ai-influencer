@@ -13,10 +13,19 @@ Usage:
 """
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from collections import Counter
 
+from aeloria.analytics.competitor_scraper import CompetitorScraper, ScrapedProfile
+
 log = logging.getLogger(__name__)
+
+# How far back to look when computing growth_rate from the snapshot history.
+GROWTH_WINDOW_DAYS = 7
+# Hard ceiling on growth_rate (fraction/week). Above this we treat as noise /
+# a one-off viral spike and clamp, so a single breakout post doesn't break
+# the bounded strategy-weight update downstream.
+GROWTH_RATE_CAP = 0.50
 
 
 @dataclass
@@ -60,11 +69,13 @@ class CompetitorTracker:
     - our_username: our IG username for comparison
     """
 
-    def __init__(self, db, settings):
+    def __init__(self, db, settings, scraper: CompetitorScraper | None = None):
         self.db = db
         self.settings = settings
         self.competitor_usernames = getattr(settings, "competitor_usernames", [])
         self.our_username = getattr(settings, "our_username", "aeloria")
+        # Optional scraper injection; if None, scrape_*() is a no-op.
+        self.scraper = scraper if scraper is not None else CompetitorScraper()
 
     def _fetch_competitor_profile(self, username: str) -> CompetitorProfile:
         """Fetch a competitor's profile data from IG Graph API or DB.
@@ -221,3 +232,158 @@ class CompetitorTracker:
             len(competitors), len(gaps), len(overlaps), len(recs),
         )
         return report
+
+    # ── Live data plumbing (wired by run_competitor_pending on the Sunday cron) ──
+
+    def scrape_and_store(self, usernames: list[str] | None = None) -> int:
+        """Hit Apify, persist each result to `competitor_profiles` as the
+        current snapshot. Returns the number of profiles written. Scraping
+        failures are swallowed (the scraper logs them); a 0 return is a valid
+        outcome (token missing, network down, Apify 5xx)."""
+        targets = usernames or self.competitor_usernames
+        if not targets:
+            return 0
+        scraped = self.scraper.scrape_usernames(targets)
+        written = 0
+        for profile in scraped:
+            try:
+                self._upsert_snapshot(profile)
+                written += 1
+            except Exception as exc:
+                log.error("upsert snapshot failed for %s: %s", profile.username, exc)
+        log.info("scrape_and_store: %d/%d profiles written", written, len(targets))
+        return written
+
+    def _upsert_snapshot(self, profile: ScrapedProfile) -> None:
+        """Upsert today's snapshot row. A re-scrape on the same day overwrites
+        the day's row (so a transient Apify failure doesn't poison the
+        snapshot); a scrape on a new day writes a new row (so growth_rate
+        has history). Implemented as a server-side ON CONFLICT upsert against
+        the unique (username, captured_on) index, so duplicate-key collisions
+        never surface as exceptions to the cron loop."""
+        row = {
+            "username": profile.username,
+            "display_name": profile.full_name,
+            "follower_count": profile.followers,
+            "following_count": profile.follows_count,
+            "post_count": profile.posts_count,
+            "biography": profile.biography,
+            "is_verified": profile.is_verified,
+            "captured_at": datetime.now(timezone.utc).isoformat(),
+        }
+        try:
+            self.db._client.table("competitor_profiles").upsert(
+                row,
+                on_conflict="username,captured_on",
+            ).execute()
+        except AttributeError:
+            # Older supabase-py without upsert() — fall back to insert+catch
+            # (the previous behaviour, retained for backwards compatibility).
+            try:
+                self.db.insert("competitor_profiles", row)
+            except Exception as exc:
+                msg = str(exc).lower()
+                if "duplicate" in msg or "unique" in msg:
+                    self.db._client.table("competitor_profiles").update({
+                        "display_name": profile.full_name,
+                        "follower_count": profile.followers,
+                        "following_count": profile.follows_count,
+                        "post_count": profile.posts_count,
+                        "biography": profile.biography,
+                        "is_verified": profile.is_verified,
+                        "captured_at": datetime.now(timezone.utc).isoformat(),
+                    }).eq("username", profile.username).execute()
+                    return
+                raise
+
+    def compute_growth_rate(self, username: str, followers: int) -> float:
+        """Weekly follower growth as a fraction (e.g. 0.05 = +5%/wk). Returns
+        0.0 when there's no history yet — first scrape has no comparison
+        point, and we'd rather under-report growth than invent it."""
+        if followers <= 0:
+            return 0.0
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=GROWTH_WINDOW_DAYS)).isoformat()
+        try:
+            history = (
+                self.db._client.table("competitor_profiles")
+                .select("follower_count, captured_at")
+                .eq("username", username)
+                .lt("captured_at", cutoff)
+                .order("captured_at", desc=True).limit(1).execute().data
+            )
+        except Exception as exc:
+            log.error("compute_growth_rate db read failed for %s: %s", username, exc)
+            return 0.0
+        if not history:
+            return 0.0
+        prior = int(history[0].get("follower_count") or 0)
+        if prior <= 0:
+            return 0.0
+        rate = (followers - prior) / prior
+        # Cap at +/- GROWTH_RATE_CAP. Negative rates are also possible
+        # (audit-block, mass-unfollow); we don't clamp those — losing 30%
+        # is genuinely useful signal that downstream weights should react to.
+        return max(min(rate, GROWTH_RATE_CAP), -GROWTH_RATE_CAP)
+
+    def refresh_growth_rates(self) -> int:
+        """Walk every stored profile and refresh its growth_rate column using
+        the current follower_count vs. the snapshot GROWTH_WINDOW_DAYS ago.
+        Idempotent; safe to run weekly."""
+        try:
+            rows = self.db._client.table("competitor_profiles").select(
+                "username, follower_count"
+            ).execute().data
+        except Exception as exc:
+            log.error("refresh_growth_rates read failed: %s", exc)
+            return 0
+        updated = 0
+        seen: set[str] = set()
+        for row in rows or []:
+            username = row.get("username")
+            followers = int(row.get("follower_count") or 0)
+            if not username or username in seen:
+                continue
+            seen.add(username)
+            rate = self.compute_growth_rate(username, followers)
+            try:
+                self.db._client.table("competitor_profiles").update({
+                    "growth_rate": rate,
+                }).eq("username", username).execute()
+                updated += 1
+            except Exception as exc:
+                log.error("growth_rate update failed for %s: %s", username, exc)
+        log.info("refresh_growth_rates: %d/%d profiles updated", updated, len(seen))
+        return updated
+
+    def has_competitor_snapshot_today(self) -> bool:
+        """Gate: the weekly cron should scrape at most once per day."""
+        try:
+            today_start = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00+00:00")
+            rows = (
+                self.db._client.table("competitor_profiles")
+                .select("id").gte("captured_at", today_start).limit(1).execute().data
+            )
+            return bool(rows)
+        except Exception:
+            return False
+
+
+def run_competitor_pending(db, settings, tg=None) -> int:
+    """Scheduled job: scrape competitors + refresh growth rates + emit a
+    short Telegram summary. Best-effort: any single step failing logs and
+    returns 0 (the next weekly run retries)."""
+    try:
+        tracker = CompetitorTracker(db, settings)
+        if tracker.has_competitor_snapshot_today():
+            log.info("competitor snapshot already captured today — skipping")
+            return 0
+        n_written = tracker.scrape_and_store()
+        n_growth = tracker.refresh_growth_rates()
+        if tg and n_written:
+            tg.send_message(
+                f"🔍 Competitors: scraped {n_written}, growth refreshed on {n_growth}"
+            )
+        return n_written
+    except Exception as exc:
+        log.error("run_competitor_pending failed: %s", exc)
+        return 0
