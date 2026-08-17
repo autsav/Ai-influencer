@@ -7,7 +7,9 @@ from datetime import timezone
 
 import httpx
 
+from aeloria.analytics.insights import fetch_insights, InsightsError
 from aeloria.auth.token_refresh import refresh_if_needed
+from aeloria.distribution.growth_hacker import GrowthHackerAgent
 from aeloria.publishing import meta
 from aeloria.redact import redact
 
@@ -19,6 +21,70 @@ def _jitter_offset_minutes(queue_id: str, jitter_minutes: int) -> int:
         return 0
     h = int(hashlib.md5(queue_id.encode()).hexdigest(), 16)
     return (h % (2 * jitter_minutes + 1)) - jitter_minutes
+
+
+def _parse_hook_type(hook_spec: str) -> str:
+    """Extract the hook-type token from `hook_spec` (e.g. 'curiosity_gap: ...').
+    Returns 'unknown' when hook_spec is empty/None."""
+    if not hook_spec:
+        return "unknown"
+    head = hook_spec.strip().split(":", 1)[0].strip()
+    return head or "unknown"
+
+
+def record_post_analytics(db, settings, post_id: str, brief_id, slot_type: str) -> None:
+    """Fetch IG insights for the published post and record to GrowthHackerAgent.
+
+    Non-blocking: every failure (insights fetch, growth_hacker write, missing
+    brief) is logged and swallowed. Callers in the publish loop rely on this
+    never raising.
+
+    Hook type and content pillar are read from the brief so learnings.json
+    groups posts by the strategy dimensions that drive future generation.
+    """
+    brief: dict = {}
+    if brief_id:
+        rows = db.select("briefs", {"id": brief_id}, limit=1)
+        if rows:
+            brief = rows[0]
+    hook_type = _parse_hook_type(brief.get("hook_spec") or "")
+    content_pillar = (brief.get("pillar") or "").strip() or "unknown"
+
+    try:
+        metrics = fetch_insights(settings, post_id, slot_type)
+    except (InsightsError, httpx.HTTPError, Exception) as e:  # noqa: BLE001
+        # Insights fetch failure (rate-limit / network / transient) — record
+        # zeros so the post still appears in learnings, then log + continue.
+        log.warning(
+            "insights fetch failed for post_id=%s slot=%s: %s",
+            post_id, slot_type, redact(str(e)),
+        )
+        metrics = {
+            "views": 0, "likes": 0, "comments": 0,
+            "shares": 0, "sends": 0, "saves": 0,
+        }
+
+    try:
+        agent = GrowthHackerAgent()
+        agent.record_analytics(
+            post_id=post_id,
+            hook_type=hook_type,
+            content_pillar=content_pillar,
+            impressions=int(metrics.get("views") or 0),
+            likes=int(metrics.get("likes") or 0),
+            comments=int(metrics.get("comments") or 0),
+            shares=int(metrics.get("shares") or 0),
+            saves=int(metrics.get("saves") or 0),
+            preset="",
+            hashtags=None,
+            scheduled_time="",
+        )
+    except Exception as e:  # noqa: BLE001
+        # Disk/JSON failure must not block the publish loop.
+        log.warning(
+            "growth_hacker.record_analytics failed for post_id=%s: %s",
+            post_id, redact(str(e)),
+        )
 
 
 def _parse_dt(s: str) -> datetime.datetime:
@@ -140,6 +206,13 @@ def publish_pending(db, settings, tg) -> int:
                 "queue_id": q["id"], "brief_id": q.get("brief_id"),
                 "platform": "instagram", "platform_post_id": mid,
             })
+            # U1 (P0-upgrades): close the feedback loop. Non-blocking —
+            # record_post_analytics swallows all errors and logs them.
+            record_post_analytics(
+                db, settings, mid,
+                brief_id=q.get("brief_id"),
+                slot_type=slot_type,
+            )
             count += 1
         except Exception as e:
             log.error("publish row %s failed: %s", q["id"], redact(str(e)))
