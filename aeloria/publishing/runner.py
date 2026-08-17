@@ -9,6 +9,7 @@ import httpx
 
 from aeloria.analytics.insights import fetch_insights, InsightsError
 from aeloria.auth.token_refresh import refresh_if_needed
+from aeloria.distribution import comment_pod
 from aeloria.distribution.growth_hacker import GrowthHackerAgent
 from aeloria.publishing import meta
 from aeloria.redact import redact
@@ -83,6 +84,24 @@ def record_post_analytics(db, settings, post_id: str, brief_id, slot_type: str) 
         # Disk/JSON failure must not block the publish loop.
         log.warning(
             "growth_hacker.record_analytics failed for post_id=%s: %s",
+            post_id, redact(str(e)),
+        )
+
+    # U4 (P1-upgrades): fire controlled comment-pod engagement. Real persona
+    # accounts only — never bots. Failures are logged, never raised.
+    try:
+        pod_cfg = comment_pod.load_config(db)
+        if pod_cfg.enabled:
+            fired = comment_pod.fire(
+                post_id,
+                pillar=content_pillar,
+                hook_type=hook_type,
+                config=pod_cfg,
+            )
+            log.info("comment_pod fired %d comments for %s", fired, post_id)
+    except Exception as e:  # noqa: BLE001
+        log.warning(
+            "comment_pod failed (non-blocking) for post_id=%s: %s",
             post_id, redact(str(e)),
         )
 
