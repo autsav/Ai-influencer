@@ -139,6 +139,45 @@ class Settings(BaseSettings):
     analytics_interval_minutes: int = 60
     stats_window_days: int = 7
 
+    # Phase 5b: competitor benchmarking. Defaults are the canonical
+    # AI-influencer set benchmarked in the 2026-08-17 study; override via
+    # env (COMPETITOR_USERNAMES=a,b,c) once we want to focus the niche.
+    # Apify token is read from APIFY_TOKEN env (never hard-code; rotate freely).
+    competitor_usernames: list[str] = [
+        "fit_aitana",       # The Clueless — Aitana López (ES)
+        "lilmiquela",       # Brud/Snap — flagship US virtual influencer
+        "imma.gram",        # ModelingCafe — JP virtual influencer
+        "noonoouri",        # Studio-house — luxury virtual influencer
+        "miquela_sousa",    # secondary handle used for crossover posts
+        "aiaborot",         # faceless AI tool-news account
+        "aitoolshub",       # faceless AI tool-news account
+        "aiworkflows_daily",# faceless AI workflow content
+        "matthewprince",    # AI founder / tools commentator (real creator, overlap)
+        "theoreticallymedia",# AI video creator (YouTube cross-platform comp)
+    ]
+    our_username: str = "aeloria"
+    competitor_scrape_interval_minutes: int = 1440  # daily; gate inside runner
+
+    # Phase 5c: email newsletter (weekly digest of best posts). Resend is
+    # the transport — simple HTTP API, 3000/mo free, no DKIM dance. Set
+    # RESEND_API_KEY + RESEND_FROM env, then run_optimizer_pending will
+    # also fire the newsletter on Monday morning (Sunday cron already runs
+    # the digest; Monday just sends).
+    resend_api_key: str = ""
+    resend_from: str = "Aeloria <hello@aeloria.ai>"  # must be on a verified domain
+    resend_reply_to: str = "hello@aeloria.ai"
+    # Public URL used in the confirm / unsubscribe links inside every email.
+    newsletter_base_url: str = "https://aeloria.ai"
+    # Cadence: weekly Monday 09:00 UTC. Interval stays daily so the runner's
+    # own day-of-week gate handles the timing (avoids per-timezone drift).
+    newsletter_interval_minutes: int = 1440
+    newsletter_send_weekday: int = 0   # Monday = 0 in Python's weekday()
+    newsletter_send_hour_utc: int = 9  # 09:00 UTC
+    newsletter_max_posts: int = 5
+    # Hard cap on sends per cron tick — protects us from a runaway subscriber
+    # spike or an API quota error that would otherwise requeue everything.
+    newsletter_send_batch_cap: int = 500
+
     # Phase 6a: weekly content mix (10/wk). reel+carousel+static counts per week.
     showrunner_weekly_mix: dict[str, int] = {"reel": 5, "carousel": 3, "static": 2}
 

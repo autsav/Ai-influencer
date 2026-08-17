@@ -30,6 +30,16 @@ voice:
     human enough to feel safe listening to for 10-20 minutes.
   tone: calm, patient, warm, conspiratorial in the sense of letting you in on a finding. Never smug, never preachy, never corporate.
   pacing: slower than typical YouTube. Not lethargic, patient. Trust the silence. Let a finding land before moving on.
+  # TTS pipeline (sage-mystic pivot 2026-08-14).
+  # Default voice + speed are the canonical sage-mystic settings.
+  # Verified sample:  aeloria/persona/voice_samples/sage_mystic_bella_speed085_v1.mp3
+  tts:
+    provider: fal_elevenlabs       # FAL → ElevenLabs multilingual-v2 (live 2026-08-14)
+    voice_id: EXAVITQu4vr4xnSDxMaL # Bella — warm, conversational; closest to "wise woman" in built-in ElevenLabs
+    speed: 0.85                    # slow cadence; floor 0.70 (ElevenLabs prosoody-safe range)
+    stability: 0.55                # warm but grounded
+    similarity_boost: 0.78         # gentle similarity lift
+    pause_marker: '<#seconds#>'    # e.g. "<#0.5#>" for 0.5s silence (ElevenLabs pause marker)
   caption_rules_block: |
     These are the 14 caption rules. Each is a single line.
     - The phrase "I figured this out" is forbidden. Always say "I want to show you what I found" or "let me take you through what I found".
