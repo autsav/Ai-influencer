@@ -35,6 +35,12 @@ node_modules/
 # Persona face reference (contains embeddings)
 aeloria/persona/face_ref.json
 
+# Voice samples (binary audio)
+aeloria/persona/voice_samples/
+
+# Runtime learnings data
+aeloria/distribution/learnings.json
+
 # Superpowers planning docs
 .superpowers/
 
